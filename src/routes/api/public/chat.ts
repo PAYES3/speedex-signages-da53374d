@@ -14,7 +14,7 @@ About Speedex Signages:
 
 Keep answers concise (2-4 sentences), friendly and helpful. If asked something unrelated to Speedex, politely steer back to signage topics.`;
 
-export const Route = createFileRoute('/api/chat')({
+export const Route = createFileRoute('/api/public/chat')({
   server: {
     handlers: {
       POST: async ({ request }) => {
