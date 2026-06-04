@@ -1,0 +1,1 @@
+CREATE POLICY "anyone can upload cv" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'cvs');
