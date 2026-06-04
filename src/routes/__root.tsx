@@ -79,11 +79,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Speedex Signages — UAE Signage Manufacturers & Branding Experts" },
+      { name: "description", content: "Premium signage, LED, acrylic, 3D letters, vehicle branding and digital signage across the UAE. Design, fabrication and installation since 2007." },
+      { name: "author", content: "Speedex Signages" },
+      { name: "theme-color", content: "#0a1628" },
+      { property: "og:title", content: "Speedex Signages — UAE Signage & Branding" },
+      { property: "og:description", content: "UAE's trusted signage and branding partner. Design, fabricate and install premium signage." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -92,6 +93,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+    ],
+    scripts: [
+      {
+        children: `(()=>{try{const t=localStorage.getItem('theme');const d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){}})();`,
       },
     ],
   }),
