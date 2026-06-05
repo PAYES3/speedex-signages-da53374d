@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Speedex Signages — UAE Signage Manufacturers & Branding Experts" },
       { name: "description", content: "Premium signage, LED, acrylic, 3D letters, vehicle branding and digital signage across the UAE. Design, fabrication and installation since 2007." },
       { name: "author", content: "Speedex Signages" },
-      { name: "theme-color", content: "#0a1628" },
+      { name: "theme-color", content: "#0E7C7B" },
       { property: "og:title", content: "Speedex Signages — UAE Signage & Branding" },
       { property: "og:description", content: "UAE's trusted signage and branding partner. Design, fabricate and install premium signage." },
       { property: "og:type", content: "website" },
@@ -97,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       {
-        children: `(()=>{try{const t=localStorage.getItem('theme');const d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){}})();`,
+        children: `(()=>{try{const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){}})();`,
       },
     ],
   }),

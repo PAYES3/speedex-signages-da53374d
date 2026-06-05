@@ -9,18 +9,13 @@ export function Hero() {
   const { t } = useTranslation();
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
-      <video
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        poster={COMPANY.heroPoster}
-      >
-        <source src={COMPANY.heroVideo} type="video/mp4" />
-      </video>
+      <img
+        src={COMPANY.heroImage}
+        alt="Illuminated Dubai storefront signage by Speedex Signages"
+        className="absolute inset-0 w-full h-full object-cover animate-[kenburns_22s_ease-in-out_infinite]"
+      />
       <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.55)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.45)_100%)]" />
 
       <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
         <motion.div

@@ -4,6 +4,7 @@ import { COMPANY } from '@/lib/site-data';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import logo from '@/assets/speedex-logo.png.asset.json';
 
 export function Footer() {
   const onSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,9 +16,8 @@ export function Footer() {
     <footer className="bg-foreground text-background mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-primary-glow grid place-items-center text-primary-foreground font-bold">S</div>
-            <span className="font-bold text-lg">{COMPANY.name}</span>
+          <div className="mb-4 inline-block bg-background/95 rounded-lg p-2">
+            <img src={logo.url} alt={COMPANY.name} className="h-10 w-auto" width={180} height={40} />
           </div>
           <p className="text-background/70 text-sm leading-relaxed">
             UAE's trusted signage and branding partner — designing, fabricating and installing premium signage across the Emirates since 2007.
