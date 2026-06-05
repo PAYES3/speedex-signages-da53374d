@@ -3,6 +3,8 @@ import { Menu, X, Moon, Sun, Languages } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import logo from '@/assets/speedex-logo.png.asset.json';
+import { COMPANY } from '@/lib/site-data';
 
 const NAV = [
   { to: '/', key: 'home' },
@@ -10,7 +12,6 @@ const NAV = [
   { to: '/services', key: 'services' },
   { to: '/explore', key: 'explore' },
   { to: '/products', key: 'products' },
-  { to: '/careers', key: 'careers' },
   { to: '/contact', key: 'contact' },
 ] as const;
 
@@ -29,8 +30,7 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const isDark = localStorage.getItem('theme') === 'dark' ||
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const isDark = localStorage.getItem('theme') === 'dark';
     setDark(isDark);
     document.documentElement.classList.toggle('dark', isDark);
   }, []);
@@ -55,9 +55,8 @@ export function Navbar() {
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'glass shadow-sm py-2' : 'py-4 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-primary-glow grid place-items-center text-primary-foreground font-bold">S</div>
-          <span className="font-bold tracking-tight text-lg">Speedex<span className="text-primary">.</span></span>
+        <Link to="/" className="flex items-center gap-2" aria-label={COMPANY.name}>
+          <img src={logo.url} alt={COMPANY.name} className="h-9 w-auto" width={160} height={36} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
