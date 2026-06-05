@@ -81,7 +81,7 @@ function ExplorePage() {
             </Reveal>
             <Reveal direction="zoom">
               <button onClick={() => setVideoOpen(true)} className="relative block mx-auto w-full max-w-4xl aspect-video rounded-2xl overflow-hidden bg-foreground group">
-                <img src={COMPANY.heroPoster} alt="Showreel preview" className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition" />
+                <img src={COMPANY.heroImage} alt="Showreel preview" className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition" />
                 <div className="absolute inset-0 grid place-items-center">
                   <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-[var(--shadow-glow)] group-hover:scale-110 transition">
                     <Play className="w-8 h-8 ml-1" />
@@ -115,7 +115,7 @@ function ExplorePage() {
       {videoOpen && (
         <div className="fixed inset-0 z-50 bg-black/90 grid place-items-center p-4" onClick={() => setVideoOpen(false)}>
           <button className="absolute top-4 right-4 text-white p-2" aria-label="Close"><X /></button>
-          <video controls autoPlay className="max-w-5xl w-full rounded-lg" src={COMPANY.heroVideo} />
+          <img src={COMPANY.heroImage} alt="Speedex Signages showreel" className="max-w-5xl w-full rounded-lg" />
         </div>
       )}
 
