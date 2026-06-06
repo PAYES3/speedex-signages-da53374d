@@ -10,11 +10,13 @@ import { Play, X } from 'lucide-react';
 export const Route = createFileRoute('/explore')({
   head: () => ({
     meta: [
-      { title: 'Explore Our Work — Signage Portfolio UAE | Speedex' },
-      { name: 'description', content: 'Browse signage projects across the UAE — LED, 3D letters, vehicle wraps, wayfinding and more by Speedex Signages.' },
-      { property: 'og:title', content: 'Speedex Signages — Portfolio' },
+      { title: 'Signage Portfolio UAE | Our Projects | Speedex Signages' },
+      { name: 'description', content: 'Explore signage projects across the UAE — LED channel letters, 3D illuminated signs, vehicle wraps, pylons and wayfinding by Speedex Signages.' },
+      { property: 'og:title', content: 'Speedex Signages — UAE Signage Portfolio' },
       { property: 'og:description', content: 'A showcase of premium signage projects delivered across the UAE.' },
+      { property: 'og:url', content: '/explore' },
     ],
+    links: [{ rel: 'canonical', href: '/explore' }],
   }),
   component: ExplorePage,
 });
