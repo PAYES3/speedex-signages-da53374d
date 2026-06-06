@@ -5,18 +5,38 @@ import { Testimonials } from '@/components/sections/Testimonials';
 import { ClientLogos } from '@/components/sections/ClientLogos';
 import { FAQ } from '@/components/sections/FAQ';
 import { CTABanner } from '@/components/sections/CTABanner';
+import { OurCompanies } from '@/components/sections/OurCompanies';
+import { SeoContent } from '@/components/sections/SeoContent';
 import { Reveal } from '@/components/Reveal';
-import { SERVICES, PROJECTS } from '@/lib/site-data';
+import { SERVICES, PROJECTS, FAQ as FAQ_DATA } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Speedex Signages — UAE Signage Manufacturers & Branding Experts' },
-      { name: 'description', content: "UAE's trusted signage company. LED, acrylic, 3D letters, vehicle branding and digital signage — designed, fabricated and installed since 2007." },
-      { property: 'og:title', content: 'Speedex Signages — We Light Up Your Brand' },
+      { title: 'Signage Company in UAE | Speedex Signages — LED, Acrylic, 3D' },
+      { name: 'description', content: "Speedex Signages — leading UAE signage company. LED signage, acrylic signage, 3D letters, vehicle branding, digital & outdoor signage across Dubai." },
+      { property: 'og:title', content: 'Speedex Signages — We Light Up Your Brand | UAE Signage Company' },
       { property: 'og:description', content: 'Premium signage manufacturing, fabrication and installation across the United Arab Emirates.' },
+      { property: 'og:url', content: '/' },
+    ],
+    links: [
+      { rel: 'canonical', href: '/' },
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQ_DATA.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
     ],
   }),
   component: Home,
@@ -28,6 +48,7 @@ function Home() {
       <Hero />
       <ClientLogos />
       <Stats />
+      <SeoContent />
 
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,6 +107,7 @@ function Home() {
       </section>
 
       <Testimonials />
+      <OurCompanies />
       <FAQ />
       <CTABanner />
     </>

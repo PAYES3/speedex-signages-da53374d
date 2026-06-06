@@ -1,16 +1,35 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Reveal } from '@/components/Reveal';
 import { CTABanner } from '@/components/sections/CTABanner';
-import { PROCESS, SERVICES } from '@/lib/site-data';
+import { PROCESS, SERVICES, SERVICE_GROUPS } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
 
 export const Route = createFileRoute('/services')({
   head: () => ({
     meta: [
-      { title: 'Services — Indoor, Outdoor & LED Signage UAE | Speedex' },
-      { name: 'description', content: 'Full signage services in the UAE: indoor, outdoor, LED, acrylic, 3D letters, vehicle branding, wayfinding, digital signage, CNC and laser cutting.' },
-      { property: 'og:title', content: 'Speedex Signages — Our Services' },
-      { property: 'og:description', content: 'Design, fabrication, installation and maintenance of premium signage across the UAE.' },
+      { title: 'Signage Services UAE | LED, Acrylic, 3D, Vehicle | Speedex' },
+      { name: 'description', content: 'Indoor, outdoor & LED signage services in the UAE: acrylic, 3D letters, vehicle branding, wayfinding, digital signage, CNC & laser cutting by Speedex Signages.' },
+      { property: 'og:title', content: 'Speedex Signages — Signage Services in the UAE' },
+      { property: 'og:description', content: 'Design, fabrication, installation and maintenance of premium signage across Dubai and the UAE.' },
+      { property: 'og:url', content: '/services' },
+    ],
+    links: [{ rel: 'canonical', href: '/services' }],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: [
+            'Indoor Signage', 'Outdoor Signage', 'LED Signage', 'Acrylic Signage',
+            '3D Letter Signage', 'Vehicle Branding', 'Wayfinding Signage', 'Digital Signage',
+            'CNC Cutting', 'Laser Cutting',
+          ].map((name, i) => ({
+            "@type": "ListItem", position: i + 1,
+            item: { "@type": "Service", name: `${name} UAE`, provider: { "@type": "LocalBusiness", name: "Speedex Signages" }, areaServed: "United Arab Emirates" },
+          })),
+        }),
+      },
     ],
   }),
   component: ServicesPage,

@@ -83,11 +83,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Premium signage, LED, acrylic, 3D letters, vehicle branding and digital signage across the UAE. Design, fabrication and installation since 2007." },
       { name: "author", content: "Speedex Signages" },
       { name: "theme-color", content: "#0E7C7B" },
+      { name: "keywords", content: "Speedex Signages, Signage Company UAE, Signage Company Dubai, LED Signage UAE, Acrylic Signage UAE, Outdoor Signage UAE, Indoor Signage UAE, Vehicle Branding UAE, Sign Board Manufacturers UAE, 3D Letter Signage UAE, Digital Signage UAE, Wayfinding Signage UAE, Custom Signage UAE, Branding Company UAE, CNC Cutting UAE, Laser Cutting UAE, Exhibition Signage UAE" },
       { property: "og:title", content: "Speedex Signages — UAE Signage & Branding" },
       { property: "og:description", content: "UAE's trusted signage and branding partner. Design, fabricate and install premium signage." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: "Speedex Signages" },
+      { property: "og:locale", content: "en_AE" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "index, follow" },
     ],
     links: [
       {
@@ -98,6 +101,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children: `(()=>{try{const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){}})();`,
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "@id": "#speedex-signages",
+          name: "Speedex Signages LLC",
+          image: "/favicon.ico",
+          description: "UAE signage manufacturer specializing in LED, acrylic, 3D letters, vehicle branding, digital signage, CNC and laser cutting.",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Al Quoz Industrial Area",
+            addressLocality: "Dubai",
+            addressCountry: "AE",
+          },
+          areaServed: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Umm Al Quwain", "Fujairah", "United Arab Emirates"],
+          telephone: "+971 50 123 4567",
+          email: "info@speedexsignages.ae",
+          priceRange: "$$",
+          sameAs: [
+            "https://instagram.com",
+            "https://facebook.com",
+            "https://linkedin.com",
+            "https://youtube.com",
+          ],
+        }),
       },
     ],
   }),
