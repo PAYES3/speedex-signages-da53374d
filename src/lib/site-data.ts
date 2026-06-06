@@ -28,8 +28,8 @@ import pFlex from '@/assets/products/flex-banner.jpg';
 export const COMPANY = {
   name: 'Speedex Signages LLC',
   tagline: 'We Light Up Your Brand',
-  phone: '+971 4 000 0000',
-  whatsapp: '971500000000',
+  phone: '+971 50 123 4567',
+  whatsapp: '971501234567',
   email: 'info@speedexsignages.ae',
   address: 'Al Quoz Industrial Area, Dubai, United Arab Emirates',
   mapEmbed: 'https://www.google.com/maps?q=Al+Quoz+Industrial+Area+Dubai&output=embed',
@@ -40,6 +40,7 @@ export const COMPANY = {
     youtube: 'https://youtube.com',
   },
   heroImage: heroSignage,
+  heroVideo: 'https://cdn.coverr.co/videos/coverr-neon-sign-in-the-city-1573/1080p.mp4',
 };
 
 export const STATS = [
@@ -146,4 +147,70 @@ export const BENEFITS = [
   'Training & certification support',
   'Modern facility with the latest equipment',
   'Collaborative, multicultural team',
+];
+
+// Service categories sourced verbatim from the uploaded "Our Services" document
+export type ServiceGroup = {
+  title: string;
+  intro?: string;
+  items: { name: string; desc: string }[];
+};
+
+export const SERVICE_GROUPS: ServiceGroup[] = [
+  {
+    title: 'Exterior / External Signages',
+    items: [
+      { name: '3D Illuminated Signage', desc: 'Chaneleum, Acrylic, Aluminium moulded letters, Illuminated Light Boxes and Forex Letters.' },
+      { name: 'Metal Signs', desc: 'Stainless Steel 3D Signs, Brass Signs and Aluminium Signs.' },
+      { name: 'Illumination Style', desc: 'Front Lit, Back Lit, Side Lit and Non-illuminated Letters.' },
+      { name: 'Flags', desc: 'Satin and German Polyester flags for outdoor branding.' },
+      { name: 'Banners', desc: 'Flex face illuminated light boxes for façades and storefronts.' },
+      { name: 'Billboards', desc: 'Large-format outdoor billboards engineered for UAE wind & weather.' },
+    ],
+  },
+  {
+    title: 'Interior / Internal Signages',
+    items: [
+      { name: 'Reception Signs', desc: '3D letters in Acrylic, Brushed Aluminium or Stainless Steel mounted on background or wall.' },
+      { name: 'Wayfinding & Directional Signage', desc: 'Name & floor directories made from acrylic, aluminium and stainless steel.' },
+      { name: 'Room / Office Plaques', desc: 'Signs on individual doors for conference rooms, restrooms, and offices in acrylic, metal or wood.' },
+      { name: 'Hanging Directional Signs', desc: 'Ceiling-suspended signs for large retail or warehouse spaces directing to departments or aisles.' },
+    ],
+  },
+  {
+    title: 'Compliance and Safety Signs',
+    items: [
+      { name: 'Compliant Signs', desc: 'Signs for permanent rooms — restrooms, exits, room numbers — following local guidelines.' },
+      { name: 'Safety / Exit Signs', desc: 'Universally recognized symbols for fire extinguishers, first aid kits, emergency exits and stairs/elevator.' },
+      { name: 'Regulatory Signs', desc: 'Simple rule signs such as "No Smoking", "Authorized Personnel Only" or capacity limits.' },
+    ],
+  },
+  {
+    title: 'Promotional & Informational Signage',
+    items: [
+      { name: 'Point-of-Purchase (POP) Signs', desc: 'Displays near a product or checkout area to drive final sales.' },
+      { name: 'Digital Displays / Kiosks', desc: 'Screens easily updated for menus, announcements or interactive wayfinding maps.' },
+      { name: 'Floor Graphics', desc: 'Durable vinyl decals on the floor used for guiding traffic, promoting products or branding a path.' },
+      { name: 'Wall Graphics / Wall Branding', desc: 'Wall murals and full-color branded environments.' },
+      { name: 'Frosted Window / Glass Graphics', desc: 'Privacy frosting, window graphics and decorative glass film.' },
+      { name: 'Wide Format Printing', desc: 'High-resolution large-format prints for hoardings and banners.' },
+    ],
+  },
+  {
+    title: 'Wide Format Printing',
+    items: [
+      { name: 'Signage and Displays', desc: 'Large banners, posters, billboards, trade-show graphics and point-of-purchase (POP) displays.' },
+      { name: 'Vehicle Wraps', desc: 'Full-color graphics that turn cars, trucks and fleets into mobile advertisements.' },
+      { name: 'Decor and Murals', desc: 'Custom wallpaper, wall decals, murals and fine art reproductions on canvas.' },
+      { name: 'Textiles', desc: 'Printing on fabrics for soft signage, apparel and home décor.' },
+      { name: 'Offset and Screen Printing', desc: 'Traditional offset and screen printing for high-volume promotional materials.' },
+    ],
+  },
+];
+
+export const COMPANIES = [
+  { name: 'Speedex Signages', desc: 'UAE signage manufacturing, branding & installation.', url: '/', internal: true, initials: 'SS' },
+  { name: 'Arabsat', desc: 'Satellite and broadcast solutions across the MENA region.', url: 'https://www.arabsat.ae', internal: false, initials: 'AS' },
+  { name: 'Excellent General Trading', desc: 'General trading and supply across the UAE.', url: 'https://www.excellentgroup.ae', internal: false, initials: 'EG' },
+  { name: 'Speedex Auto Workshop', desc: 'Professional automotive repair and detailing services.', url: 'https://www.speedexgroups.ae', internal: false, initials: 'SA' },
 ];
