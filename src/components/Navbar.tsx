@@ -53,10 +53,10 @@ export function Navbar() {
   };
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'glass shadow-sm py-2' : 'py-4 bg-transparent'}`}>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all border-b ${scrolled ? 'bg-background/95 backdrop-blur shadow-md border-border py-2' : 'bg-background/90 backdrop-blur border-border/60 py-3'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2" aria-label={COMPANY.name}>
-          <img src={logo.url} alt={COMPANY.name} className="h-9 w-auto" width={160} height={36} />
+          <img src={logo.url} alt={`${COMPANY.name} — UAE signage company logo`} className="h-12 sm:h-14 w-auto drop-shadow-sm" width={220} height={56} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
@@ -64,8 +64,8 @@ export function Navbar() {
             <Link
               key={n.to}
               to={n.to}
-              className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors relative"
-              activeProps={{ className: 'text-primary' }}
+              className="px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+              activeProps={{ className: 'text-primary after:scale-x-100' }}
               activeOptions={{ exact: n.to === '/' }}
             >
               {t(`nav.${n.key}`)}

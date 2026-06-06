@@ -4,15 +4,18 @@ import { Stats } from '@/components/sections/Stats';
 import { CTABanner } from '@/components/sections/CTABanner';
 import { TIMELINE } from '@/lib/site-data';
 import { Award, Target, Eye, Heart, ShieldCheck, Sparkles } from 'lucide-react';
+import { OurCompanies } from '@/components/sections/OurCompanies';
 
 export const Route = createFileRoute('/about')({
   head: () => ({
     meta: [
-      { title: 'About Us — Speedex Signages UAE' },
-      { name: 'description', content: 'Since 2007, Speedex Signages has designed, fabricated and installed premium signage across the UAE. Our story, mission and values.' },
-      { property: 'og:title', content: 'About Speedex Signages' },
-      { property: 'og:description', content: "UAE's trusted signage and branding partner since 2007." },
+      { title: 'About Speedex Signages | UAE Signage & Branding Company' },
+      { name: 'description', content: 'Since 2007, Speedex Signages has manufactured premium LED, acrylic, 3D and digital signage across Dubai and the UAE. Discover our story, mission and values.' },
+      { property: 'og:title', content: 'About Speedex Signages — UAE Signage Company' },
+      { property: 'og:description', content: "UAE's trusted signage and branding partner since 2007 — serving Dubai, Abu Dhabi and all seven Emirates." },
+      { property: 'og:url', content: '/about' },
     ],
+    links: [{ rel: 'canonical', href: '/about' }],
   }),
   component: AboutPage,
 });
@@ -99,6 +102,7 @@ function AboutPage() {
       </section>
 
       <Stats />
+      <OurCompanies />
 
       <section className="py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">

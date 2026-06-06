@@ -13,11 +13,13 @@ import { toast } from 'sonner';
 export const Route = createFileRoute('/contact')({
   head: () => ({
     meta: [
-      { title: 'Contact — Speedex Signages UAE | Get a Quote' },
-      { name: 'description', content: 'Get in touch with Speedex Signages for a free signage quote. Based in Al Quoz, Dubai — serving the entire UAE.' },
-      { property: 'og:title', content: 'Contact Speedex Signages' },
+      { title: 'Contact Speedex Signages | UAE Signage Company Quote' },
+      { name: 'description', content: 'Contact Speedex Signages for a free signage quote in the UAE. Based in Al Quoz, Dubai — serving Dubai, Abu Dhabi, Sharjah and all seven Emirates.' },
+      { property: 'og:title', content: 'Contact Speedex Signages — UAE Signage Company' },
       { property: 'og:description', content: 'Get a signage quote from the UAE’s trusted manufacturer and installer.' },
+      { property: 'og:url', content: '/contact' },
     ],
+    links: [{ rel: 'canonical', href: '/contact' }],
   }),
   component: ContactPage,
 });

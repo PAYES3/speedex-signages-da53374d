@@ -15,11 +15,13 @@ import { toast } from 'sonner';
 export const Route = createFileRoute('/careers')({
   head: () => ({
     meta: [
-      { title: 'Careers — Join Speedex Signages UAE' },
-      { name: 'description', content: "We're hiring designers, fabricators, installers and project managers across the UAE. Explore openings at Speedex Signages." },
-      { property: 'og:title', content: 'Careers at Speedex Signages' },
+      { title: 'Careers at Speedex Signages | UAE Signage Jobs' },
+      { name: 'description', content: "We're hiring designers, fabricators, installers and project managers across the UAE. Explore signage industry careers at Speedex Signages." },
+      { property: 'og:title', content: 'Careers at Speedex Signages — UAE' },
       { property: 'og:description', content: 'Build your career with the UAE’s trusted signage company.' },
+      { property: 'og:url', content: '/careers' },
     ],
+    links: [{ rel: 'canonical', href: '/careers' }],
   }),
   component: CareersPage,
 });

@@ -14,11 +14,13 @@ import { Textarea } from '@/components/ui/textarea';
 export const Route = createFileRoute('/products')({
   head: () => ({
     meta: [
-      { title: 'Products — LED, Acrylic, Neon & 3D Signs UAE | Speedex' },
-      { name: 'description', content: 'Browse our signage product catalog — LED signs, acrylic 3D letters, neon, reception, pylon, safety and wayfinding signs.' },
-      { property: 'og:title', content: 'Speedex Signages — Products' },
+      { title: 'Signage Products UAE | LED, Acrylic, Neon & 3D | Speedex' },
+      { name: 'description', content: 'Signage product catalog for the UAE — LED signs, acrylic 3D letters, LED neon, reception logos, illuminated pylons, exit signs and wayfinding plaques.' },
+      { property: 'og:title', content: 'Speedex Signages — Signage Products UAE' },
       { property: 'og:description', content: 'A complete signage product catalog for businesses across the UAE.' },
+      { property: 'og:url', content: '/products' },
     ],
+    links: [{ rel: 'canonical', href: '/products' }],
   }),
   component: ProductsPage,
 });

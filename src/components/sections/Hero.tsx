@@ -4,20 +4,44 @@ import { ArrowRight, Play } from 'lucide-react';
 import { COMPANY } from '@/lib/site-data';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import logo from '@/assets/speedex-logo.png.asset.json';
 
 export function Hero() {
   const { t } = useTranslation();
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={COMPANY.heroImage}
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src={COMPANY.heroVideo} type="video/mp4" />
+      </video>
       <img
         src={COMPANY.heroImage}
-        alt="Illuminated Dubai storefront signage by Speedex Signages"
-        className="absolute inset-0 w-full h-full object-cover animate-[kenburns_22s_ease-in-out_infinite]"
+        alt="Illuminated LED signage manufacturing facility in Dubai by Speedex Signages"
+        className="absolute inset-0 w-full h-full object-cover animate-[kenburns_22s_ease-in-out_infinite] -z-10"
       />
-      <div className="absolute inset-0" style={{ background: 'var(--gradient-hero)' }} />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.45)_100%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/70" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
 
       <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="flex justify-center mb-6"
+        >
+          <div className="bg-white/95 backdrop-blur rounded-2xl px-6 py-3 shadow-2xl">
+            <img src={logo.url} alt="Speedex Signages logo" className="h-16 sm:h-20 w-auto" width={240} height={80} />
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

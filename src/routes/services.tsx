@@ -1,16 +1,35 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Reveal } from '@/components/Reveal';
 import { CTABanner } from '@/components/sections/CTABanner';
-import { PROCESS, SERVICES } from '@/lib/site-data';
+import { PROCESS, SERVICES, SERVICE_GROUPS } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
 
 export const Route = createFileRoute('/services')({
   head: () => ({
     meta: [
-      { title: 'Services — Indoor, Outdoor & LED Signage UAE | Speedex' },
-      { name: 'description', content: 'Full signage services in the UAE: indoor, outdoor, LED, acrylic, 3D letters, vehicle branding, wayfinding, digital signage, CNC and laser cutting.' },
-      { property: 'og:title', content: 'Speedex Signages — Our Services' },
-      { property: 'og:description', content: 'Design, fabrication, installation and maintenance of premium signage across the UAE.' },
+      { title: 'Signage Services UAE | LED, Acrylic, 3D, Vehicle | Speedex' },
+      { name: 'description', content: 'Indoor, outdoor & LED signage services in the UAE: acrylic, 3D letters, vehicle branding, wayfinding, digital signage, CNC & laser cutting by Speedex Signages.' },
+      { property: 'og:title', content: 'Speedex Signages — Signage Services in the UAE' },
+      { property: 'og:description', content: 'Design, fabrication, installation and maintenance of premium signage across Dubai and the UAE.' },
+      { property: 'og:url', content: '/services' },
+    ],
+    links: [{ rel: 'canonical', href: '/services' }],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: [
+            'Indoor Signage', 'Outdoor Signage', 'LED Signage', 'Acrylic Signage',
+            '3D Letter Signage', 'Vehicle Branding', 'Wayfinding Signage', 'Digital Signage',
+            'CNC Cutting', 'Laser Cutting',
+          ].map((name, i) => ({
+            "@type": "ListItem", position: i + 1,
+            item: { "@type": "Service", name: `${name} UAE`, provider: { "@type": "LocalBusiness", name: "Speedex Signages" }, areaServed: "United Arab Emirates" },
+          })),
+        }),
+      },
     ],
   }),
   component: ServicesPage,
@@ -82,6 +101,35 @@ function ServicesPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-14">
+          <Reveal>
+            <div className="text-center">
+              <p className="text-primary text-sm font-semibold uppercase tracking-wider">Types of Signage</p>
+              <h2 className="text-3xl sm:text-4xl font-bold mt-2">Complete range of signage we deliver</h2>
+              <p className="mt-4 text-muted-foreground max-w-3xl mx-auto">
+                From exterior 3D illuminated signage to interior wayfinding, compliance signs and wide-format printing — every category produced in-house at our UAE facility.
+              </p>
+            </div>
+          </Reveal>
+          {SERVICE_GROUPS.map((g, gi) => (
+            <Reveal key={g.title} direction="up" delay={gi * 0.04}>
+              <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-primary">{g.title}</h3>
+                <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {g.items.map((it) => (
+                    <div key={it.name} className="border border-border rounded-xl p-4 hover:border-primary transition">
+                      <h4 className="font-semibold">{it.name}</h4>
+                      <p className="mt-1 text-sm text-muted-foreground">{it.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 

@@ -1,66 +1,100 @@
 ## Goals
+Improve UX (visible navbar, working hero video/WhatsApp, prominent logo), apply the uploaded Services content verbatim, add an "Our Companies" section, and deliver comprehensive UAE-focused SEO across the site.
 
-Apply the user's brand and clarity fixes, and make the chatbot a stricter Speedex-only assistant that cites pages and FAQ items.
+---
 
-## Changes
+## 1. Hero video background
+- `src/components/sections/Hero.tsx`: replace the still image with `<video autoPlay muted loop playsInline preload="metadata" poster={heroSignage}>` using a signage/manufacturing-relevant free Coverr/Pexels MP4 (e.g. neon storefront / workshop). Keep the existing image as the `poster` fallback. Tone down overlay so it stays readable in light mode.
+- Keep H1 "We Light Up Your Brand".
 
-### 1. Branding (logo + name)
-- Save the uploaded `signage.png` as a Lovable Asset and use it as the official Speedex Signages LLC logo.
-- Replace the "S" gradient mark + "Speedex." wordmark in `Navbar.tsx` and `Footer.tsx` with the real logo image (with proper alt text).
-- Update `<title>`, meta tags, JSON-LD, sitemap, `llms.txt`, and all on-page copy to "Speedex Signages LLC".
-- Recolor the design tokens in `src/styles.css` to match the logo: teal primary (~#0E7C7B / oklch teal) and dark slate secondary. Keep amber as a small accent only.
+## 2. Navbar visibility & sticky polish (`src/components/Navbar.tsx`)
+- Default state (top of page) gets a solid light background `bg-background/95 backdrop-blur` + bottom border, not transparent — fixes the invisible nav over the hero.
+- Scrolled state keeps glass + shadow.
+- Bigger logo: `h-12 sm:h-14` (was `h-9`), plus `drop-shadow-sm` for contrast.
+- Strengthen link contrast (`text-foreground` + `font-semibold`) and underline-on-hover indicator.
+- Keep sticky (`fixed top-0`), mobile menu, dark mode toggle, language toggle.
 
-### 2. Default theme = light
-- In `Navbar.tsx`, change the theme bootstrap so the default (no stored preference) is **light**, not system. Light mode is the first paint; dark is opt-in via the toggle.
-- Audit `Hero` and section overlays so they still read correctly in light mode (lighter gradient overlay, darker text on the hero only because of the video).
+## 3. WhatsApp button (`src/components/WhatsAppButton.tsx` + `site-data.ts`)
+- Update `COMPANY.whatsapp` to a real-format UAE international number (placeholder `971501234567` — flag in plan for user to replace) and `COMPANY.phone` accordingly.
+- Use `https://wa.me/<digits>?text=<encoded>` with a richer prefilled message ("Hello Speedex Signages, I would like a quote for …. My name is …."). Use `encodeURIComponent`.
+- Add `rel="noopener noreferrer"`, visible WhatsApp SVG icon (not generic chat bubble), tooltip label, and slight pulse ring.
 
-### 3. Hero video replacement
-- The current Pexels clip is generic and unclear. Replace with a clearer, more signage-relevant looped MP4. Options (in priority order):
-  1. A bright LED storefront / channel-letter sign night-time clip from Pexels/Coverr (free, hotlinkable MP4).
-  2. If no suitable free clip resolves, fall back to a high-quality still image of an illuminated signage facade (AI-generated, 16:9) with a slow Ken Burns zoom — still feels cinematic and is guaranteed to render.
-- Reduce overlay opacity slightly so the footage reads, but keep the headline glow subtle as previously requested.
-- Add `preload="metadata"`, `poster=...`, and a graceful image fallback.
+## 4. Services page = exact DOCX content (`src/routes/services.tsx` + `src/lib/site-data.ts`)
+- Replace the `PROCESS` list with the 5 items verbatim from the DOCX (Concept & Design, Fabrication/Printing, Installation, Maintenance and Repair, Digital Signage Solutions).
+- Add new structured data sections rendered on `/services`:
+  - **Exterior / External Signages** (3D Illuminated, Metal Signs, Illumination Styles, Flags, Banners, Billboards)
+  - **Interior / Internal Signages** (Reception Signs, Wayfinding & Directional, Room/Office Plaques, Hanging Directional)
+  - **Compliance and Safety Signs** (Compliant, Safety/Exit, Regulatory)
+  - **Promotional & Informational Signage** (POP, Digital Displays/Kiosks, Floor Graphics, Wall Graphics, Frosted Glass, Wide Format)
+  - **Wide Format Printing** (Signage & Displays, Vehicle Wraps, Decor & Murals, Textiles, Offset & Screen Printing)
+- Each rendered as a titled card grid with the exact DOCX bullet copy (no paraphrase, no placeholder). Keep existing service image grid above as the visual catalog.
 
-### 4. Remove Careers from navbar
-- Remove the `careers` entry from the `NAV` array in `Navbar.tsx` and from the mobile menu.
-- Keep the `/careers` route and page working (still linked from the Footer) so existing applications and SEO stay intact.
-- Remove the Careers nav label from `src/lib/i18n.ts` usage (keep the translation key for the page itself).
+## 5. "Our Companies" section
+- New component `src/components/sections/OurCompanies.tsx` rendering 4 cards:
+  - Speedex Signages — internal link `/`
+  - Arabsat — https://www.arabsat.ae
+  - Excellent General Trading — https://www.excellentgroup.ae
+  - Speedex Auto Workshop — https://www.speedexgroups.ae
+- Each card: company name, one-line description, external link with `target="_blank" rel="noopener"`. Logo placeholder circle with initials (since we don't have logos).
+- Mount on Home (`src/routes/index.tsx`) below stats/testimonials, and also on About page.
 
-### 5. Exact images for Services and Products
-- Generate one dedicated image per Service (10 total) and per Product (9 total) using the image tool, premium quality where text/detail matters, sized 1024×768 (4:3) for cards.
-- Each image depicts the actual item:
-  - Services: Indoor Signage, Outdoor Signage, LED Signage, Acrylic Signage, 3D Letter Signage, Vehicle Branding, Wayfinding Signage, Digital Signage, CNC Cutting, Laser Cutting.
-  - Products: LED Channel Letters, Acrylic 3D Letters, LED Neon, Reception Logos, Safety Signs, Pylon Signs, Wayfinding, Stainless Steel Letters, Light Boxes.
-- Save to `src/assets/services/*.jpg` and `src/assets/products/*.jpg`, import them in `src/lib/site-data.ts`, and remove generic stock URLs.
-- Add descriptive `alt` text on every card.
+## 6. Logo prominence
+- Increase navbar logo size (see §2).
+- Add a larger logo lockup at the top of the Hero on mobile (since the dark hero swallows it) — small inline logo + wordmark above the H1, white-tinted for contrast.
 
-### 6. Chatbot upgrades (stricter, citation-aware)
-Edit `src/routes/api/public/chat.ts` and `src/components/Chatbot.tsx`:
+## 7. SEO overhaul
+### Per-route metadata (`head()` in every route file)
+For `/`, `/about`, `/services`, `/products`, `/explore`, `/careers`, `/contact`:
+- Unique `<title>` ≤ 60 chars with primary keyword (e.g. `Signage Company in UAE | Speedex Signages — LED, Acrylic, 3D`).
+- Unique meta description ≤ 160 chars naturally weaving target keywords.
+- `og:title`, `og:description`, `og:url` (relative), `og:type` (`website` / leaf appropriate), `twitter:card="summary_large_image"`, `og:image` set to `/og.jpg` (will generate one hero share image and save to `public/og.jpg`).
+- `<link rel="canonical">` on each leaf (relative href) — not on root, per TanStack dedupe rule.
 
-- **Knowledge injection**: At request time, server-side, load a compact JSON knowledge pack built from `src/lib/site-data.ts` (services, products, FAQ Q&A, contact info, page routes) and inject it into the system prompt as `KNOWLEDGE`. This keeps the bot grounded in real site content.
-- **Citations**: Update the system prompt to require the assistant to end each answer with a `Sources:` line listing the page link(s) it relied on, e.g. `Sources: /services, /faq#turnaround`. Render those as clickable links in `Chatbot.tsx` (simple linkifier for `/path` tokens).
-- **Strict scope**: Hard rule in the system prompt — only answer questions about Speedex Signages, its services, products, process, locations, careers (when asked), and how to contact/get a quote. For anything else, reply with a single-line redirect: "I can only help with Speedex Signages topics — try asking about our services, products, or how to request a quote."
-- **Quote requests**: When intent is a quote/pricing, do NOT invent prices. Respond with a fixed template:
-  > "For an accurate quote, please share: (1) signage type, (2) size/quantity, (3) installation location in the UAE, (4) deadline. You can submit these on our Contact page (/contact) or WhatsApp us via the floating button. Sources: /contact"
-- **Contact details**: Always pull phone/email/address verbatim from the knowledge pack — never paraphrase or hallucinate. If the user asks for contact info, respond with the exact block + `Sources: /contact`.
-- **Refusals stay short**: Off-topic, jailbreak attempts, or requests to ignore instructions → one-line refusal + redirect.
-- Keep streaming + 429/402 handling as-is.
+### Structured data (JSON-LD via `head().scripts`)
+- Root: `Organization` + `LocalBusiness` (name, url, logo, address Al Quoz Dubai, areaServed UAE, telephone, sameAs social links).
+- `/services`: `Service` items + `ItemList` of services.
+- `/products`: `ItemList` of products.
+- `/contact`: `LocalBusiness` repeat with `ContactPoint`.
+- FAQ section: `FAQPage` schema generated from the existing FAQ array.
+- Breadcrumbs: `BreadcrumbList` on inner pages.
 
-### 7. Misc cleanup
-- Update `Footer.tsx` to use the new logo and keep a "Careers" link (since it's no longer in the navbar).
-- Update `llms.txt` and `sitemap.xml` to keep `/careers` listed (still a real page).
-- Re-run a quick visual pass on the home page in light mode.
+### sitemap.xml & robots.txt
+- Convert static `public/sitemap.xml` to a server route `src/routes/sitemap[.]xml.ts` listing all 7 public routes with `lastmod` = build time and priorities. Delete the static file.
+- `public/robots.txt`: keep `User-agent: *` + `Allow: /`, add `Sitemap: /sitemap.xml` line (relative is invalid per spec → use the preview URL with a TODO until a custom domain is set; ask user during build if they want their domain baked in).
 
-## Technical notes
+### Image alt tags
+- Audit all `<img>` in Hero, Navbar logo, Services cards, Products cards, Explore portfolio, About, Testimonials, OurCompanies. Replace generic `alt={s.title}` with descriptive UAE-keyword alts like `"LED illuminated channel letter signage installation in Dubai by Speedex"`.
 
-- Logo asset: `src/assets/speedex-logo.png.asset.json` via `lovable-assets create`.
-- Service/product images: generated with `imagegen--generate_image` (model `standard`), aspect 4:3, no transparent background.
-- Hero video: prefer a hotlinked Pexels signage MP4; if none found, generate a 16:9 photographic still and apply a CSS `animate-[kenburns_20s_ease-in-out_infinite]` transform on an `<img>` instead of the `<video>`.
-- Chatbot knowledge pack is built once per request from `site-data.ts` to keep it always in sync with what the site shows.
-- No DB schema changes. No new dependencies.
+### Content / on-page SEO
+- Add an SEO content block on the Home page below Stats: 2–3 short paragraphs introducing "Speedex Signages — A Leading Signage & Branding Company in the UAE", weaving in the target keyword list naturally (no stuffing). Include H2/H3 hierarchy.
+- About page: expand intro paragraph with location, years of experience, services covered, UAE-wide coverage (Dubai, Abu Dhabi, Sharjah, Ajman, RAK).
+- Services page: add intro paragraph + per-section short descriptions referencing UAE.
+- Products page: add intro paragraph; rename product cards to use SEO-friendly titles (e.g. "LED Channel Letter Signage — Dubai").
+- Contact page: H1 includes "Contact Speedex Signages — UAE Signage Company"; add NAP block (Name/Address/Phone) in structured `<address>` element.
 
-## Out of scope
+### Technical SEO / Core Web Vitals
+- Hero video: `preload="metadata"`, `poster`, lazy by virtue of being above-the-fold (do not lazy). Preload the poster image via `head().links` on `/` with `rel="preload" as="image" fetchpriority="high"`.
+- All non-hero images keep `loading="lazy"` and add `decoding="async"` + explicit `width`/`height` to reduce CLS.
+- Ensure single `<h1>` per page; demote duplicates to `<h2>`.
+- Add `lang`/`dir` to `<html>` based on i18n (already partially in place — keep).
+- Confirm semantic HTML (`<header>`, `<main>`, `<footer>`, `<nav>`, `<section>` with aria-labels).
 
-- Real UAE phone/email (still placeholder until you provide them).
-- Translating new chatbot system prompt into Arabic (assistant still answers in the user's language; UI strings already i18n'd).
-- Persisting chat transcripts to the DB.
+### URLs
+- Current routes are already SEO-friendly (`/services`, `/products`, etc.) — no changes needed. Confirm no hash navigation is used for primary nav.
+
+## 8. Responsive & theme preservation
+- All new sections use existing semantic tokens (`bg-card`, `text-foreground`, `text-primary`) so dark mode and Arabic RTL work unchanged.
+- New OurCompanies + SEO content sections tested at mobile/tablet/desktop breakpoints via existing Tailwind grid utilities.
+
+---
+
+## Out of scope / assumptions
+- Real Speedex phone/email/WhatsApp numbers: using realistic placeholders; will flag for user replacement.
+- Logos for Arabsat / Excellent / Speedex Auto: using initials avatars (no logo files provided).
+- Arabic translations of the new DOCX-sourced content: English only this round (existing `i18n.ts` AR strings remain for UI chrome).
+- No backend / schema changes.
+
+## Files touched (summary)
+- Edit: `Navbar.tsx`, `WhatsAppButton.tsx`, `sections/Hero.tsx`, `lib/site-data.ts`, `routes/__root.tsx`, `routes/index.tsx`, `routes/about.tsx`, `routes/services.tsx`, `routes/products.tsx`, `routes/explore.tsx`, `routes/careers.tsx`, `routes/contact.tsx`, `public/robots.txt`
+- Create: `components/sections/OurCompanies.tsx`, `components/sections/SeoContent.tsx`, `routes/sitemap[.]xml.ts`, `public/og.jpg` (generated)
+- Delete: `public/sitemap.xml`
