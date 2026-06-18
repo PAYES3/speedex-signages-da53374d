@@ -25,6 +25,10 @@ export function Hero() {
       <img
         src={COMPANY.heroImage}
         alt="Illuminated LED signage manufacturing facility in Dubai by Speedex Signages"
+        width={1920}
+        height={1080}
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover animate-[kenburns_22s_ease-in-out_infinite] -z-10"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/70" />
