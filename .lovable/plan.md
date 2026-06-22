@@ -1,100 +1,86 @@
-## Goals
-Improve UX (visible navbar, working hero video/WhatsApp, prominent logo), apply the uploaded Services content verbatim, add an "Our Companies" section, and deliver comprehensive UAE-focused SEO across the site.
+## Goal
 
----
+Expand the Speedex Signages site with an admin CMS (services, portfolio, reviews, contact inbox), polish the homepage, and keep all current features (SEO, dark mode, Arabic, chatbot, video hero).
 
-## 1. Hero video background
-- `src/components/sections/Hero.tsx`: replace the still image with `<video autoPlay muted loop playsInline preload="metadata" poster={heroSignage}>` using a signage/manufacturing-relevant free Coverr/Pexels MP4 (e.g. neon storefront / workshop). Keep the existing image as the `poster` fallback. Tone down overlay so it stays readable in light mode.
-- Keep H1 "We Light Up Your Brand".
+## Important note on the admin credentials
 
-## 2. Navbar visibility & sticky polish (`src/components/Navbar.tsx`)
-- Default state (top of page) gets a solid light background `bg-background/95 backdrop-blur` + bottom border, not transparent — fixes the invisible nav over the hero.
-- Scrolled state keeps glass + shadow.
-- Bigger logo: `h-12 sm:h-14` (was `h-9`), plus `drop-shadow-sm` for contrast.
-- Strengthen link contrast (`text-foreground` + `font-semibold`) and underline-on-hover indicator.
-- Keep sticky (`fixed top-0`), mobile menu, dark mode toggle, language toggle.
+You asked for username `Speedex_Signages` / password `Speedex@Siganges.com`. I can't hardcode credentials in the client (anyone viewing the site source could read them and take over the database). The correct, equally one-step approach: I seed a single admin account in Lovable Cloud Auth using your email + that password, gate the admin panel with proper login, and grant admin via a separate `user_roles` table. You'll log in at `/admin/login` with:
 
-## 3. WhatsApp button (`src/components/WhatsAppButton.tsx` + `site-data.ts`)
-- Update `COMPANY.whatsapp` to a real-format UAE international number (placeholder `971501234567` — flag in plan for user to replace) and `COMPANY.phone` accordingly.
-- Use `https://wa.me/<digits>?text=<encoded>` with a richer prefilled message ("Hello Speedex Signages, I would like a quote for …. My name is …."). Use `encodeURIComponent`.
-- Add `rel="noopener noreferrer"`, visible WhatsApp SVG icon (not generic chat bubble), tooltip label, and slight pulse ring.
+- email: `admin@speedexsignages.ae` (or any email you tell me — Supabase Auth needs an email, not a username)
+- password: `Speedex@Siganges.com`
 
-## 4. Services page = exact DOCX content (`src/routes/services.tsx` + `src/lib/site-data.ts`)
-- Replace the `PROCESS` list with the 5 items verbatim from the DOCX (Concept & Design, Fabrication/Printing, Installation, Maintenance and Repair, Digital Signage Solutions).
-- Add new structured data sections rendered on `/services`:
-  - **Exterior / External Signages** (3D Illuminated, Metal Signs, Illumination Styles, Flags, Banners, Billboards)
-  - **Interior / Internal Signages** (Reception Signs, Wayfinding & Directional, Room/Office Plaques, Hanging Directional)
-  - **Compliance and Safety Signs** (Compliant, Safety/Exit, Regulatory)
-  - **Promotional & Informational Signage** (POP, Digital Displays/Kiosks, Floor Graphics, Wall Graphics, Frosted Glass, Wide Format)
-  - **Wide Format Printing** (Signage & Displays, Vehicle Wraps, Decor & Murals, Textiles, Offset & Screen Printing)
-- Each rendered as a titled card grid with the exact DOCX bullet copy (no paraphrase, no placeholder). Keep existing service image grid above as the visual catalog.
+Tell me the email you want and I'll seed it.
 
-## 5. "Our Companies" section
-- New component `src/components/sections/OurCompanies.tsx` rendering 4 cards:
-  - Speedex Signages — internal link `/`
-  - Arabsat — https://www.arabsat.ae
-  - Excellent General Trading — https://www.excellentgroup.ae
-  - Speedex Auto Workshop — https://www.speedexgroups.ae
-- Each card: company name, one-line description, external link with `target="_blank" rel="noopener"`. Logo placeholder circle with initials (since we don't have logos).
-- Mount on Home (`src/routes/index.tsx`) below stats/testimonials, and also on About page.
+## What I'll build
 
-## 6. Logo prominence
-- Increase navbar logo size (see §2).
-- Add a larger logo lockup at the top of the Hero on mobile (since the dark hero swallows it) — small inline logo + wordmark above the H1, white-tinted for contrast.
+### 1. Backend (Lovable Cloud)
 
-## 7. SEO overhaul
-### Per-route metadata (`head()` in every route file)
-For `/`, `/about`, `/services`, `/products`, `/explore`, `/careers`, `/contact`:
-- Unique `<title>` ≤ 60 chars with primary keyword (e.g. `Signage Company in UAE | Speedex Signages — LED, Acrylic, 3D`).
-- Unique meta description ≤ 160 chars naturally weaving target keywords.
-- `og:title`, `og:description`, `og:url` (relative), `og:type` (`website` / leaf appropriate), `twitter:card="summary_large_image"`, `og:image` set to `/og.jpg` (will generate one hero share image and save to `public/og.jpg`).
-- `<link rel="canonical">` on each leaf (relative href) — not on root, per TanStack dedupe rule.
+New tables, all with RLS + GRANTs:
+- `services` — title, slug, description, icon, image_url, sort_order, published
+- `portfolio_projects` — title, slug, category, description, cover_url, media (jsonb of image/video URLs), published, sort_order
+- `portfolio_categories` — name, slug
+- `testimonials` — name, company, rating (1–5), content, avatar_url, approved, created_at
+- `user_roles` + `app_role` enum + `has_role()` SECURITY DEFINER (per the user-roles rule)
 
-### Structured data (JSON-LD via `head().scripts`)
-- Root: `Organization` + `LocalBusiness` (name, url, logo, address Al Quoz Dubai, areaServed UAE, telephone, sameAs social links).
-- `/services`: `Service` items + `ItemList` of services.
-- `/products`: `ItemList` of products.
-- `/contact`: `LocalBusiness` repeat with `ContactPoint`.
-- FAQ section: `FAQPage` schema generated from the existing FAQ array.
-- Breadcrumbs: `BreadcrumbList` on inner pages.
+Reuse existing `contact_messages` and `quote_requests` for the inbox.
 
-### sitemap.xml & robots.txt
-- Convert static `public/sitemap.xml` to a server route `src/routes/sitemap[.]xml.ts` listing all 7 public routes with `lastmod` = build time and priorities. Delete the static file.
-- `public/robots.txt`: keep `User-agent: *` + `Allow: /`, add `Sitemap: /sitemap.xml` line (relative is invalid per spec → use the preview URL with a TODO until a custom domain is set; ask user during build if they want their domain baked in).
+Storage buckets (private, signed URLs for admin uploads; public read for published media):
+- `services-media`
+- `portfolio-media`
+- `testimonial-avatars`
 
-### Image alt tags
-- Audit all `<img>` in Hero, Navbar logo, Services cards, Products cards, Explore portfolio, About, Testimonials, OurCompanies. Replace generic `alt={s.title}` with descriptive UAE-keyword alts like `"LED illuminated channel letter signage installation in Dubai by Speedex"`.
+RLS pattern:
+- Public can SELECT only `published = true` rows (services, portfolio) and `approved = true` testimonials.
+- Public can INSERT into `testimonials` (defaults to `approved = false`) via a server function.
+- Admin (has_role admin) can do everything via authenticated server functions.
 
-### Content / on-page SEO
-- Add an SEO content block on the Home page below Stats: 2–3 short paragraphs introducing "Speedex Signages — A Leading Signage & Branding Company in the UAE", weaving in the target keyword list naturally (no stuffing). Include H2/H3 hierarchy.
-- About page: expand intro paragraph with location, years of experience, services covered, UAE-wide coverage (Dubai, Abu Dhabi, Sharjah, Ajman, RAK).
-- Services page: add intro paragraph + per-section short descriptions referencing UAE.
-- Products page: add intro paragraph; rename product cards to use SEO-friendly titles (e.g. "LED Channel Letter Signage — Dubai").
-- Contact page: H1 includes "Contact Speedex Signages — UAE Signage Company"; add NAP block (Name/Address/Phone) in structured `<address>` element.
+### 2. Admin panel (`/admin/*`, gated by `_authenticated` + admin role)
 
-### Technical SEO / Core Web Vitals
-- Hero video: `preload="metadata"`, `poster`, lazy by virtue of being above-the-fold (do not lazy). Preload the poster image via `head().links` on `/` with `rel="preload" as="image" fetchpriority="high"`.
-- All non-hero images keep `loading="lazy"` and add `decoding="async"` + explicit `width`/`height` to reduce CLS.
-- Ensure single `<h1>` per page; demote duplicates to `<h2>`.
-- Add `lang`/`dir` to `<html>` based on i18n (already partially in place — keep).
-- Confirm semantic HTML (`<header>`, `<main>`, `<footer>`, `<nav>`, `<section>` with aria-labels).
+- `/admin/login` — email+password sign-in
+- `/admin` — dashboard: counts (messages, pending reviews, services, projects), recent activity
+- `/admin/services` — list / create / edit / delete, upload service image from local PC
+- `/admin/portfolio` — list / create / edit / delete projects, multi-file image+video upload, category management, drag-to-reorder
+- `/admin/reviews` — pending queue with Approve / Reject, rating display
+- `/admin/messages` — contact + quote inbox; one-click "Reply" opens `mailto:` with prefilled subject/body
+- `/admin/media` — browse uploaded files per bucket, delete
 
-### URLs
-- Current routes are already SEO-friendly (`/services`, `/products`, etc.) — no changes needed. Confirm no hash navigation is used for primary nav.
+### 3. Public site changes
 
-## 8. Responsive & theme preservation
-- All new sections use existing semantic tokens (`bg-card`, `text-foreground`, `text-primary`) so dark mode and Arabic RTL work unchanged.
-- New OurCompanies + SEO content sections tested at mobile/tablet/desktop breakpoints via existing Tailwind grid utilities.
+- Homepage polish: add a live "Featured Projects" strip (from portfolio), a "What clients say" carousel (approved testimonials only), and keep the existing video hero, glassmorphism, dark mode, Arabic, chatbot. No layout overhaul — just real CMS content replacing the current static testimonials/work mentions.
+- `/services` — read from `services` table (falls back to current static list if empty so the site never looks empty).
+- `/portfolio` — new route. Grid with category filter chips, lazy-loaded images, video lightbox, animations. SEO `head()` + JSON-LD `ItemList`.
+- Testimonials section — public "Leave a review" form (name, company, rating stars, message); submissions go to moderation queue.
+- Contact form already exists — keep it; ensure submissions land in `/admin/messages`.
 
----
+### 4. SEO + perf (incremental on top of what's already done)
 
-## Out of scope / assumptions
-- Real Speedex phone/email/WhatsApp numbers: using realistic placeholders; will flag for user replacement.
-- Logos for Arabsat / Excellent / Speedex Auto: using initials avatars (no logo files provided).
-- Arabic translations of the new DOCX-sourced content: English only this round (existing `i18n.ts` AR strings remain for UI chrome).
-- No backend / schema changes.
+- Add `/portfolio` and each portfolio project to `sitemap.xml.ts` (driven by DB).
+- Per-route `head()` titles/descriptions for `/portfolio` and `/admin/*` (noindex on admin).
+- `Product`-style JSON-LD on portfolio items, `Review`/`AggregateRating` JSON-LD where testimonials are shown.
+- Lazy-loaded images with width/height + `loading="lazy"` on all CMS imagery.
 
-## Files touched (summary)
-- Edit: `Navbar.tsx`, `WhatsAppButton.tsx`, `sections/Hero.tsx`, `lib/site-data.ts`, `routes/__root.tsx`, `routes/index.tsx`, `routes/about.tsx`, `routes/services.tsx`, `routes/products.tsx`, `routes/explore.tsx`, `routes/careers.tsx`, `routes/contact.tsx`, `public/robots.txt`
-- Create: `components/sections/OurCompanies.tsx`, `components/sections/SeoContent.tsx`, `routes/sitemap[.]xml.ts`, `public/og.jpg` (generated)
-- Delete: `public/sitemap.xml`
+### 5. AI chatbot
+
+Already exists at `/api/public/chat` and works against your current site copy. I'll extend its system prompt to include the live services + portfolio list (server-side fetch) so it can answer specific project/service questions. No UI change.
+
+### What I'm NOT changing
+
+- Existing routes, copy uploaded from your Word docs, brand colors, fonts, animations, navbar/footer, dark mode, Arabic toggle, WhatsApp button, chatbot UI.
+- Logo size (already enlarged in earlier turn).
+- Existing security migrations.
+
+## Technical details
+
+- Stack stays TanStack Start + React + TS + Tailwind + Lovable Cloud (Supabase). No new frameworks.
+- All admin DB writes via `createServerFn` + `requireSupabaseAuth` + `has_role(uid, 'admin')` check. Public reads via the publishable-key server client with narrow `TO anon` policies.
+- Uploads via `supabase.storage.from(bucket).upload(...)` from the admin browser client (admin is signed in; RLS allows admin INSERT).
+- Routing: `/admin` lives under `src/routes/_authenticated/admin/*`; a child `beforeLoad` calls a `requireAdmin` server fn and redirects non-admins to `/`.
+- Seed: a migration inserts your email into `auth.users` (via admin API in a one-shot server fn the first time you visit `/admin/login`, OR I can ask you to sign up once and then I grant the role — tell me which you prefer).
+
+## Open questions before I build
+
+1. What email should the admin account use? (Supabase Auth requires an email.)
+2. Office address + Google Maps embed URL for the Location section — do you have specific coordinates / Maps link, or should I use a generic Dubai pin until you provide one?
+3. Any existing portfolio content (images/case studies) to seed, or start empty and you'll upload via admin?
+
+Once you confirm (1) and (2), I'll switch to build mode and ship it in one pass.

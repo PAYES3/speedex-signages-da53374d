@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Hero } from '@/components/sections/Hero';
 import { Stats } from '@/components/sections/Stats';
-import { Testimonials } from '@/components/sections/Testimonials';
+import { CustomerFeedback } from '@/components/sections/CustomerFeedback';
 import { ClientLogos } from '@/components/sections/ClientLogos';
 import { FAQ } from '@/components/sections/FAQ';
 import { CTABanner } from '@/components/sections/CTABanner';
@@ -106,7 +106,7 @@ function Home() {
         </div>
       </section>
 
-      <Testimonials />
+      <CustomerFeedback />
       <OurCompanies />
       <FAQ />
       <CTABanner />
