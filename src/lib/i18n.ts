@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const en = {
-  nav: { home: 'Home', about: 'About', services: 'Services', explore: 'Explore', products: 'Products', careers: 'Careers', contact: 'Contact', quote: 'Get a Quote' },
+  nav: { home: 'Home', about: 'About', services: 'Services', portfolio: 'Portfolio', explore: 'Explore', products: 'Products', careers: 'Careers', contact: 'Contact', quote: 'Get a Quote' },
   hero: {
     tag: 'UAE Signage & Branding Experts',
     title: 'We Light Up Your Brand',
@@ -14,7 +14,7 @@ const en = {
 };
 
 const ar = {
-  nav: { home: 'الرئيسية', about: 'من نحن', services: 'خدماتنا', explore: 'استكشف', products: 'المنتجات', careers: 'وظائف', contact: 'اتصل بنا', quote: 'احصل على عرض' },
+  nav: { home: 'الرئيسية', about: 'من نحن', services: 'خدماتنا', portfolio: 'أعمالنا', explore: 'استكشف', products: 'المنتجات', careers: 'وظائف', contact: 'اتصل بنا', quote: 'احصل على عرض' },
   hero: {
     tag: 'خبراء اللافتات والعلامات التجارية في الإمارات',
     title: 'نُنير علامتك التجارية',
