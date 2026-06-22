@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
@@ -40,6 +41,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRoute
+  '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRoute
+  '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/explore': typeof ExploreRoute
+  '/portfolio': typeof PortfolioRoute
   '/products': typeof ProductsRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/explore'
+    | '/portfolio'
     | '/products'
     | '/services'
     | '/sitemap.xml'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/explore'
+    | '/portfolio'
     | '/products'
     | '/services'
     | '/sitemap.xml'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/explore'
+    | '/portfolio'
     | '/products'
     | '/services'
     | '/sitemap.xml'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   ExploreRoute: typeof ExploreRoute
+  PortfolioRoute: typeof PortfolioRoute
   ProductsRoute: typeof ProductsRoute
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -263,6 +276,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -403,6 +423,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   ExploreRoute: ExploreRoute,
+  PortfolioRoute: PortfolioRoute,
   ProductsRoute: ProductsRoute,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
