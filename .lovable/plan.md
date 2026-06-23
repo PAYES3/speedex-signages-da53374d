@@ -1,86 +1,72 @@
-## Goal
+## Speedex Group — Premium Corporate Site Upgrade
 
-Expand the Speedex Signages site with an admin CMS (services, portfolio, reviews, contact inbox), polish the homepage, and keep all current features (SEO, dark mode, Arabic, chatbot, video hero).
+Most of the foundation already exists (admin CMS, portfolio, services CRUD, testimonials, contact forms, chatbot, dark mode, i18n, SEO scaffolding). This plan focuses on the **new hero, the Group/Companies architecture, Location/Maps, and polish** — not rebuilding what's already shipped.
 
-## Important note on the admin credentials
+### 1. Cinematic Hero (homepage)
 
-You asked for username `Speedex_Signages` / password `Speedex@Siganges.com`. I can't hardcode credentials in the client (anyone viewing the site source could read them and take over the database). The correct, equally one-step approach: I seed a single admin account in Lovable Cloud Auth using your email + that password, gate the admin panel with proper login, and grant admin via a separate `user_roles` table. You'll log in at `/admin/login` with:
+- Replace current `Hero.tsx` with a full-bleed cinematic hero:
+  - Background `<video>` (autoplay, muted, loop, playsInline, `preload="metadata"`, poster fallback) sourced from a new admin-controlled `hero_video_url` setting (so you can swap the clip later without code).
+  - Layered dark gradient + subtle vignette + grain for text legibility in light/dark.
+  - Glassmorphism logo plate + animated tag chip.
+  - Headline: **"Transforming Ideas Into Powerful Visual Identities"**
+  - Sub: **"Professional Signage, Transport, Contracting, Trading & Automotive Solutions Across UAE"**
+  - 3 CTA buttons: **Explore Our Companies** → `/companies`, **View Our Projects** → `/portfolio`, **Contact Us** → `/contact`.
+  - Motion: staggered fade/slide-in, slow Ken Burns on poster, scroll-cue indicator.
+- Video asset: I'll generate a short cinematic placeholder via the video tool (signage industry montage). You can replace it in the admin later.
 
-- email: `admin@speedexsignages.ae` (or any email you tell me — Supabase Auth needs an email, not a username)
-- password: `Speedex@Siganges.com`
+### 2. Group / Companies architecture
 
-Tell me the email you want and I'll seed it.
+- New table `companies` (name, slug, tagline, description, services[], hero_image, accent_color, order, active).
+- New public route `/companies` — grid of all 5 group companies with premium cards.
+- New dynamic route `/companies/$slug` — per-company landing page (hero, services list, CTA, SEO head per company).
+- Seed migration with the 5 companies and their service bullets exactly as you provided (no rewording).
+- Admin CRUD page `/admin/companies` (list/create/edit/delete + image upload, reusing `FileUpload`).
+- Navbar: add **Companies** link; Footer: list group companies.
+- Replace existing `OurCompanies` section on the homepage with a live-from-DB version.
 
-## What I'll build
+### 3. Site settings (hero video, etc.)
 
-### 1. Backend (Lovable Cloud)
+- New `site_settings` key/value table (singleton-style) with admin editor at `/admin/settings` for: hero video URL, hero poster, contact email, phone, WhatsApp, address, Google Maps embed URL.
+- Hero and Footer/Contact read from this table.
 
-New tables, all with RLS + GRANTs:
-- `services` — title, slug, description, icon, image_url, sort_order, published
-- `portfolio_projects` — title, slug, category, description, cover_url, media (jsonb of image/video URLs), published, sort_order
-- `portfolio_categories` — name, slug
-- `testimonials` — name, company, rating (1–5), content, avatar_url, approved, created_at
-- `user_roles` + `app_role` enum + `has_role()` SECURITY DEFINER (per the user-roles rule)
+### 4. Location section + Contact page map
 
-Reuse existing `contact_messages` and `quote_requests` for the inbox.
+- New `Location` section on homepage and a richer map block on `/contact`:
+  - Google Maps embed iframe driven by `site_settings.maps_embed_url`.
+  - "Get Directions" button → `https://www.google.com/maps/dir/?api=1&destination=...`.
+  - Glass card with address, hours, phone, email.
 
-Storage buckets (private, signed URLs for admin uploads; public read for published media):
-- `services-media`
-- `portfolio-media`
-- `testimonial-avatars`
+### 5. SEO sweep
 
-RLS pattern:
-- Public can SELECT only `published = true` rows (services, portfolio) and `approved = true` testimonials.
-- Public can INSERT into `testimonials` (defaults to `approved = false`) via a server function.
-- Admin (has_role admin) can do everything via authenticated server functions.
+- Per-route `head()` already exists; add for `/companies`, `/companies/$slug`, `/admin/*` (noindex).
+- Update `sitemap.xml.ts` to include companies routes (loader-driven from DB).
+- Expand root JSON-LD to `Organization` with `subOrganization[]` listing the 5 companies.
+- Add `Service` JSON-LD on `/services` and `BreadcrumbList` on company detail pages.
 
-### 2. Admin panel (`/admin/*`, gated by `_authenticated` + admin role)
+### 6. Light/Dark polish
 
-- `/admin/login` — email+password sign-in
-- `/admin` — dashboard: counts (messages, pending reviews, services, projects), recent activity
-- `/admin/services` — list / create / edit / delete, upload service image from local PC
-- `/admin/portfolio` — list / create / edit / delete projects, multi-file image+video upload, category management, drag-to-reorder
-- `/admin/reviews` — pending queue with Approve / Reject, rating display
-- `/admin/messages` — contact + quote inbox; one-click "Reply" opens `mailto:` with prefilled subject/body
-- `/admin/media` — browse uploaded files per bucket, delete
+- Audit hero, glass cards, and new company pages for token usage (no hardcoded white/black). Ensure contrast in both themes.
 
-### 3. Public site changes
+### 7. Out of scope (already done, won't touch)
 
-- Homepage polish: add a live "Featured Projects" strip (from portfolio), a "What clients say" carousel (approved testimonials only), and keep the existing video hero, glassmorphism, dark mode, Arabic, chatbot. No layout overhaul — just real CMS content replacing the current static testimonials/work mentions.
-- `/services` — read from `services` table (falls back to current static list if empty so the site never looks empty).
-- `/portfolio` — new route. Grid with category filter chips, lazy-loaded images, video lightbox, animations. SEO `head()` + JSON-LD `ItemList`.
-- Testimonials section — public "Leave a review" form (name, company, rating stars, message); submissions go to moderation queue.
-- Contact form already exists — keep it; ensure submissions land in `/admin/messages`.
+- Admin auth + RBAC (`user_roles`, `has_role`)
+- Portfolio CMS + categories + filtering
+- Services CRUD + media
+- Testimonials + approval + stars
+- Contact/quote inbox + mailto reply
+- AI chatbot (Lovable AI)
+- Dark mode toggle, i18n (EN/AR), WhatsApp button, back-to-top
+- Word-doc content (preserved verbatim per your rule)
 
-### 4. SEO + perf (incremental on top of what's already done)
+### Technical details
 
-- Add `/portfolio` and each portfolio project to `sitemap.xml.ts` (driven by DB).
-- Per-route `head()` titles/descriptions for `/portfolio` and `/admin/*` (noindex on admin).
-- `Product`-style JSON-LD on portfolio items, `Review`/`AggregateRating` JSON-LD where testimonials are shown.
-- Lazy-loaded images with width/height + `loading="lazy"` on all CMS imagery.
+- New migration: `companies` + `site_settings` tables, GRANTs, RLS (public SELECT on active rows; admin write via `has_role('admin')`), seed data, storage bucket `company-media`.
+- New server fns in `src/lib/admin/content.functions.ts`: `listCompanies`, `getCompanyBySlug`, `upsertCompany`, `deleteCompany`, `getSettings`, `updateSettings`.
+- New files: `src/routes/companies.tsx`, `src/routes/companies.$slug.tsx`, `src/routes/_authenticated/admin.companies.tsx`, `src/routes/_authenticated/admin.settings.tsx`, `src/components/sections/Location.tsx`. Rewrite `src/components/sections/Hero.tsx` and `src/components/sections/OurCompanies.tsx`.
+- Hero video: generated via `videogen` (5s, 1080p, 16:9) → stored as asset, URL seeded into `site_settings.hero_video_url`.
 
-### 5. AI chatbot
+### Questions before I build
 
-Already exists at `/api/public/chat` and works against your current site copy. I'll extend its system prompt to include the live services + portfolio list (server-side fetch) so it can answer specific project/service questions. No UI change.
-
-### What I'm NOT changing
-
-- Existing routes, copy uploaded from your Word docs, brand colors, fonts, animations, navbar/footer, dark mode, Arabic toggle, WhatsApp button, chatbot UI.
-- Logo size (already enlarged in earlier turn).
-- Existing security migrations.
-
-## Technical details
-
-- Stack stays TanStack Start + React + TS + Tailwind + Lovable Cloud (Supabase). No new frameworks.
-- All admin DB writes via `createServerFn` + `requireSupabaseAuth` + `has_role(uid, 'admin')` check. Public reads via the publishable-key server client with narrow `TO anon` policies.
-- Uploads via `supabase.storage.from(bucket).upload(...)` from the admin browser client (admin is signed in; RLS allows admin INSERT).
-- Routing: `/admin` lives under `src/routes/_authenticated/admin/*`; a child `beforeLoad` calls a `requireAdmin` server fn and redirects non-admins to `/`.
-- Seed: a migration inserts your email into `auth.users` (via admin API in a one-shot server fn the first time you visit `/admin/login`, OR I can ask you to sign up once and then I grant the role — tell me which you prefer).
-
-## Open questions before I build
-
-1. What email should the admin account use? (Supabase Auth requires an email.)
-2. Office address + Google Maps embed URL for the Location section — do you have specific coordinates / Maps link, or should I use a generic Dubai pin until you provide one?
-3. Any existing portfolio content (images/case studies) to seed, or start empty and you'll upload via admin?
-
-Once you confirm (1) and (2), I'll switch to build mode and ship it in one pass.
+1. **Google Maps embed URL / address** — do you have a specific Maps link and street address for the UAE office, or should I use a generic Dubai Al Quoz pin as placeholder?
+2. **Hero video** — OK with an AI-generated 5s cinematic placeholder (you can swap via admin later), or will you upload your own MP4?
+3. **Per-company hero images** — generate AI placeholders per company now, or leave empty and you'll upload via the new admin Companies page?

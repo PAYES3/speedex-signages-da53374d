@@ -7,10 +7,14 @@ import { FAQ } from '@/components/sections/FAQ';
 import { CTABanner } from '@/components/sections/CTABanner';
 import { OurCompanies } from '@/components/sections/OurCompanies';
 import { SeoContent } from '@/components/sections/SeoContent';
+import { Location } from '@/components/sections/Location';
 import { Reveal } from '@/components/Reveal';
 import { SERVICES, PROJECTS, FAQ as FAQ_DATA } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useQuery } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
+import { publicGetSettings } from '@/lib/admin/content.functions';
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -43,9 +47,12 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
+  const getSettings = useServerFn(publicGetSettings);
+  const { data: settings } = useQuery({ queryKey: ['site-settings'], queryFn: () => getSettings() });
+  const s = (settings ?? {}) as Record<string, string>;
   return (
     <>
-      <Hero />
+      <Hero videoUrl={s.hero_video_url} posterUrl={s.hero_poster_url} />
       <ClientLogos />
       <Stats />
       <SeoContent />
@@ -108,6 +115,13 @@ function Home() {
 
       <CustomerFeedback />
       <OurCompanies />
+      <Location
+        address={s.office_address}
+        phone={s.contact_phone}
+        email={s.contact_email}
+        mapsEmbedUrl={s.maps_embed_url}
+        mapsDirectionsUrl={s.maps_directions_url}
+      />
       <FAQ />
       <CTABanner />
     </>

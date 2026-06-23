@@ -259,3 +259,95 @@ export const publicListTestimonials = createServerFn({ method: 'GET' })
     if (error) return [];
     return data ?? [];
   });
+
+/* ============================================================
+ * COMPANIES (group)
+ * ============================================================ */
+const companySchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().trim().min(1).max(200),
+  slug: z.string().trim().min(1).max(160).regex(/^[a-z0-9-]+$/),
+  tagline: z.string().trim().max(400).default(''),
+  description: z.string().trim().max(8000).default(''),
+  services: z.array(z.string().trim().min(1).max(200)).default([]),
+  hero_image: z.string().trim().max(1200).nullable().optional(),
+  accent_color: z.string().trim().max(20).default('#0E7C7B'),
+  website_url: z.string().trim().max(800).nullable().optional(),
+  sort_order: z.number().int().default(0),
+  active: z.boolean().default(true),
+});
+
+export const publicListCompanies = createServerFn({ method: 'GET' })
+  .handler(async () => {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const { data, error } = await supabaseAdmin
+      .from('companies').select('*').eq('active', true).order('sort_order').order('name');
+    if (error) return [];
+    return data ?? [];
+  });
+
+export const publicGetCompany = createServerFn({ method: 'GET' })
+  .inputValidator((input) => z.object({ slug: z.string().min(1).max(160) }).parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const { data: row, error } = await supabaseAdmin
+      .from('companies').select('*').eq('slug', data.slug).eq('active', true).maybeSingle();
+    if (error) return null;
+    return row;
+  });
+
+export const listAllCompanies = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data, error } = await context.supabase
+      .from('companies').select('*').order('sort_order').order('name');
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const upsertCompany = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => companySchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase.from('companies').upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteCompany = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase.from('companies').delete().eq('id', data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/* ============================================================
+ * SITE SETTINGS (key/value)
+ * ============================================================ */
+export const publicGetSettings = createServerFn({ method: 'GET' })
+  .handler(async () => {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const { data, error } = await supabaseAdmin.from('site_settings').select('key,value');
+    if (error) return {} as Record<string, string>;
+    const out: Record<string, string> = {};
+    for (const r of data ?? []) out[r.key as string] = (r.value as string) ?? '';
+    return out;
+  });
+
+export const updateSettings = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ entries: z.record(z.string().min(1).max(80), z.string().max(2000)) }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const rows = Object.entries(data.entries).map(([key, value]) => ({ key, value }));
+    const { error } = await context.supabase.from('site_settings').upsert(rows);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

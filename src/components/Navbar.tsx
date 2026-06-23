@@ -9,6 +9,7 @@ import { COMPANY } from '@/lib/site-data';
 const NAV = [
   { to: '/', key: 'home' },
   { to: '/about', key: 'about' },
+  { to: '/companies', key: 'companies' },
   { to: '/services', key: 'services' },
   { to: '/portfolio', key: 'portfolio' },
   { to: '/explore', key: 'explore' },
