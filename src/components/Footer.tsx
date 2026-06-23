@@ -4,19 +4,19 @@ import { useServerFn } from '@tanstack/react-start';
 import { publicListCompanies } from '@/lib/admin/content.functions';
 import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, Youtube } from 'lucide-react';
 import { COMPANY } from '@/lib/site-data';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import logo from '@/assets/speedex-logo.png.asset.json';
+
+const QUICK_LINKS = [
+  { to: '/about', label: 'About' },
+  { to: '/companies', label: 'Companies' },
+  { to: '/services', label: 'Services' },
+  { to: '/portfolio', label: 'Portfolio' },
+  { to: '/contact', label: 'Contact' },
+] as const;
 
 export function Footer() {
   const fetcher = useServerFn(publicListCompanies);
   const { data: companies } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
-  const onSubscribe = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    toast.success('Subscribed! Thanks for joining our newsletter.');
-    (e.target as HTMLFormElement).reset();
-  };
   return (
     <footer className="bg-foreground text-background mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -50,8 +50,8 @@ export function Footer() {
         <div>
           <h4 className="font-semibold mb-4">Quick Links</h4>
           <ul className="space-y-2 text-sm text-background/70">
-            {['About','Companies','Services','Portfolio','Contact'].map((l) => (
-              <li key={l}><Link to={`/${l.toLowerCase()}`} className="hover:text-primary">{l}</Link></li>
+            {QUICK_LINKS.map((l) => (
+              <li key={l.to}><Link to={l.to} className="hover:text-primary">{l.label}</Link></li>
             ))}
           </ul>
         </div>
