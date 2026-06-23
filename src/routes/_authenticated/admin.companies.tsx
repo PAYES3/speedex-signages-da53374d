@@ -143,12 +143,23 @@ function AdminCompaniesPage() {
           </div>
           <div>
             <Label>Hero image</Label>
-            <FileUpload
-              bucket="portfolio-media"
-              accept="image/*"
-              currentUrl={editing.hero_image || ''}
-              onUploaded={(url) => setEditing({ ...editing, hero_image: url })}
-            />
+            <div className="flex items-center gap-3 mt-1">
+              {editing.hero_image && (
+                <img src={editing.hero_image} alt="" className="h-16 w-24 object-cover rounded-md border border-border" />
+              )}
+              <FileUpload
+                bucket="portfolio-media"
+                accept="image/*"
+                label={editing.hero_image ? 'Replace image' : 'Upload image'}
+                onUploaded={(files) => {
+                  const first = files[0];
+                  if (first) setEditing({ ...editing, hero_image: first.url });
+                }}
+              />
+              {editing.hero_image && (
+                <Button variant="ghost" size="sm" onClick={() => setEditing({ ...editing, hero_image: null })}>Remove</Button>
+              )}
+            </div>
           </div>
           <div className="flex gap-2">
             <Button onClick={onSave}><Save className="w-4 h-4" /> Save</Button>
