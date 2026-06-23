@@ -16,6 +16,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/about", changefreq: "monthly", priority: "0.8" },
+          { path: "/companies", changefreq: "monthly", priority: "0.9" },
           { path: "/services", changefreq: "monthly", priority: "0.9" },
           { path: "/portfolio", changefreq: "weekly", priority: "0.9" },
           { path: "/products", changefreq: "monthly", priority: "0.9" },
@@ -23,6 +24,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/careers", changefreq: "monthly", priority: "0.6" },
           { path: "/contact", changefreq: "monthly", priority: "0.8" },
         ];
+        try {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { data } = await supabaseAdmin
+            .from("companies").select("slug,updated_at").eq("active", true);
+          for (const c of data ?? []) {
+            entries.push({ path: `/companies/${c.slug}`, changefreq: "monthly", priority: "0.7" });
+          }
+        } catch { /* sitemap should not fail on DB error */ }
         const lastmod = new Date().toISOString().slice(0, 10);
         const urls = entries.map((e) => [
           `  <url>`,
