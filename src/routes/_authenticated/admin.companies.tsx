@@ -11,7 +11,8 @@ import { Switch } from '@/components/ui/switch';
 import { Card } from '@/components/ui/card';
 import { FileUpload } from '@/components/admin/FileUpload';
 import { toast } from 'sonner';
-import { Plus, Trash2, Save, Edit3 } from 'lucide-react';
+import { Plus, Trash2, Save, Edit3, Tags } from 'lucide-react';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 
 export const Route = createFileRoute('/_authenticated/admin/companies')({
   head: () => ({
@@ -88,15 +89,12 @@ function AdminCompaniesPage() {
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Companies</h1>
-          <p className="text-sm text-muted-foreground">Manage the Speedex Group companies shown on the public site.</p>
-        </div>
-        <Button onClick={() => setEditing({ ...blank })}>
-          <Plus className="w-4 h-4" /> Add company
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="Companies"
+        subtitle="Manage the Speedex Group companies shown on the public site."
+        addLabel="Add company"
+        onAdd={() => setEditing({ ...blank })}
+      />
 
       {editing && (
         <Card className="p-5 space-y-4 border-primary/40">

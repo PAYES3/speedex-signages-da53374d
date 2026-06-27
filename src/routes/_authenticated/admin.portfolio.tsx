@@ -14,6 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { Pencil, Trash2, Plus, Tags } from 'lucide-react';
 import { toast } from 'sonner';
 import { FileUpload, MediaPreview } from '@/components/admin/FileUpload';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 
 export const Route = createFileRoute('/_authenticated/admin/portfolio')({
   component: Portfolio,
@@ -90,16 +91,17 @@ function Portfolio() {
 
   return (
     <div>
-      <header className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <div>
-          <h1 className="text-3xl font-bold">Portfolio</h1>
-          <p className="text-muted-foreground mt-1">Manage projects shown on /portfolio.</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setCatModal(true)}><Tags className="w-4 h-4 mr-2" />Categories</Button>
-          <Button onClick={() => setEditing({ ...empty })}><Plus className="w-4 h-4 mr-2" />New project</Button>
-        </div>
-      </header>
+      <AdminPageHeader
+        title="Portfolio"
+        subtitle="Manage projects shown on /portfolio."
+        addLabel="New project"
+        onAdd={() => setEditing({ ...empty })}
+        extra={
+          <Button variant="outline" size="lg" className="h-12" onClick={() => setCatModal(true)}>
+            <Tags className="w-4 h-4 mr-2" />Categories
+          </Button>
+        }
+      />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {projects?.map((p: any) => (

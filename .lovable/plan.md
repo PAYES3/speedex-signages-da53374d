@@ -1,72 +1,43 @@
-## Speedex Group — Premium Corporate Site Upgrade
+# Plan
 
-Most of the foundation already exists (admin CMS, portfolio, services CRUD, testimonials, contact forms, chatbot, dark mode, i18n, SEO scaffolding). This plan focuses on the **new hero, the Group/Companies architecture, Location/Maps, and polish** — not rebuilding what's already shipped.
+## 1. Admin Panel — prominent "Add" buttons
 
-### 1. Cinematic Hero (homepage)
+Today every admin page (Companies, Services, Portfolio, Reviews) renders a small `<Button>Add…</Button>` in the page header — easy to miss on a busy list.
 
-- Replace current `Hero.tsx` with a full-bleed cinematic hero:
-  - Background `<video>` (autoplay, muted, loop, playsInline, `preload="metadata"`, poster fallback) sourced from a new admin-controlled `hero_video_url` setting (so you can swap the clip later without code).
-  - Layered dark gradient + subtle vignette + grain for text legibility in light/dark.
-  - Glassmorphism logo plate + animated tag chip.
-  - Headline: **"Transforming Ideas Into Powerful Visual Identities"**
-  - Sub: **"Professional Signage, Transport, Contracting, Trading & Automotive Solutions Across UAE"**
-  - 3 CTA buttons: **Explore Our Companies** → `/companies`, **View Our Projects** → `/portfolio`, **Contact Us** → `/contact`.
-  - Motion: staggered fade/slide-in, slow Ken Burns on poster, scroll-cue indicator.
-- Video asset: I'll generate a short cinematic placeholder via the video tool (signage industry montage). You can replace it in the admin later.
+Changes:
+- Add a shared `AdminPageHeader` component with: large title, subtitle, and a primary CTA slot rendered as a **large gradient pill button** (`h-12 px-6`, primary→primary-glow, shadow, hover lift, leading `Plus` icon).
+- Apply it to `admin.companies.tsx`, `admin.services.tsx`, `admin.portfolio.tsx`, `admin.reviews.tsx`.
+- Also add a **sticky bottom-right floating action button** ("+ Add") on those four pages for thumb-reach on mobile and instant visibility on long lists.
 
-### 2. Group / Companies architecture
+## 2. Homepage hero — 5 randomized signage videos
 
-- New table `companies` (name, slug, tagline, description, services[], hero_image, accent_color, order, active).
-- New public route `/companies` — grid of all 5 group companies with premium cards.
-- New dynamic route `/companies/$slug` — per-company landing page (hero, services list, CTA, SEO head per company).
-- Seed migration with the 5 companies and their service bullets exactly as you provided (no rewording).
-- Admin CRUD page `/admin/companies` (list/create/edit/delete + image upload, reusing `FileUpload`).
-- Navbar: add **Companies** link; Footer: list group companies.
-- Replace existing `OurCompanies` section on the homepage with a live-from-DB version.
+- Generate **5 cinematic 10-second signage manufacturing videos** with `videogen--generate_video` (1080p, 16:9): LED channel-letter fabrication, CNC acrylic cutting, 3D illuminated signboard install, vehicle wrap application, UAE night cityscape of lit signage. Save under `src/assets/hero/hero-1.mp4` … `hero-5.mp4` as Lovable Asset pointers.
+- Update `Hero.tsx`:
+  - Import the 5 asset pointers into an array.
+  - On mount, pick `Math.floor(Math.random() * 5)` so each refresh shows a different clip (admin-supplied `hero_video_url` from Settings still wins if set).
+  - `autoPlay muted loop playsInline preload="auto"` + `<source>` per pick; smooth crossfade in via framer-motion opacity.
 
-### 3. Site settings (hero video, etc.)
+## 3. Hero readability
 
-- New `site_settings` key/value table (singleton-style) with admin editor at `/admin/settings` for: hero video URL, hero poster, contact email, phone, WhatsApp, address, Google Maps embed URL.
-- Hero and Footer/Contact read from this table.
+- Strengthen the existing overlay stack: darker base gradient (`from-black/85 via-black/65 to-black/90`) + a true neutral `bg-black/45` flat layer behind the content column only, so video stays visible at the edges.
+- Add `text-shadow: 0 2px 24px rgba(0,0,0,0.6)` utility (`drop-shadow-[0_2px_24px_rgba(0,0,0,0.6)]`) on headline, sub, chip, stats.
+- Bump sub copy from `text-white/85` → `text-white font-medium`, headline weight stays bold, chip border `border-white/30`.
+- CTA outlines get `bg-black/30 backdrop-blur-md` so they stay legible over bright frames.
 
-### 4. Location section + Contact page map
+## 4. Smart merge of `Our Services.docx`
 
-- New `Location` section on homepage and a richer map block on `/contact`:
-  - Google Maps embed iframe driven by `site_settings.maps_embed_url`.
-  - "Get Directions" button → `https://www.google.com/maps/dir/?api=1&destination=...`.
-  - Glass card with address, hours, phone, email.
+The doc's **Types** sections (Exterior, Interior, Compliance, Promotional, Wide Format) are already present verbatim in `SERVICE_GROUPS` and render on `/services`. The doc's **page 1 "Our Services" workflow list** (Concept & Design, Fabrication/Printing, Installation, Maintenance and Repair, Digital Signage Solutions) is **not** displayed verbatim anywhere.
 
-### 5. SEO sweep
+Changes (no invented content):
+- Add a `SERVICE_WORKFLOW` array in `src/lib/site-data.ts` containing only those 5 items, copying the doc's exact titles and descriptions.
+- Add a new "Our Services" section near the top of `/services` (above "How we work") that renders these 5 items as cards — title, dash, description — preserving doc order. Light/dark mode safe via existing tokens (`bg-card`, `text-muted-foreground`).
+- No changes to `SERVICE_GROUPS` (already verbatim). No new copy beyond the doc.
 
-- Per-route `head()` already exists; add for `/companies`, `/companies/$slug`, `/admin/*` (noindex).
-- Update `sitemap.xml.ts` to include companies routes (loader-driven from DB).
-- Expand root JSON-LD to `Organization` with `subOrganization[]` listing the 5 companies.
-- Add `Service` JSON-LD on `/services` and `BreadcrumbList` on company detail pages.
+## Out of scope
 
-### 6. Light/Dark polish
+Hero video upload UI changes, admin auth, other doc files, redesign of non-admin pages.
 
-- Audit hero, glass cards, and new company pages for token usage (no hardcoded white/black). Ensure contrast in both themes.
+## Files
 
-### 7. Out of scope (already done, won't touch)
-
-- Admin auth + RBAC (`user_roles`, `has_role`)
-- Portfolio CMS + categories + filtering
-- Services CRUD + media
-- Testimonials + approval + stars
-- Contact/quote inbox + mailto reply
-- AI chatbot (Lovable AI)
-- Dark mode toggle, i18n (EN/AR), WhatsApp button, back-to-top
-- Word-doc content (preserved verbatim per your rule)
-
-### Technical details
-
-- New migration: `companies` + `site_settings` tables, GRANTs, RLS (public SELECT on active rows; admin write via `has_role('admin')`), seed data, storage bucket `company-media`.
-- New server fns in `src/lib/admin/content.functions.ts`: `listCompanies`, `getCompanyBySlug`, `upsertCompany`, `deleteCompany`, `getSettings`, `updateSettings`.
-- New files: `src/routes/companies.tsx`, `src/routes/companies.$slug.tsx`, `src/routes/_authenticated/admin.companies.tsx`, `src/routes/_authenticated/admin.settings.tsx`, `src/components/sections/Location.tsx`. Rewrite `src/components/sections/Hero.tsx` and `src/components/sections/OurCompanies.tsx`.
-- Hero video: generated via `videogen` (5s, 1080p, 16:9) → stored as asset, URL seeded into `site_settings.hero_video_url`.
-
-### Questions before I build
-
-1. **Google Maps embed URL / address** — do you have a specific Maps link and street address for the UAE office, or should I use a generic Dubai Al Quoz pin as placeholder?
-2. **Hero video** — OK with an AI-generated 5s cinematic placeholder (you can swap via admin later), or will you upload your own MP4?
-3. **Per-company hero images** — generate AI placeholders per company now, or leave empty and you'll upload via the new admin Companies page?
+- New: `src/components/admin/AdminPageHeader.tsx`, `src/assets/hero/hero-{1..5}.mp4.asset.json`
+- Edit: `src/components/admin/AdminShell.tsx` (only if FAB needs portal), `src/routes/_authenticated/admin.{companies,services,portfolio,reviews}.tsx`, `src/components/sections/Hero.tsx`, `src/lib/site-data.ts`, `src/routes/services.tsx`

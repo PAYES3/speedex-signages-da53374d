@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Pencil, Trash2, Plus } from 'lucide-react';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 import { toast } from 'sonner';
 import { FileUpload, MediaPreview } from '@/components/admin/FileUpload';
 
@@ -60,13 +61,12 @@ function Services() {
 
   return (
     <div>
-      <header className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">Services</h1>
-          <p className="text-muted-foreground mt-1">Manage what appears on /services.</p>
-        </div>
-        <Button onClick={() => setEditing({ ...empty })}><Plus className="w-4 h-4 mr-2" />New service</Button>
-      </header>
+      <AdminPageHeader
+        title="Services"
+        subtitle="Manage what appears on /services."
+        addLabel="New service"
+        onAdd={() => setEditing({ ...empty })}
+      />
 
       <div className="grid lg:grid-cols-2 gap-4">
         {data?.map((s: any) => (

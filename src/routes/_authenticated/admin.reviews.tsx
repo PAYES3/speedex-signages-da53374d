@@ -5,6 +5,7 @@ import { listAllTestimonials, moderateTestimonial, deleteTestimonial } from '@/l
 import { Button } from '@/components/ui/button';
 import { Check, X, Star, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 
 export const Route = createFileRoute('/_authenticated/admin/reviews')({
   component: Reviews,
@@ -33,10 +34,10 @@ function Reviews() {
 
   return (
     <div>
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">Reviews</h1>
-        <p className="text-muted-foreground mt-1">Moderate customer testimonials before they appear on your site.</p>
-      </header>
+      <AdminPageHeader
+        title="Reviews"
+        subtitle="Moderate customer testimonials before they appear on your site."
+      />
       <div className="space-y-3">
         {data?.map((t: any) => (
           <div key={t.id} className={`bg-card border rounded-xl p-4 ${t.approved ? 'border-border' : 'border-amber-300 dark:border-amber-700'}`}>

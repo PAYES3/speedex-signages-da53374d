@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { Reveal } from '@/components/Reveal';
 import { CTABanner } from '@/components/sections/CTABanner';
-import { PROCESS, SERVICES, SERVICE_GROUPS } from '@/lib/site-data';
+import { PROCESS, SERVICES, SERVICE_GROUPS, SERVICE_WORKFLOW } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
 
 export const Route = createFileRoute('/services')({
@@ -63,6 +63,31 @@ function ServicesPage() {
                   <p className="text-xs text-muted-foreground">Step {i + 1}</p>
                   <h3 className="font-semibold mt-1">{p.title}</h3>
                   <p className="mt-2 text-xs text-muted-foreground">{p.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Verbatim "Our Services" section from the uploaded document */}
+      <section className="py-16 border-t border-border/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <p className="text-primary text-sm font-semibold uppercase tracking-wider">Our Services</p>
+              <h2 className="text-3xl sm:text-4xl font-bold mt-2">What we offer end-to-end</h2>
+            </div>
+          </Reveal>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {SERVICE_WORKFLOW.map((w, i) => (
+              <Reveal key={w.title} direction="up" delay={i * 0.05}>
+                <div className="bg-card border border-border rounded-2xl p-6 h-full hover:border-primary/40 transition">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary grid place-items-center text-sm font-bold">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{w.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{w.desc}</p>
                 </div>
               </Reveal>
             ))}
