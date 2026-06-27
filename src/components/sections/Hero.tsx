@@ -1,9 +1,17 @@
 import { Link } from '@tanstack/react-router';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo, useState } from 'react';
 import { ArrowRight, Building2, FolderKanban, Phone } from 'lucide-react';
 import { COMPANY } from '@/lib/site-data';
 import { Button } from '@/components/ui/button';
 import logo from '@/assets/speedex-logo.png.asset.json';
+import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
+import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
+import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
+import hero4 from '@/assets/hero/hero-4.mp4.asset.json';
+import hero5 from '@/assets/hero/hero-5.mp4.asset.json';
+
+const HERO_VIDEOS = [hero1.url, hero2.url, hero3.url, hero4.url, hero5.url];
 
 type HeroProps = {
   videoUrl?: string;
@@ -11,29 +19,40 @@ type HeroProps = {
 };
 
 export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
-  const finalVideo = videoUrl || COMPANY.heroVideo;
+  // Admin-set URL wins; otherwise pick one of 5 cinematic clips at random per page load.
+  const randomVideo = useMemo(() => HERO_VIDEOS[Math.floor(Math.random() * HERO_VIDEOS.length)], []);
+  const finalVideo = videoUrl || randomVideo || COMPANY.heroVideo;
   const finalPoster = posterUrl || COMPANY.heroImage;
+  const [videoReady, setVideoReady] = useState(false);
 
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-black">
-      {/* Background video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster={finalPoster}
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover scale-105"
-      >
-        <source src={finalVideo} type="video/mp4" />
-      </video>
+      {/* Background video — crossfades in for a smooth start */}
+      <AnimatePresence>
+        <motion.video
+          key={finalVideo}
+          initial={{ opacity: 0, scale: 1.08 }}
+          animate={{ opacity: videoReady ? 1 : 0, scale: 1.05 }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={finalPoster}
+          aria-hidden="true"
+          onCanPlay={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={finalVideo} type="video/mp4" />
+        </motion.video>
+      </AnimatePresence>
 
-      {/* Cinematic overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/85" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.55)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,124,123,0.18),transparent_50%,rgba(14,124,123,0.18))] mix-blend-screen" />
+      {/* Cinematic overlays — strong contrast for legibility on every clip */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.75)_100%)]" />
+      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,124,123,0.22),transparent_50%,rgba(14,124,123,0.22))] mix-blend-screen" />
 
       {/* Top + bottom letterboxing for cinema feel */}
       <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
@@ -68,7 +87,7 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.02] tracking-tight"
+          className="mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.02] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]"
           style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
         >
           Transforming Ideas Into{' '}
@@ -82,7 +101,7 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-7 text-base sm:text-lg md:text-xl text-white/85 max-w-3xl mx-auto leading-relaxed"
+          className="mt-7 text-base sm:text-lg md:text-xl text-white font-medium max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]"
         >
           Professional Signage, Transport, Contracting, Trading & Automotive Solutions Across UAE
         </motion.p>
@@ -100,12 +119,12 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
             </Button>
           </Link>
           <Link to="/portfolio">
-            <Button size="lg" variant="outline" className="h-12 px-6 border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md">
+            <Button size="lg" variant="outline" className="h-12 px-6 border-white/40 bg-black/40 text-white hover:bg-black/55 backdrop-blur-md">
               <FolderKanban className="w-4 h-4" /> View Our Projects
             </Button>
           </Link>
           <Link to="/contact">
-            <Button size="lg" variant="outline" className="h-12 px-6 border-white/30 bg-transparent text-white hover:bg-white/10 backdrop-blur-md">
+            <Button size="lg" variant="outline" className="h-12 px-6 border-white/40 bg-black/40 text-white hover:bg-black/55 backdrop-blur-md">
               <Phone className="w-4 h-4" /> Contact Us <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -124,9 +143,9 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
             { v: '2,400+', l: 'Projects Delivered' },
             { v: '7', l: 'Emirates Served' },
           ].map((s) => (
-            <div key={s.l} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 text-center">
-              <p className="text-xl sm:text-2xl font-bold text-white">{s.v}</p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider text-white/60 mt-1">{s.l}</p>
+            <div key={s.l} className="bg-black/40 backdrop-blur-md border border-white/20 rounded-xl px-4 py-3 text-center">
+              <p className="text-xl sm:text-2xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{s.v}</p>
+              <p className="text-[10px] sm:text-xs uppercase tracking-wider text-white/85 mt-1">{s.l}</p>
             </div>
           ))}
         </motion.div>
