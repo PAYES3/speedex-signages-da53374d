@@ -208,6 +208,15 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   },
 ];
 
+// "Our Services" workflow — copied verbatim from the uploaded "Our Services" document.
+export const SERVICE_WORKFLOW: { title: string; desc: string }[] = [
+  { title: 'Concept & Design', desc: 'Working with you to determine the right type, size, material, and design for your sign based on your goals, brand, and location.' },
+  { title: 'Fabrication / Printing', desc: 'Producing the physical sign, banner, or graphic using various materials (vinyl, metal, plastic, foam, digital screens, etc.).' },
+  { title: 'Installation', desc: 'Professionally mounting and installing the finished signage, which can be critical for large exterior signs or electrical signs. This often includes handling local permits and compliance requirements.' },
+  { title: 'Maintenance and Repair', desc: 'Ongoing services to keep your signs clean, bright, and in good working order.' },
+  { title: 'Digital Signage Solutions', desc: 'This is a growing area that involves setting up and managing digital screens and displays.' },
+];
+
 export const COMPANIES = [
   { name: 'Speedex Signages', desc: 'UAE signage manufacturing, branding & installation.', url: '/', internal: true, initials: 'SS' },
   { name: 'Arabsat', desc: 'Satellite and broadcast solutions across the MENA region.', url: 'https://www.arabsat.ae', internal: false, initials: 'AS' },
