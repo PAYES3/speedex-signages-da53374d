@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "author", content: "Speedex Signages" },
-      { name: "theme-color", content: "#0E7C7B" },
+      { name: "theme-color", content: "#2563EB" },
       { name: "keywords", content: "Speedex Signages, Signage Company UAE, Signage Company Dubai, LED Signage UAE, Acrylic Signage UAE, Outdoor Signage UAE, Indoor Signage UAE, Vehicle Branding UAE, Sign Board Manufacturers UAE, 3D Letter Signage UAE, Digital Signage UAE, Wayfinding Signage UAE, Custom Signage UAE, Branding Company UAE, CNC Cutting UAE, Laser Cutting UAE, Exhibition Signage UAE" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Speedex Signages" },

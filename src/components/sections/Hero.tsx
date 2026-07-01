@@ -52,7 +52,7 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.75)_100%)]" />
       <div className="absolute inset-0 bg-black/30" />
-      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(14,124,123,0.22),transparent_50%,rgba(14,124,123,0.22))] mix-blend-screen" />
+      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(37,99,235,0.22),transparent_50%,rgba(37,99,235,0.22))] mix-blend-screen" />
 
       {/* Top + bottom letterboxing for cinema feel */}
       <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
@@ -114,7 +114,7 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
           className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
         >
           <Link to="/companies">
-            <Button size="lg" className="h-12 px-6 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[0_10px_40px_-10px_rgba(14,124,123,0.8)] hover:shadow-[0_15px_50px_-10px_rgba(14,124,123,1)] hover:scale-[1.03] transition-all">
+            <Button size="lg" className="h-12 px-6 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] hover:shadow-[0_15px_50px_-10px_rgba(37,99,235,1)] hover:scale-[1.03] transition-all">
               <Building2 className="w-4 h-4" /> Explore Our Companies
             </Button>
           </Link>
