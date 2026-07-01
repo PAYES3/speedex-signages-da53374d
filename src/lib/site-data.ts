@@ -30,9 +30,9 @@ export const COMPANY = {
   tagline: 'We Light Up Your Brand',
   phone: '+971 50 123 4567',
   whatsapp: '971501234567',
-  email: 'info@speedexsignages.ae',
+  email: 'speedexsignages@excellentgroup.ae',
   address: 'Al Quoz Industrial Area, Dubai, United Arab Emirates',
-  mapEmbed: 'https://www.google.com/maps?q=Al+Quoz+Industrial+Area+Dubai&output=embed',
+  mapEmbed: 'https://www.google.com/maps?q=Speedex+Auto+Workshop+L.L.C&ll=24.3564342,54.4935042&z=17&output=embed',
   social: {
     instagram: 'https://instagram.com',
     facebook: 'https://facebook.com',

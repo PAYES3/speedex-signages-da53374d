@@ -123,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
           areaServed: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Umm Al Quwain", "Fujairah", "United Arab Emirates"],
           telephone: "+971 50 123 4567",
-          email: "info@speedexsignages.ae",
+          email: "speedexsignages@excellentgroup.ae",
           priceRange: "$$",
           sameAs: [
             "https://instagram.com",

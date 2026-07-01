@@ -120,7 +120,7 @@ function Home() {
         phone={s.contact_phone}
         email={s.contact_email}
         mapsEmbedUrl={s.maps_embed_url}
-        mapsDirectionsUrl={s.maps_directions_url}
+        mapsDirectionsUrl={s.maps_directions_url || 'https://www.google.com/maps/place/Speedex+Auto+Workshop+L.L.C/@24.3564359,54.4925938,514m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e5e4195316879d7:0xd4cfbd6175b97d6c!8m2!3d24.3564342!4d54.4935042'}
       />
       <FAQ />
       <CTABanner />
