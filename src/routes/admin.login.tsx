@@ -1,8 +1,6 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useServerFn } from '@tanstack/react-start';
-import { setupFirstAdmin } from '@/lib/admin/admin.functions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,19 +19,9 @@ export const Route = createFileRoute('/admin/login')({
 
 function AdminLogin() {
   const navigate = useNavigate();
-  const setup = useServerFn(setupFirstAdmin);
-  const [email, setEmail] = useState('admin@speedexsignages.ae');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [setupRunning, setSetupRunning] = useState(false);
-
-  useEffect(() => {
-    // Auto-run first-time setup so the default admin exists.
-    setSetupRunning(true);
-    setup({ data: undefined })
-      .catch(() => {})
-      .finally(() => setSetupRunning(false));
-  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,15 +58,10 @@ function AdminLogin() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
           </div>
-          <Button type="submit" disabled={loading || setupRunning} className="w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground">
-            {loading || setupRunning ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" /> {setupRunning ? 'Preparing…' : 'Signing in…'}</>) : 'Sign in'}
+          <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground">
+            {loading ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Signing in…</>) : 'Sign in'}
           </Button>
         </form>
-
-        <div className="mt-6 p-3 rounded-lg bg-secondary/40 border border-border text-xs text-muted-foreground">
-          <p className="font-semibold text-foreground mb-1">First time here?</p>
-          <p>Default admin: <code>admin@speedexsignages.ae</code> / <code>Speedex@Siganges.com</code>. Change the password from the admin dashboard after sign-in.</p>
-        </div>
 
         <div className="mt-4 text-center">
           <Link to="/" className="text-xs text-primary hover:underline">← Back to website</Link>

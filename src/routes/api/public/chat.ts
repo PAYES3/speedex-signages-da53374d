@@ -55,6 +55,12 @@ export const Route = createFileRoute('/api/public/chat')({
           const { messages } = (await request.json()) as { messages: { role: string; content: string }[] };
           if (!Array.isArray(messages)) return new Response('Bad request', { status: 400 });
 
+          // Sanitize: only allow user/assistant roles, cap length, limit count.
+          const sanitized = messages
+            .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+            .map((m) => ({ role: m.role as 'user' | 'assistant', content: String(m.content).slice(0, 2000) }))
+            .slice(-20);
+
           const apiKey = process.env.LOVABLE_API_KEY;
           if (!apiKey) return new Response('AI not configured', { status: 500 });
 
@@ -67,7 +73,7 @@ export const Route = createFileRoute('/api/public/chat')({
             body: JSON.stringify({
               model: 'google/gemini-3-flash-preview',
               stream: true,
-              messages: [{ role: 'system', content: buildSystemPrompt() }, ...messages.slice(-20)],
+              messages: [{ role: 'system', content: buildSystemPrompt() }, ...sanitized],
             }),
           });
 
