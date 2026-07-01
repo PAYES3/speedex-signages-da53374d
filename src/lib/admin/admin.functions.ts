@@ -2,51 +2,6 @@ import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 
-const ADMIN_EMAIL = 'admin@speedexsignages.ae';
-const ADMIN_PASSWORD = 'Speedex@Siganges.com';
-
-/**
- * One-time setup: if no admin user exists yet, create one with the
- * default credentials and grant the admin role. Idempotent — safe to call
- * repeatedly; once an admin exists it becomes a no-op.
- */
-export const setupFirstAdmin = createServerFn({ method: 'POST' })
-  .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-
-    const { count, error: countErr } = await supabaseAdmin
-      .from('user_roles')
-      .select('id', { count: 'exact', head: true })
-      .eq('role', 'admin');
-    if (countErr) throw new Error(countErr.message);
-    if ((count ?? 0) > 0) {
-      return { ok: true, created: false, email: ADMIN_EMAIL };
-    }
-
-    // Try create the user; if email already exists we'll look it up.
-    const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
-      email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
-      email_confirm: true,
-    });
-
-    let userId = created?.user?.id;
-    if (createErr && !userId) {
-      const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
-      const found = list?.users.find((u) => u.email?.toLowerCase() === ADMIN_EMAIL);
-      if (!found) throw new Error(createErr.message);
-      userId = found.id;
-    }
-    if (!userId) throw new Error('Could not provision admin user');
-
-    const { error: roleErr } = await supabaseAdmin
-      .from('user_roles')
-      .upsert({ user_id: userId, role: 'admin' }, { onConflict: 'user_id,role' });
-    if (roleErr) throw new Error(roleErr.message);
-
-    return { ok: true, created: true, email: ADMIN_EMAIL };
-  });
-
 /** Returns whether the calling user has the admin role. */
 export const checkIsAdmin = createServerFn({ method: 'GET' })
   .middleware([requireSupabaseAuth])
