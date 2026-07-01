@@ -16,7 +16,7 @@ export function Location({
   phone = COMPANY.phone,
   email = COMPANY.email,
   mapsEmbedUrl = COMPANY.mapEmbed,
-  mapsDirectionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=Al+Quoz+Industrial+Area+Dubai',
+  mapsDirectionsUrl = 'https://www.google.com/maps/place/Speedex+Auto+Workshop+L.L.C/@24.3564359,54.4925938,514m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e5e4195316879d7:0xd4cfbd6175b97d6c!8m2!3d24.3564342!4d54.4935042',
 }: Props) {
   return (
     <section className="py-24 relative overflow-hidden">
@@ -79,19 +79,29 @@ export function Location({
             </div>
           </Reveal>
 
-          {/* Map */}
+          {/* Map — clicking anywhere opens Google Maps in a new tab */}
           <Reveal direction="right" className="lg:col-span-3">
-            <div className="h-full min-h-[420px] rounded-2xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]">
+            <a
+              href={mapsDirectionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open Speedex location in Google Maps"
+              className="group relative block h-full min-h-[420px] rounded-2xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]"
+            >
               <iframe
                 title="Speedex Group location"
                 src={mapsEmbedUrl}
-                className="w-full h-full"
+                className="w-full h-full pointer-events-none"
                 style={{ minHeight: 420 }}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
               />
-            </div>
+              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors" />
+              <div className="absolute top-4 right-4 inline-flex items-center gap-2 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold shadow-md border border-border">
+                <Navigation className="w-3.5 h-3.5 text-primary" /> Open in Google Maps
+              </div>
+            </a>
           </Reveal>
         </div>
       </div>
