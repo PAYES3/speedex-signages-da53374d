@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import { ArrowRight, Building2, FolderKanban, Phone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { COMPANY } from '@/lib/site-data';
 import { Button } from '@/components/ui/button';
-import logo from '@/assets/speedex-logo.png.asset.json';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
 import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
@@ -19,21 +18,19 @@ type HeroProps = {
 };
 
 export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
-  // Admin-set URL wins; otherwise pick one of 5 cinematic clips at random per page load.
   const randomVideo = useMemo(() => HERO_VIDEOS[Math.floor(Math.random() * HERO_VIDEOS.length)], []);
   const finalVideo = videoUrl || randomVideo || COMPANY.heroVideo;
   const finalPoster = posterUrl || COMPANY.heroImage;
   const [videoReady, setVideoReady] = useState(false);
 
   return (
-    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-black">
-      {/* Background video — crossfades in for a smooth start */}
+    <section className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#0a1628]">
       <AnimatePresence>
         <motion.video
           key={finalVideo}
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: videoReady ? 1 : 0, scale: 1.05 }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: videoReady ? 0.55 : 0, scale: 1.03 }}
+          transition={{ duration: 1.4, ease: 'easeOut' }}
           autoPlay
           muted
           loop
@@ -48,118 +45,72 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
         </motion.video>
       </AnimatePresence>
 
-      {/* Cinematic overlays — strong contrast for legibility on every clip */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.75)_100%)]" />
-      <div className="absolute inset-0 bg-black/30" />
-      <div className="absolute inset-0 bg-[linear-gradient(115deg,rgba(37,99,235,0.22),transparent_50%,rgba(37,99,235,0.22))] mix-blend-screen" />
+      {/* Navy overlays — reference-style left-to-right + bottom fades */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628] via-[#0a1628]/85 to-[#0a1628]/40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 via-transparent to-[#0a1628]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,211,238,0.12),transparent_60%)]" />
 
-      {/* Top + bottom letterboxing for cinema feel */}
-      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-black/80 to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
+        <div className="max-w-3xl text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-primary text-[11px] sm:text-xs font-semibold tracking-[0.15em] uppercase"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            Premium Signage Manufacturer
+          </motion.div>
 
-      <div className="relative z-10 text-center px-4 sm:px-6 max-w-6xl mx-auto pt-24 pb-16">
-        {/* Glass logo plate */}
-        <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="flex justify-center mb-8"
-        >
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-8 py-4 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
-            <img src={logo.url} alt="Speedex Group logo" className="h-14 sm:h-16 w-auto" width={220} height={70} />
-          </div>
-        </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-bold text-white leading-[0.95] tracking-[-0.03em]"
+            style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
+          >
+            We light up{' '}
+            <span className="block text-primary">your brand.</span>
+          </motion.h1>
 
-        {/* Tag chip */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs sm:text-sm font-medium tracking-wide uppercase"
-        >
-          <span className="w-2 h-2 rounded-full bg-primary-glow animate-pulse" />
-          Speedex Group · United Arab Emirates
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="mt-8 text-base sm:text-lg text-white/70 max-w-xl leading-relaxed"
+          >
+            From dazzling LED facades to towering billboards — {COMPANY.name} designs,
+            fabricates and installs signage that gets your brand noticed across the UAE.
+          </motion.p>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.02] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]"
-          style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
-        >
-          Transforming Ideas Into{' '}
-          <span className="bg-gradient-to-r from-primary-glow via-white to-primary-glow bg-clip-text text-transparent">
-            Powerful Visual Identities
-          </span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-7 text-base sm:text-lg md:text-xl text-white font-medium max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]"
-        >
-          Professional Signage, Transport, Contracting, Trading & Automotive Solutions Across UAE
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
-        >
-          <Link to="/companies">
-            <Button size="lg" className="h-12 px-6 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[0_10px_40px_-10px_rgba(37,99,235,0.8)] hover:shadow-[0_15px_50px_-10px_rgba(37,99,235,1)] hover:scale-[1.03] transition-all">
-              <Building2 className="w-4 h-4" /> Explore Our Companies
-            </Button>
-          </Link>
-          <Link to="/portfolio">
-            <Button size="lg" variant="outline" className="h-12 px-6 border-white/40 bg-black/40 text-white hover:bg-black/55 backdrop-blur-md">
-              <FolderKanban className="w-4 h-4" /> View Our Projects
-            </Button>
-          </Link>
-          <Link to="/contact">
-            <Button size="lg" variant="outline" className="h-12 px-6 border-white/40 bg-black/40 text-white hover:bg-black/55 backdrop-blur-md">
-              <Phone className="w-4 h-4" /> Contact Us <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
-        </motion.div>
-
-        {/* Trust stats strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.95 }}
-          className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto"
-        >
-          {[
-            { v: '18+', l: 'Years Experience' },
-            { v: '5', l: 'Group Companies' },
-            { v: '2,400+', l: 'Projects Delivered' },
-            { v: '7', l: 'Emirates Served' },
-          ].map((s) => (
-            <div key={s.l} className="bg-black/40 backdrop-blur-md border border-white/20 rounded-xl px-4 py-3 text-center">
-              <p className="text-xl sm:text-2xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">{s.v}</p>
-              <p className="text-[10px] sm:text-xs uppercase tracking-wider text-white/85 mt-1">{s.l}</p>
-            </div>
-          ))}
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
+            className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
+          >
+            <Link to="/contact">
+              <Button size="lg" className="h-12 px-6 rounded-full bg-primary text-primary-foreground font-semibold shadow-[0_10px_40px_-10px_rgba(34,211,238,0.8)] hover:shadow-[0_15px_50px_-10px_rgba(34,211,238,1)] hover:scale-[1.03] transition-all">
+                Start Your Project <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+            <Link to="/portfolio">
+              <Button size="lg" variant="outline" className="h-12 px-6 rounded-full border-primary/50 bg-transparent text-primary hover:bg-primary/10 hover:text-primary font-semibold">
+                Explore Our Work
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center gap-2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/50 text-[10px] uppercase tracking-[0.35em] flex items-center gap-2"
       >
         <span>Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-white/60 to-transparent" />
+        <span>↓</span>
       </motion.div>
     </section>
   );
