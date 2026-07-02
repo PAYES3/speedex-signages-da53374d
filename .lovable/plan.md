@@ -1,34 +1,49 @@
-## Homepage updates — video, map link, email
 
-Hero already ships 5 randomized cinematic videos with a single `<video>` element that swaps source per refresh, autoplay/muted/loop/playsInline, and a crossfade in — no changes needed. The remaining work is the map click-through and the email swap.
+## Goal
+Restyle the site to match https://speedex-signage-hub.vercel.app — a deep navy background with a bright cyan accent, oversized bold sans headline, minimal pill chip, and two-button CTA row. Keep all existing pages/routes and content; only the visual language changes.
 
-### 1. Google Maps click-through (Location section)
+## Changes
 
-Update `src/components/sections/Location.tsx`:
-- Wrap the map iframe in an `<a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer">` with `pointer-events-none` on the iframe so the anchor captures the click across the whole map surface (iframes swallow clicks otherwise). Add a subtle hover overlay + "Open in Google Maps" chip for affordance.
-- Keep the existing "Get Directions" button.
+### 1. Color tokens (`src/styles.css`)
+Shift the theme from current blue (hue 255) to **navy + cyan**:
+- `--background` (dark): deep navy `oklch(0.16 0.05 250)` (matches #0a1628-ish)
+- `--primary`: bright cyan `oklch(0.78 0.15 220)` (~ #22d3ee / #38bdf8 vibe from reference)
+- `--primary-glow`: lighter cyan `oklch(0.86 0.12 220)`
+- `--accent`: cyan variant
+- `--ring`: cyan
+- Update `--gradient-hero`, `--gradient-primary`, `--gradient-accent`, `--shadow-glow` to cyan
+- Force **dark mode as default** by adding `.dark` class on `<html>` in the inline bootstrap script (reference is dark-only). Light mode stays available but ships dark.
 
-Update `src/routes/index.tsx` and `src/lib/site-data.ts` to use the real Speedex Auto Workshop URL:
-- `mapsDirectionsUrl` default → `https://www.google.com/maps/place/Speedex+Auto+Workshop+L.L.C/@24.3564359,54.4925938,514m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e5e4195316879d7:0xd4cfbd6175b97d6c!8m2!3d24.3564342!4d54.4935042`
-- `mapEmbed` in `COMPANY` → embed variant centered on the same coords: `https://www.google.com/maps?q=Speedex+Auto+Workshop+L.L.C&ll=24.3564342,54.4935042&z=17&output=embed`
+### 2. Hero (`src/components/sections/Hero.tsx`)
+Rework to match reference composition:
+- Keep the 5 random background videos (existing feature), but change overlays to a **navy-to-transparent gradient from the left** (content left-aligned) plus a soft bottom fade — not the current centered radial black wash.
+- Content **left-aligned** on desktop (max-w container, `text-left`), centered on mobile.
+- Remove the glass logo plate and stats grid from the hero (reference has neither).
+- Chip: small pill "● PREMIUM SIGNAGE MANUFACTURER" — cyan border, subtle cyan tint background, cyan dot.
+- Headline: massive (7xl→9xl) tight sans, white with the last two words ("your brand.") in cyan. Use Space Grotesk (already loaded).
+- Subhead: single short paragraph, muted white/70.
+- CTAs: solid cyan pill "Start Your Project →" + outlined cyan pill "Explore Our Work". Drop the third button.
+- Scroll cue: small "SCROLL ↓" centered at bottom (keep existing but restyle).
 
-### 2. Email update → `speedexsignages@excellentgroup.ae`
+### 3. Navbar (`src/components/Navbar.tsx`)
+- Transparent-on-hero → solid navy on scroll (likely already handled; just tune colors).
+- Logo lockup gets a small cyan rounded-square icon tile to the left of the wordmark (matches reference's ⚡ tile).
+- Right side: swap current CTA styling to a **cyan pill "Get a Quote"** button linking to `/contact`.
+- Nav link hover/active color → cyan.
 
-Replace `info@speedexsignages.ae` everywhere it's hardcoded:
-- `src/lib/site-data.ts` (`COMPANY.email`)
-- `src/routes/__root.tsx` (JSON-LD Organization email)
+### 4. Buttons across site
+No component rewrites needed — because `--primary` now resolves to cyan, all existing `bg-primary` / `from-primary` usages inherit the new accent automatically. Spot-fix any remaining hardcoded blue rgb (e.g. `rgba(37,99,235,...)` in Hero shadows) → cyan `rgba(34,211,238,...)`.
 
-`Footer`, `contact.tsx`, `Location.tsx`, admin settings default all read from `COMPANY.email`, so they pick up the change automatically. `admin.settings` `contact_email` DB value (if set) still overrides — leave that alone; user can update in admin if needed.
+### 5. Metadata
+- Update `theme-color` meta in `src/routes/__root.tsx` from `#2563EB` → cyan `#22D3EE`.
+- Update fallback accent color defaults in `src/lib/admin/content.functions.ts`, `src/routes/companies.$slug.tsx`, `src/routes/_authenticated/admin.companies.tsx` from `#2563EB` → `#22D3EE`.
 
-### 3. Out of scope
+## Out of scope
+- No content/copy changes beyond the hero headline/subhead wording to match the reference tone.
+- No route additions, no backend changes.
+- Other sections (Companies, Stats, Testimonials, Footer, etc.) keep their current structure — they automatically pick up the new cyan accent via tokens.
 
-- Hero video system (already correct: 5 clips, random per refresh, single element, muted/autoplay/loop).
-- Admin settings row edits (user-managed).
-- Any content/design changes beyond above.
-
-### Files touched
-
-- `src/components/sections/Location.tsx` — make map clickable, open in new tab
-- `src/lib/site-data.ts` — email + mapEmbed
-- `src/routes/index.tsx` — default `mapsDirectionsUrl` prop
-- `src/routes/__root.tsx` — JSON-LD email
+## Technical notes
+- All color changes go through CSS variables in `src/styles.css`; no component-level color hardcoding.
+- Hero video logic (random 1-of-5, autoplay, muted, loop) is preserved as-is.
+- Force-dark bootstrap: change the inline `<script>` in `__root.tsx` to always add the `dark` class (still respects an explicit `theme=light` opt-in from localStorage).
