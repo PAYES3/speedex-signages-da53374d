@@ -3,7 +3,6 @@ import { Menu, X, Moon, Sun, Languages } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import logo from '@/assets/speedex-logo.png.asset.json';
 import { COMPANY } from '@/lib/site-data';
 
 const NAV = [
@@ -58,7 +57,9 @@ export function Navbar() {
     <header className={`fixed top-0 inset-x-0 z-50 transition-all border-b ${scrolled ? 'bg-background/95 backdrop-blur shadow-md border-border py-2' : 'bg-background/90 backdrop-blur border-border/60 py-3'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2" aria-label={COMPANY.name}>
-          <img src={logo.url} alt={`${COMPANY.name} — UAE signage company logo`} className="h-12 sm:h-14 w-auto drop-shadow-sm" width={220} height={56} />
+          <span className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+            {COMPANY.name}
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
