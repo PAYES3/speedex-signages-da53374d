@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "author", content: "Speedex Signages" },
-      { name: "theme-color", content: "#22D3EE" },
+      { name: "theme-color", content: "#F58220" },
       { name: "keywords", content: "Speedex Signages, Signage Company UAE, Signage Company Dubai, LED Signage UAE, Acrylic Signage UAE, Outdoor Signage UAE, Indoor Signage UAE, Vehicle Branding UAE, Sign Board Manufacturers UAE, 3D Letter Signage UAE, Digital Signage UAE, Wayfinding Signage UAE, Custom Signage UAE, Branding Company UAE, CNC Cutting UAE, Laser Cutting UAE, Exhibition Signage UAE" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Speedex Signages" },
@@ -95,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap",
       },
       {
         rel: "stylesheet",
@@ -104,7 +104,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     scripts: [
       {
-        children: `(()=>{try{const t=localStorage.getItem('theme');if(t!=='light')document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){document.documentElement.classList.add('dark');}})();`,
+        children: `(()=>{try{const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');const l=localStorage.getItem('lang');if(l==='ar'){document.documentElement.dir='rtl';document.documentElement.lang='ar';}}catch(e){}})();`,
       },
       {
         type: "application/ld+json",
