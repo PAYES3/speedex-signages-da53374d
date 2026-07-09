@@ -1,49 +1,118 @@
+# Speedex Signages — Premium Corporate Redesign Plan
 
-## Goal
-Restyle the site to match https://speedex-signage-hub.vercel.app — a deep navy background with a bright cyan accent, oversized bold sans headline, minimal pill chip, and two-button CTA row. Keep all existing pages/routes and content; only the visual language changes.
+Shift the site from the current dark navy + cyan "tech" look to a clean, spacious, corporate signage-company aesthetic (think premium industrial UAE brand), while preserving all existing content, routes, data, and admin functionality.
 
-## Changes
+## 1. Design tokens (src/styles.css)
 
-### 1. Color tokens (`src/styles.css`)
-Shift the theme from current blue (hue 255) to **navy + cyan**:
-- `--background` (dark): deep navy `oklch(0.16 0.05 250)` (matches #0a1628-ish)
-- `--primary`: bright cyan `oklch(0.78 0.15 220)` (~ #22d3ee / #38bdf8 vibe from reference)
-- `--primary-glow`: lighter cyan `oklch(0.86 0.12 220)`
-- `--accent`: cyan variant
-- `--ring`: cyan
-- Update `--gradient-hero`, `--gradient-primary`, `--gradient-accent`, `--shadow-glow` to cyan
-- Force **dark mode as default** by adding `.dark` class on `<html>` in the inline bootstrap script (reference is dark-only). Light mode stays available but ships dark.
+Rebuild the token layer around a light-first corporate palette.
 
-### 2. Hero (`src/components/sections/Hero.tsx`)
-Rework to match reference composition:
-- Keep the 5 random background videos (existing feature), but change overlays to a **navy-to-transparent gradient from the left** (content left-aligned) plus a soft bottom fade — not the current centered radial black wash.
-- Content **left-aligned** on desktop (max-w container, `text-left`), centered on mobile.
-- Remove the glass logo plate and stats grid from the hero (reference has neither).
-- Chip: small pill "● PREMIUM SIGNAGE MANUFACTURER" — cyan border, subtle cyan tint background, cyan dot.
-- Headline: massive (7xl→9xl) tight sans, white with the last two words ("your brand.") in cyan. Use Space Grotesk (already loaded).
-- Subhead: single short paragraph, muted white/70.
-- CTAs: solid cyan pill "Start Your Project →" + outlined cyan pill "Explore Our Work". Drop the third button.
-- Scroll cue: small "SCROLL ↓" centered at bottom (keep existing but restyle).
+- Background: `#FFFFFF` (light gray `#F8F9FA` for alternating sections)
+- Foreground / text: charcoal `#1F2937`
+- Primary (CTA/accents only): orange `#F58220`
+- Secondary surface: light gray `#F8F9FA`
+- Muted text: slate `#64748B`
+- Border: `#E5E7EB`
+- Optional dark accent: navy `#0F172A` (footer, deep sections)
+- Remove cyan glows; replace `--shadow-glow` with a soft orange-tinted shadow used sparingly, and `--shadow-elegant` with a neutral soft shadow (`0 10px 30px -12px rgba(15,23,42,0.12)`)
+- Gradients: retire hero cyan gradient; keep one subtle `--gradient-primary` (orange → deeper orange) for CTA only
+- Dark mode: keep functional, but default the site to **light** (flip `__root.tsx` bootstrap script back to light; remove forced `dark` class)
+- Radius: standardize on `--radius: 0.875rem` (14px) for cards/buttons
 
-### 3. Navbar (`src/components/Navbar.tsx`)
-- Transparent-on-hero → solid navy on scroll (likely already handled; just tune colors).
-- Logo lockup gets a small cyan rounded-square icon tile to the left of the wordmark (matches reference's ⚡ tile).
-- Right side: swap current CTA styling to a **cyan pill "Get a Quote"** button linking to `/contact`.
-- Nav link hover/active color → cyan.
+## 2. Typography
 
-### 4. Buttons across site
-No component rewrites needed — because `--primary` now resolves to cyan, all existing `bg-primary` / `from-primary` usages inherit the new accent automatically. Spot-fix any remaining hardcoded blue rgb (e.g. `rgba(37,99,235,...)` in Hero shadows) → cyan `rgba(34,211,238,...)`.
+- Load **Inter** (body) + **Manrope** (headings) via `<link>` in `src/routes/__root.tsx` head (drop Space Grotesk)
+- Update `body` and `h1–h6` font-family in `styles.css`
+- Tighter tracking on headings, comfortable 1.65 line-height on body, max prose width ~68ch
 
-### 5. Metadata
-- Update `theme-color` meta in `src/routes/__root.tsx` from `#2563EB` → cyan `#22D3EE`.
-- Update fallback accent color defaults in `src/lib/admin/content.functions.ts`, `src/routes/companies.$slug.tsx`, `src/routes/_authenticated/admin.companies.tsx` from `#2563EB` → `#22D3EE`.
+## 3. Layout system
 
-## Out of scope
-- No content/copy changes beyond the hero headline/subhead wording to match the reference tone.
-- No route additions, no backend changes.
-- Other sections (Companies, Stats, Testimonials, Footer, etc.) keep their current structure — they automatically pick up the new cyan accent via tokens.
+- Container max-width 1280px, `px-6 lg:px-8`
+- Section vertical rhythm: `py-20 lg:py-28`
+- Alternate white / `bg-secondary` (light gray) sections for visual pacing
+
+## 4. Section-by-section changes
+
+**Hero (`src/components/sections/Hero.tsx`)**
+- Full-bleed real signage photograph background (keep existing video as optional, but darken to ~35% with a soft charcoal gradient — not navy)
+- ~92vh height, left-aligned content, max-w-3xl
+- Small orange eyebrow label, bold Manrope headline (charcoal on light overlay or white on darkened image), supporting paragraph
+- Two CTAs: **Get Free Quote** (solid orange) and **View Projects** (white / charcoal-bordered outline)
+- Subtle fade-up on load; remove pulsing dot and neon shadows
+
+**Navbar (`src/components/Navbar.tsx`)**
+- White background with subtle bottom border, charcoal links, orange hover underline
+- Sticky, slight shadow on scroll
+- Primary CTA button in orange on the right
+
+**Services / Companies / Portfolio / Stats / FAQ / CTA / ClientLogos / CustomerFeedback / Testimonials / Location / OurCompanies**
+- Unified card style: white card, 14px radius, soft neutral shadow, hover = lift + shadow deepen (no glow)
+- Consistent Lucide icons, `strokeWidth={1.75}`, size 20–24, orange accent circles on light backgrounds
+- Portfolio: larger thumbnails, category filter chips, hover zoom on image, overlay caption
+- Testimonials: photo + logo + name + role + stars (orange), quiet slider
+- Stats: large charcoal numbers, orange underline accent
+- Location: keep map, restyle info card to white + orange icon chips
+
+**Footer (`src/components/Footer.tsx`)**
+- Switch to navy `#0F172A` background with white text and orange link hover
+- Add optional newsletter row
+- Cleaner column rhythm, larger padding
+
+## 5. Buttons
+
+- Update shadcn `Button` variants only via tokens (no component rewrite needed):
+  - `default` = orange bg, white text, hover slightly darker orange, soft shadow
+  - `outline` = white bg, charcoal border, charcoal text, hover light-gray fill
+  - `ghost` / `secondary` retuned to neutral grays
+- Standard sizes: h-11 default, h-12 lg, rounded-full for hero CTAs, rounded-xl elsewhere
+
+## 6. Animations
+
+- Keep existing `Reveal` component and framer-motion
+- Limit to fade-up, fade-in, subtle scale (1 → 1.02) on card hover, image zoom (scale 1.05) on portfolio hover
+- Remove pulses, neon glows, ken-burns intensity
+
+## 7. Images
+
+Content-only note: existing hero videos + uploaded assets stay. Where placeholder imagery is weak, we'll swap to sharper signage-relevant stock via existing image slots (no new asset uploads unless you approve).
+
+## 8. Accent color code cleanup
+
+Replace hard-coded `#22D3EE` fallbacks with `#F58220` in:
+- `src/routes/companies.$slug.tsx`
+- `src/routes/_authenticated/admin.companies.tsx`
+- `src/lib/admin/content.functions.ts`
+- `src/routes/__root.tsx` (`theme-color` meta)
+
+## 9. Out of scope
+
+- No backend, schema, routing, or admin-logic changes
+- No new routes; existing pages keep their content
+- No new asset uploads unless you request them
 
 ## Technical notes
-- All color changes go through CSS variables in `src/styles.css`; no component-level color hardcoding.
-- Hero video logic (random 1-of-5, autoplay, muted, loop) is preserved as-is.
-- Force-dark bootstrap: change the inline `<script>` in `__root.tsx` to always add the `dark` class (still respects an explicit `theme=light` opt-in from localStorage).
+
+- All color changes flow through `src/styles.css` tokens; components consume `bg-primary`, `text-foreground`, etc. — no hardcoded hex in components (except the noted fallback strings).
+- Fonts loaded via `<link>` in `__root.tsx` head (Tailwind v4 rule: never `@import` remote URLs in `styles.css`).
+- Default theme flipped to light by removing the forced `dark` class in the root bootstrap script.
+- Dark mode tokens retained so the theme toggle keeps working.
+
+## Files touched
+
+- `src/styles.css`
+- `src/routes/__root.tsx`
+- `src/components/Navbar.tsx`
+- `src/components/Footer.tsx`
+- `src/components/sections/Hero.tsx`
+- `src/components/sections/Stats.tsx`
+- `src/components/sections/OurCompanies.tsx`
+- `src/components/sections/ClientLogos.tsx`
+- `src/components/sections/CustomerFeedback.tsx`
+- `src/components/sections/Testimonials.tsx`
+- `src/components/sections/FAQ.tsx`
+- `src/components/sections/CTABanner.tsx`
+- `src/components/sections/Location.tsx`
+- `src/components/sections/SeoContent.tsx`
+- `src/routes/index.tsx`, `about.tsx`, `services.tsx`, `portfolio.tsx`, `companies.tsx`, `contact.tsx`, `companies.$slug.tsx` (spacing / card class refinements)
+- `src/routes/_authenticated/admin.companies.tsx`, `src/lib/admin/content.functions.ts` (accent fallback swap)
+
+Approve and I'll implement in one pass.
