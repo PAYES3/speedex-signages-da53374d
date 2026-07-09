@@ -55,7 +55,7 @@ export function Navbar() {
   };
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all border-b ${scrolled ? 'bg-background/95 backdrop-blur shadow-md border-border py-2' : 'bg-background/90 backdrop-blur border-border/60 py-3'}`}>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'bg-background/95 backdrop-blur shadow-sm border-b border-border py-2' : 'bg-background/80 backdrop-blur border-b border-transparent py-3'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2" aria-label={COMPANY.name}>
           <img
@@ -90,7 +90,7 @@ export function Navbar() {
             {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <Link to="/contact" className="hidden sm:block">
-            <Button className="bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-glow)]">
+            <Button className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm px-5">
               {t('nav.quote')}
             </Button>
           </Link>
