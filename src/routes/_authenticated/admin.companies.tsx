@@ -45,7 +45,7 @@ const blank: Company = {
   description: '',
   services: [],
   hero_image: null,
-  accent_color: '#22D3EE',
+  accent_color: '#F58220',
   website_url: null,
   sort_order: 0,
   active: true,
