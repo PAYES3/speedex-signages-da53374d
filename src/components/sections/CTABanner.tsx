@@ -8,15 +8,16 @@ export function CTABanner() {
     <section className="py-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal direction="zoom">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground p-10 md:p-16 text-center">
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent/30 rounded-full blur-3xl" />
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#FFF6EC] via-white to-[#FFEBD5] border border-primary/20 p-12 md:p-20 text-center shadow-[var(--shadow-elegant)]">
+            <div className="absolute -top-24 -right-24 w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-[#D4A017]/20 rounded-full blur-3xl" />
             <div className="relative">
-              <h2 className="text-3xl sm:text-5xl font-bold">Ready to light up your brand?</h2>
-              <p className="mt-4 text-primary-foreground/85 max-w-xl mx-auto">Tell us about your project — we'll get back with a tailored quote within one business day.</p>
+              <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">Start your project</p>
+              <h2 className="mt-3 text-4xl sm:text-6xl font-extrabold text-foreground tracking-tight">Ready to elevate your brand?</h2>
+              <p className="mt-5 text-lg sm:text-xl text-foreground/70 max-w-2xl mx-auto">Tell us about your project — we'll respond with a tailored quote within one business day.</p>
               <Link to="/contact">
-                <Button size="lg" className="mt-8 bg-foreground text-background hover:bg-foreground/90">
-                  Get a Quote <ArrowRight className="ml-2 w-4 h-4" />
+                <Button size="lg" className="mt-8 h-14 px-8 text-lg bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-[0_14px_36px_-12px_rgba(245,130,32,0.55)]">
+                  Get a Quote <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </div>
