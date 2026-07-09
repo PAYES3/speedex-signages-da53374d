@@ -55,7 +55,7 @@ function CompanyDetailPage() {
     return <div className="min-h-screen grid place-items-center">Loading…</div>;
   }
 
-  const accent = company.accent_color || '#22D3EE';
+  const accent = company.accent_color || '#F58220';
 
   return (
     <>
