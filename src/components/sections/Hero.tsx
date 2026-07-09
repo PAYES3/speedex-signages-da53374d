@@ -24,12 +24,12 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
   const [videoReady, setVideoReady] = useState(false);
 
   return (
-    <section className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#0a1628]">
+    <section className="relative min-h-[92svh] flex items-center overflow-hidden bg-foreground">
       <AnimatePresence>
         <motion.video
           key={finalVideo}
-          initial={{ opacity: 0, scale: 1.06 }}
-          animate={{ opacity: videoReady ? 0.55 : 0, scale: 1.03 }}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: videoReady ? 0.6 : 0, scale: 1.02 }}
           transition={{ duration: 1.4, ease: 'easeOut' }}
           autoPlay
           muted
@@ -45,10 +45,9 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
         </motion.video>
       </AnimatePresence>
 
-      {/* Navy overlays — reference-style left-to-right + bottom fades */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628] via-[#0a1628]/85 to-[#0a1628]/40" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 via-transparent to-[#0a1628]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,211,238,0.12),transparent_60%)]" />
+      {/* Subtle charcoal overlays for readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1F2937]/85 via-[#1F2937]/60 to-[#1F2937]/25" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1F2937]/70" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
         <div className="max-w-3xl text-left">
@@ -56,31 +55,29 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-primary text-[11px] sm:text-xs font-semibold tracking-[0.15em] uppercase"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/15 text-primary text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase backdrop-blur"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            Premium Signage Manufacturer
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            Premium Signage — UAE
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-5xl sm:text-7xl md:text-8xl lg:text-[9rem] font-bold text-white leading-[0.95] tracking-[-0.03em]"
-            style={{ fontFamily: '"Space Grotesk", "Inter", sans-serif' }}
+            className="mt-6 text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold text-white leading-[1.02] tracking-[-0.025em]"
           >
-            We light up{' '}
-            <span className="block text-primary">your brand.</span>
+            Signage that <span className="text-primary">elevates</span> your brand.
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-8 text-base sm:text-lg text-white/70 max-w-xl leading-relaxed"
+            className="mt-6 text-base sm:text-lg text-white/80 max-w-xl leading-relaxed"
           >
-            From dazzling LED facades to towering billboards — {COMPANY.name} designs,
-            fabricates and installs signage that gets your brand noticed across the UAE.
+            {COMPANY.name} designs, fabricates and installs premium signage across the UAE —
+            from LED facades and 3D letters to full corporate branding.
           </motion.p>
 
           <motion.div
@@ -90,13 +87,13 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
             className="mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
           >
             <Link to="/contact">
-              <Button size="lg" className="h-12 px-6 rounded-full bg-primary text-primary-foreground font-semibold shadow-[0_10px_40px_-10px_rgba(34,211,238,0.8)] hover:shadow-[0_15px_50px_-10px_rgba(34,211,238,1)] hover:scale-[1.03] transition-all">
-                Start Your Project <ArrowRight className="w-4 h-4" />
+              <Button size="lg" className="h-12 px-7 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-[0_10px_30px_-10px_rgba(245,130,32,0.6)] transition-all">
+                Get Free Quote <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link to="/portfolio">
-              <Button size="lg" variant="outline" className="h-12 px-6 rounded-full border-primary/50 bg-transparent text-primary hover:bg-primary/10 hover:text-primary font-semibold">
-                Explore Our Work
+              <Button size="lg" variant="outline" className="h-12 px-7 rounded-full border-white/70 bg-white/5 backdrop-blur text-white hover:bg-white hover:text-foreground font-semibold">
+                View Projects
               </Button>
             </Link>
           </motion.div>
@@ -107,7 +104,7 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/50 text-[10px] uppercase tracking-[0.35em] flex items-center gap-2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-white/60 text-[10px] uppercase tracking-[0.35em] flex items-center gap-2"
       >
         <span>Scroll</span>
         <span>↓</span>
