@@ -24,12 +24,12 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
   const [videoReady, setVideoReady] = useState(false);
 
   return (
-    <section className="relative min-h-[92svh] flex items-center overflow-hidden bg-[#FAF7F2]">
+    <section className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#FAF7F2]">
       <AnimatePresence>
         <motion.video
           key={finalVideo}
           initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: videoReady ? 0.9 : 0, scale: 1.02 }}
+          animate={{ opacity: videoReady ? 1 : 0, scale: 1.02 }}
           transition={{ duration: 1.4, ease: 'easeOut' }}
           autoPlay
           muted
@@ -46,8 +46,8 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
       </AnimatePresence>
 
       {/* Light bright overlays for premium daylight feel */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/55 to-white/15" />
-      <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/45 to-white/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20">
         <div className="max-w-3xl text-left">
@@ -65,19 +65,18 @@ export function Hero({ videoUrl, posterUrl }: HeroProps = {}) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-6xl sm:text-7xl md:text-[5rem] lg:text-[5.75rem] font-extrabold text-foreground leading-[1.02] tracking-[-0.03em]"
+            className="mt-6 text-6xl sm:text-7xl md:text-[5.25rem] lg:text-[5.75rem] font-extrabold text-foreground leading-[1.02] tracking-[-0.035em]"
           >
-            Signage that <span className="text-primary">elevates</span> your brand.
+            Premium Signage Solutions <span className="text-primary">For Your Business</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-6 text-lg sm:text-xl text-foreground/75 max-w-xl leading-relaxed font-medium"
+            className="mt-6 text-xl sm:text-2xl text-foreground/75 max-w-2xl leading-relaxed font-medium"
           >
-            {COMPANY.name} designs, fabricates and installs premium signage across the UAE —
-            from LED facades and 3D letters to full corporate branding.
+            Custom design, manufacturing and installation services for commercial brands across the UAE.
           </motion.p>
 
           <motion.div

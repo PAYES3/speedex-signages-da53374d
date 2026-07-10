@@ -15,16 +15,16 @@ export function Testimonials() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {TESTIMONIALS.map((t, i) => (
             <Reveal key={t.name} direction="up" delay={i * 0.08}>
-              <div className="bg-card p-6 rounded-2xl shadow-sm hover:shadow-[var(--shadow-elegant)] transition h-full flex flex-col">
-                <div className="flex gap-0.5 mb-3">
-                  {Array.from({ length: 5 }).map((_, k) => <Star key={k} className="w-4 h-4 fill-accent text-accent" />)}
+              <div className="bg-white border border-border p-7 rounded-2xl shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: 5 }).map((_, k) => <Star key={k} className="w-5 h-5 fill-primary text-primary" />)}
                 </div>
-                <p className="text-sm text-foreground/80 flex-1">"{t.text}"</p>
-                <div className="mt-5 flex items-center gap-3">
-                  <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" />
+                <p className="text-base text-foreground/85 flex-1 leading-relaxed">"{t.text}"</p>
+                <div className="mt-6 flex items-center gap-3 pt-5 border-t border-border/60">
+                  <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20" loading="lazy" />
                   <div>
-                    <p className="font-semibold text-sm">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.role}</p>
+                    <p className="font-semibold text-base">{t.name}</p>
+                    <p className="text-sm text-muted-foreground">{t.role}</p>
                   </div>
                 </div>
               </div>
