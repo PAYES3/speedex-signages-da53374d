@@ -1,118 +1,86 @@
-# Speedex Signages — Premium Corporate Redesign Plan
+# Speedex Signages — Premium Redesign Plan
 
-Shift the site from the current dark navy + cyan "tech" look to a clean, spacious, corporate signage-company aesthetic (think premium industrial UAE brand), while preserving all existing content, routes, data, and admin functionality.
+## Goal
+Elevate the site to a bright, corporate, premium UAE signage brand. Build on the existing white/orange system already in place, and push it further into a polished, spacious, trust-building experience.
 
-## 1. Design tokens (src/styles.css)
+## Scope
+Frontend + design system only. No schema, routing, or admin logic changes. Content stays; presentation is upgraded.
 
-Rebuild the token layer around a light-first corporate palette.
+---
 
-- Background: `#FFFFFF` (light gray `#F8F9FA` for alternating sections)
-- Foreground / text: charcoal `#1F2937`
-- Primary (CTA/accents only): orange `#F58220`
-- Secondary surface: light gray `#F8F9FA`
-- Muted text: slate `#64748B`
-- Border: `#E5E7EB`
-- Optional dark accent: navy `#0F172A` (footer, deep sections)
-- Remove cyan glows; replace `--shadow-glow` with a soft orange-tinted shadow used sparingly, and `--shadow-elegant` with a neutral soft shadow (`0 10px 30px -12px rgba(15,23,42,0.12)`)
-- Gradients: retire hero cyan gradient; keep one subtle `--gradient-primary` (orange → deeper orange) for CTA only
-- Dark mode: keep functional, but default the site to **light** (flip `__root.tsx` bootstrap script back to light; remove forced `dark` class)
-- Radius: standardize on `--radius: 0.875rem` (14px) for cards/buttons
+## 1. Design tokens (`src/styles.css`)
+- Add gold accent `--gold: oklch(0.78 0.13 84)` (#D4A017) for premium highlights.
+- Introduce surface tokens: `--surface-beige: #FAF7F2`, `--surface-gray: #F5F6F7`, `--surface-warm: #E5E7EB`.
+- Bump base body to `1.125rem`, keep 1.7 line-height. Widen H1 clamp to `clamp(3rem, 6vw, 5rem)`; H2 to `clamp(2.25rem, 4vw, 3.5rem)`.
+- Add `--section-y: clamp(6rem, 10vw, 9rem)` for consistent 100–140px vertical rhythm.
+- Card radius token `--radius-card: 1rem` (16px); soft shadow `--shadow-card` and lifted `--shadow-card-hover`.
+- Remove leftover glow utilities from cards (keep `glow-text` for optional accents only).
 
-## 2. Typography
+## 2. Layout container
+- New `.container-x` utility (max-width 1280px, responsive padding) applied consistently across sections instead of ad-hoc `max-w-7xl`.
 
-- Load **Inter** (body) + **Manrope** (headings) via `<link>` in `src/routes/__root.tsx` head (drop Space Grotesk)
-- Update `body` and `h1–h6` font-family in `styles.css`
-- Tighter tracking on headings, comfortable 1.65 line-height on body, max prose width ~68ch
+## 3. Hero (`src/components/sections/Hero.tsx`)
+- Full-viewport (`100svh`) autoplay/muted/loop/playsinline video (already wired) with slightly stronger clarity: `opacity: 1` when ready, plus a light gradient overlay (white 55% → 20%) — no dark tints.
+- Headline: "Premium Signage Solutions For Your Business" at 72–80px.
+- Subhead: "Custom design, manufacturing and installation services for commercial brands." at 22–26px.
+- CTAs: primary orange, secondary white with orange border. Both 56px tall, 18–20px text.
+- Subtle scroll indicator, tighter entrance animation stack.
 
-## 3. Layout system
+## 4. New section — Signage slider (`src/components/sections/SignageShowcase.tsx`)
+- Auto-advancing full-bleed slider (5–6 slides) using existing portfolio-style imagery: facades, LED boards, acrylic letters, office/retail/mall branding.
+- Each slide: overlay card with headline + one-line description + CTA button. Dot navigation, framer-motion crossfade, pause on hover.
 
-- Container max-width 1280px, `px-6 lg:px-8`
-- Section vertical rhythm: `py-20 lg:py-28`
-- Alternate white / `bg-secondary` (light gray) sections for visual pacing
+## 5. New section — Manufacturing process (`src/components/sections/ProcessVideo.tsx`)
+- Heading: "From Design to Installation — We Build Signage That Represents Your Brand".
+- Cinematic 16:9 video card with 16px radius, soft shadow, poster image, play-button overlay, lazy-loaded.
+- Right column: 4 process steps (Design → Fabrication → Finishing → Installation) with numbered gold accents.
 
-## 4. Section-by-section changes
+## 6. Services (`src/routes/services.tsx` grid + shared card)
+- Redesign cards to white bg, 16px radius, image on top, icon chip, bold 26–32px title, description, "Learn More" arrow link.
+- Reorganize into the 8 categories listed (LED, Acrylic, Building, Office, Retail, Vehicle, Indoor, Outdoor). Use existing service data; only visuals change.
 
-**Hero (`src/components/sections/Hero.tsx`)**
-- Full-bleed real signage photograph background (keep existing video as optional, but darken to ~35% with a soft charcoal gradient — not navy)
-- ~92vh height, left-aligned content, max-w-3xl
-- Small orange eyebrow label, bold Manrope headline (charcoal on light overlay or white on darkened image), supporting paragraph
-- Two CTAs: **Get Free Quote** (solid orange) and **View Projects** (white / charcoal-bordered outline)
-- Subtle fade-up on load; remove pulsing dot and neon shadows
+## 7. Portfolio (`src/routes/portfolio.tsx`)
+- Larger 3-col grid, category filter chips (orange active state), hover image zoom (scale 1.05), overlay with project name + category.
+- Keep existing data source.
 
-**Navbar (`src/components/Navbar.tsx`)**
-- White background with subtle bottom border, charcoal links, orange hover underline
-- Sticky, slight shadow on scroll
-- Primary CTA button in orange on the right
+## 8. Why Choose Speedex (new or upgraded section on `index.tsx`)
+- 8 feature cards in a 4×2 grid: Quality Materials, Experienced Team, Custom Designs, Fast Delivery, Professional Installation, Competitive Pricing, Warranty Support, Complete Solutions. Icon + title + short line each.
 
-**Services / Companies / Portfolio / Stats / FAQ / CTA / ClientLogos / CustomerFeedback / Testimonials / Location / OurCompanies**
-- Unified card style: white card, 14px radius, soft neutral shadow, hover = lift + shadow deepen (no glow)
-- Consistent Lucide icons, `strokeWidth={1.75}`, size 20–24, orange accent circles on light backgrounds
-- Portfolio: larger thumbnails, category filter chips, hover zoom on image, overlay caption
-- Testimonials: photo + logo + name + role + stars (orange), quiet slider
-- Stats: large charcoal numbers, orange underline accent
-- Location: keep map, restyle info card to white + orange icon chips
+## 9. Trust strip (upgrade `Stats.tsx` + `ClientLogos.tsx`)
+- Stats: keep the current large-number treatment; add gold underline accent option.
+- Client logos: grayscale by default, colored on hover, tidy 6-per-row grid on desktop.
 
-**Footer (`src/components/Footer.tsx`)**
-- Switch to navy `#0F172A` background with white text and orange link hover
-- Add optional newsletter row
-- Cleaner column rhythm, larger padding
+## 10. Testimonials (`Testimonials.tsx`)
+- Slider with photo + logo + name + designation + quote + orange 5-star rating. Quiet auto-advance, arrow controls.
 
-## 5. Buttons
+## 11. About page (`src/routes/about.tsx`)
+- Add Mission / Vision / Core Values trio, factory/team image band, experience highlights row. Keep copy structure; upgrade layout to editorial with generous whitespace.
 
-- Update shadcn `Button` variants only via tokens (no component rewrite needed):
-  - `default` = orange bg, white text, hover slightly darker orange, soft shadow
-  - `outline` = white bg, charcoal border, charcoal text, hover light-gray fill
-  - `ghost` / `secondary` retuned to neutral grays
-- Standard sizes: h-11 default, h-12 lg, rounded-full for hero CTAs, rounded-xl elsewhere
+## 12. Contact (`src/routes/contact.tsx`)
+- Two-column: form (white card, 16px radius) on left; contact details, hours, WhatsApp CTA, map embed on right. Larger form fields (h-14), 18px labels.
 
-## 6. Animations
+## 13. Buttons (shadcn `button.tsx`)
+- Tune `default` (orange bg, white text) and `outline` (white bg, orange border, orange text → filled on hover) variants. Bump default `lg` size to h-14 / px-8 / text-lg. Rounded-full retained.
 
-- Keep existing `Reveal` component and framer-motion
-- Limit to fade-up, fade-in, subtle scale (1 → 1.02) on card hover, image zoom (scale 1.05) on portfolio hover
-- Remove pulses, neon glows, ken-burns intensity
+## 14. Cards & motion cleanup
+- Sweep components and remove residual heavy shadows, neon glows, ken-burns. Standardize on: fade-up on enter, image zoom 1.05 on hover, card lift `translateY(-4px)` + `--shadow-card-hover`.
 
-## 7. Images
+## 15. Footer (`Footer.tsx`)
+- Already charcoal (#222); add a thin top gold hairline, bump link/label sizes to 16–18px, tighten column widths, add gold hover on links.
 
-Content-only note: existing hero videos + uploaded assets stay. Where placeholder imagery is weak, we'll swap to sharper signage-relevant stock via existing image slots (no new asset uploads unless you approve).
+## 16. Navbar (`Navbar.tsx`)
+- Keep white translucent bar; increase link font-weight/spacing, orange underline hover (already present), CTA button to h-11 rounded-full.
 
-## 8. Accent color code cleanup
+## 17. Mobile & performance
+- Verify all new sections stack cleanly at 375/768/1024. Videos use `preload="metadata"` + poster. Images use `loading="lazy"` and `decoding="async"`. No horizontal overflow.
 
-Replace hard-coded `#22D3EE` fallbacks with `#F58220` in:
-- `src/routes/companies.$slug.tsx`
-- `src/routes/_authenticated/admin.companies.tsx`
-- `src/lib/admin/content.functions.ts`
-- `src/routes/__root.tsx` (`theme-color` meta)
+## 18. SEO
+- Keep per-route `head()` metadata; refresh homepage title/description to reflect premium positioning. No new routes.
 
-## 9. Out of scope
+## Out of scope
+- No backend/schema/auth changes.
+- No new admin fields.
+- No new asset uploads unless you provide them; new sections reuse existing hero videos and portfolio imagery.
 
-- No backend, schema, routing, or admin-logic changes
-- No new routes; existing pages keep their content
-- No new asset uploads unless you request them
-
-## Technical notes
-
-- All color changes flow through `src/styles.css` tokens; components consume `bg-primary`, `text-foreground`, etc. — no hardcoded hex in components (except the noted fallback strings).
-- Fonts loaded via `<link>` in `__root.tsx` head (Tailwind v4 rule: never `@import` remote URLs in `styles.css`).
-- Default theme flipped to light by removing the forced `dark` class in the root bootstrap script.
-- Dark mode tokens retained so the theme toggle keeps working.
-
-## Files touched
-
-- `src/styles.css`
-- `src/routes/__root.tsx`
-- `src/components/Navbar.tsx`
-- `src/components/Footer.tsx`
-- `src/components/sections/Hero.tsx`
-- `src/components/sections/Stats.tsx`
-- `src/components/sections/OurCompanies.tsx`
-- `src/components/sections/ClientLogos.tsx`
-- `src/components/sections/CustomerFeedback.tsx`
-- `src/components/sections/Testimonials.tsx`
-- `src/components/sections/FAQ.tsx`
-- `src/components/sections/CTABanner.tsx`
-- `src/components/sections/Location.tsx`
-- `src/components/sections/SeoContent.tsx`
-- `src/routes/index.tsx`, `about.tsx`, `services.tsx`, `portfolio.tsx`, `companies.tsx`, `contact.tsx`, `companies.$slug.tsx` (spacing / card class refinements)
-- `src/routes/_authenticated/admin.companies.tsx`, `src/lib/admin/content.functions.ts` (accent fallback swap)
-
-Approve and I'll implement in one pass.
+## Files touched (approx.)
+`src/styles.css`, `src/components/ui/button.tsx`, `src/components/Navbar.tsx`, `src/components/Footer.tsx`, `src/components/sections/Hero.tsx`, `Stats.tsx`, `ClientLogos.tsx`, `Testimonials.tsx`, `CTABanner.tsx`, `OurCompanies.tsx`, `FAQ.tsx`, `SeoContent.tsx`, `Location.tsx`, new `SignageShowcase.tsx`, new `ProcessVideo.tsx`, new `WhyChoose.tsx`, `src/routes/index.tsx`, `about.tsx`, `services.tsx`, `portfolio.tsx`, `contact.tsx`.

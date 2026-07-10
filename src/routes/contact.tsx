@@ -66,17 +66,17 @@ function ContactPage() {
           <Reveal direction="left">
             <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
               <h2 className="text-xl font-bold">Send us a message</h2>
-              <form onSubmit={onSubmit} className="mt-5 space-y-3">
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <Input name="name" placeholder="Full name *" required maxLength={120} />
-                  <Input name="email" type="email" placeholder="Email *" required maxLength={255} />
+              <form onSubmit={onSubmit} className="mt-6 space-y-4">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Input name="name" placeholder="Full name *" required maxLength={120} className="h-14 text-base" />
+                  <Input name="email" type="email" placeholder="Email *" required maxLength={255} className="h-14 text-base" />
                 </div>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <Input name="phone" placeholder="Phone (optional)" maxLength={40} />
-                  <Input name="subject" placeholder="Subject" maxLength={200} />
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <Input name="phone" placeholder="Phone (optional)" maxLength={40} className="h-14 text-base" />
+                  <Input name="subject" placeholder="Subject" maxLength={200} className="h-14 text-base" />
                 </div>
-                <Textarea name="message" placeholder="Your message *" rows={5} required maxLength={4000} />
-                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground shadow-[var(--shadow-glow)]">
+                <Textarea name="message" placeholder="Your message *" rows={6} required maxLength={4000} className="text-base" />
+                <Button type="submit" size="lg" disabled={loading} className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground">
                   {loading ? 'Sending…' : 'Send Message'}
                 </Button>
               </form>
