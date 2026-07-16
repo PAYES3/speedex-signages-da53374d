@@ -21,8 +21,8 @@ export default defineTool({
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
     const { data, error } = await supabaseForUser(ctx)
       .from("services")
-      .select("id, title, slug, summary, published, order_index")
-      .order("order_index", { ascending: true })
+      .select("id, title, slug, description, published, sort_order")
+      .order("sort_order", { ascending: true })
       .limit(limit);
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     return {
