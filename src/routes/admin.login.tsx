@@ -14,11 +14,22 @@ export const Route = createFileRoute('/admin/login')({
       { name: 'robots', content: 'noindex, nofollow' },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === 'string' ? s.next : undefined,
+  }),
   component: AdminLogin,
 });
 
+// Only allow same-origin relative paths so we can't be used as an open redirect.
+function safeNext(next: string | undefined): string | null {
+  if (!next || !next.startsWith('/') || next.startsWith('//')) return null;
+  return next;
+}
+
 function AdminLogin() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
+  const nextPath = safeNext(next);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,6 +44,10 @@ function AdminLogin() {
       return;
     }
     toast.success('Welcome back!');
+    if (nextPath) {
+      window.location.href = nextPath;
+      return;
+    }
     navigate({ to: '/admin' });
   };
 
