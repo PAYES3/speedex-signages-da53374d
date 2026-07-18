@@ -236,3 +236,22 @@
   0%, 100% { transform: scale(1.05) translate(0, 0); }
   50% { transform: scale(1.15) translate(-1%, -1%); }
 }
+
+@utility glass-panel {
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  border-radius: var(--radius-card);
+}
+
+@utility gold-text {
+  color: var(--gold);
+}
+
+@utility hover-glow {
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  &:hover {
+    box-shadow: 0 24px 60px -20px color-mix(in oklab, var(--primary) 45%, transparent);
+    transform: translateY(-4px);
+  }
+}
