@@ -11,6 +11,9 @@ import { Location } from '@/components/sections/Location';
 import { SignageShowcase } from '@/components/sections/SignageShowcase';
 import { ProcessVideo } from '@/components/sections/ProcessVideo';
 import { WhyChoose } from '@/components/sections/WhyChoose';
+import { BeforeAfter } from '@/components/sections/BeforeAfter';
+import { ProcessTimeline } from '@/components/sections/ProcessTimeline';
+import { FactoryShowcase } from '@/components/sections/FactoryShowcase';
 import { Reveal } from '@/components/Reveal';
 import { SERVICES, PROJECTS, FAQ as FAQ_DATA } from '@/lib/site-data';
 import { ArrowRight } from 'lucide-react';
@@ -58,9 +61,7 @@ function Home() {
       <Hero videoUrl={s.hero_video_url} posterUrl={s.hero_poster_url} />
       <ClientLogos />
       <SignageShowcase />
-      <ProcessVideo />
-      <Stats />
-      <section className="py-24 lg:py-32 bg-white">
+      <section className="py-24 lg:py-32 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto mb-16">
@@ -72,7 +73,7 @@ function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {SERVICES.slice(0, 6).map((s, i) => (
               <Reveal key={s.title} direction="up" delay={i * 0.08}>
-                <div className="group bg-white border border-border rounded-2xl p-8 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1 hover:border-primary/40 transition-all duration-300 h-full">
+                <div className="group glass-panel p-8 hover-glow h-full">
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 grid place-items-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                     <s.icon className="w-7 h-7" strokeWidth={1.75} />
                   </div>
@@ -88,7 +89,12 @@ function Home() {
         </div>
       </section>
 
+      <BeforeAfter />
+      <ProcessTimeline />
+      <FactoryShowcase />
       <WhyChoose />
+      <Stats />
+      <ProcessVideo />
 
       <section className="py-24 lg:py-32 bg-[color:var(--surface-gray)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
