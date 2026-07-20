@@ -217,7 +217,7 @@ export const SERVICE_WORKFLOW: { title: string; desc: string }[] = [
   { title: 'Digital Signage Solutions', desc: 'This is a growing area that involves setting up and managing digital screens and displays.' },
 ];
 
-// Structural array elements mapped under primary sister concerns with precise endpoint hooks
+// Replaced total list with 7 accurate parent and sister concerns with exact names and logo lines
 export const COMPANIES = [
   {
     name: 'Speedex Signages',
@@ -231,7 +231,7 @@ export const COMPANIES = [
   {
     name: 'Speedex Facilities Management',
     slug: 'speedex-facilities-management',
-    desc: 'Integrated property maintenance, MEP installation, safety compliance, and comprehensive building operations.',
+    desc: 'Integrated property maintenance, MEP installation, safety compliance, and comprehensive building operations.[cite: 5]',
     url: 'https://speedexgroups.ae/about-us',
     internal: false,
     initials: 'SF',
@@ -249,19 +249,19 @@ export const COMPANIES = [
   {
     name: 'Speedex Auto Workshop',
     slug: 'speedex-auto-workshop',
-    desc: 'Advanced fleet maintenance diagnostics, mechanical repairs, and heavy equipment engineering solutions.',
+    desc: 'Advanced fleet maintenance diagnostics, mechanical repairs, and heavy equipment engineering solutions.[cite: 1]',
     url: 'https://www.speedexgroups.ae',
     internal: false,
     initials: 'SA',
     logo: '/assets/logos/speedex-auto.png'
   },
   {
-    name: 'Excellent Field Contracting and Engineering Services',
-    slug: 'excellent-field-contracting-and-engineering-services',
-    desc: 'Turnkey civil construction, engineering infrastructure, infrastructure development, and structural project operations.',
+    name: 'Excellent Field Contracting',
+    slug: 'excellent-field-contracting',
+    desc: 'Turnkey civil construction, ADNOC-related contracting services, infrastructure development, and structural project operations.',
     url: 'https://excellentcontracting.ae/',
     internal: false,
-    initials: 'EC',
+    initials: 'EF',
     logo: '/assets/logos/excellent-contracting.png'
   },
   {
@@ -274,12 +274,12 @@ export const COMPANIES = [
     logo: '/assets/logos/excellent-trading.png'
   },
   {
-    name: 'Arabsat Transport Passengers by Buses LLC',
-    slug: 'arabsat-transport-passengers-by-buses-llc',
-    desc: 'Reliable car and bus transportation services with a modern fleet, experienced drivers, and efficient mobility solutions, ensuring safe, comfortable, and punctual travel across the MENA region.',
+    name: 'Arabsat Transport',
+    slug: 'arabsat-satellite-operations',
+    desc: 'Specialized high-tech logistics, fleet transport management, tracking data systems, and secure communication-linked distribution across the MENA region.',
     url: 'https://www.arabsat.ae',
     internal: false,
-    initials: 'AS',
+    initials: 'AT',
     logo: '/assets/logos/arabsat.png'
   }
 ];
