@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListCompanies } from '@/lib/admin/content.functions';
-import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react'; // Youtube removed from imports
 import { COMPANY } from '@/lib/site-data';
 import logo from '@/assets/speedex-logo.png.asset.json';
 
@@ -14,9 +14,17 @@ const QUICK_LINKS = [
   { to: '/contact', label: 'Contact' },
 ] as const;
 
+// Clean array without Youtube
+const SOCIAL_LINKS = [
+  { Icon: Instagram, url: "https://www.instagram.com/speedex_signages" },
+  { Icon: Facebook, url: "https://www.facebook.com/share/19Hp7naRrK/" },
+  { Icon: Linkedin, url: "https://www.linkedin.com/showcase/speedex-signages-abu-dhabi/" }
+] as const;
+
 export function Footer() {
   const fetcher = useServerFn(publicListCompanies);
   const { data: companies } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
+  
   return (
     <footer className="bg-[#1B1B1B] text-white/90 mt-24 border-t-2" style={{ borderTopColor: '#D4A017' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -27,10 +35,17 @@ export function Footer() {
           <p className="text-white/65 text-base leading-relaxed">
             Speedex Group — UAE's trusted partner across signage, automotive, transport, contracting and trading since 2007.
           </p>
+          
           <div className="flex gap-3 mt-5">
-            {[Instagram, Facebook, Linkedin, Youtube].map((Icon, i) => (
-              <a key={i} href="#" className="w-10 h-10 grid place-items-center rounded-full bg-white/10 hover:bg-primary hover:text-primary-foreground transition">
-                <Icon className="w-4 h-4" />
+            {SOCIAL_LINKS.map((item, i) => (
+              <a 
+                key={i} 
+                href={item.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 grid place-items-center rounded-full bg-white/10 hover:bg-primary hover:text-primary-foreground transition"
+              >
+                <item.Icon className="w-4 h-4" />
               </a>
             ))}
           </div>
@@ -65,6 +80,7 @@ export function Footer() {
           </ul>
         </div>
       </div>
+      
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-white/55 flex flex-col md:flex-row justify-between gap-2">
           <p>© {new Date().getFullYear()} {COMPANY.name}. All rights reserved.</p>
