@@ -217,9 +217,69 @@ export const SERVICE_WORKFLOW: { title: string; desc: string }[] = [
   { title: 'Digital Signage Solutions', desc: 'This is a growing area that involves setting up and managing digital screens and displays.' },
 ];
 
+// Structural array elements mapped under primary sister concerns with precise endpoint hooks
 export const COMPANIES = [
-  { name: 'Speedex Signages', desc: 'UAE signage manufacturing, branding & installation.', url: '/', internal: true, initials: 'SS' },
-  { name: 'Arabsat', desc: 'Satellite and broadcast solutions across the MENA region.', url: 'https://www.arabsat.ae', internal: false, initials: 'AS' },
-  { name: 'Excellent General Trading', desc: 'General trading and supply across the UAE.', url: 'https://www.excellentgroup.ae', internal: false, initials: 'EG' },
-  { name: 'Speedex Auto Workshop', desc: 'Professional automotive repair and detailing services.', url: 'https://www.speedexgroups.ae', internal: false, initials: 'SA' },
+  {
+    name: 'Speedex Signages',
+    slug: 'speedex-signages',
+    desc: 'UAE signage manufacturing, branding & installation.',
+    url: '/',
+    internal: true,
+    initials: 'SS',
+    logo: '/assets/logos/speedex-signages.png'
+  },
+  {
+    name: 'Speedex Facilities Management',
+    slug: 'speedex-facilities-management',
+    desc: 'Integrated property maintenance, MEP installation, safety compliance, and comprehensive building operations.',
+    url: 'https://speedexgroups.ae/about-us',
+    internal: false,
+    initials: 'SF',
+    logo: '/assets/logos/speedex-fm.png'
+  },
+  {
+    name: 'Speedex Car Rental',
+    slug: 'speedex-car-rental',
+    desc: 'Premium vehicle fleet rentals, luxury options, and corporate transportation logistics throughout the UAE.',
+    url: 'https://speedexgroups.ae',
+    internal: false,
+    initials: 'CR',
+    logo: '/assets/logos/speedex-car-rental.png'
+  },
+  {
+    name: 'Speedex Auto Workshop',
+    slug: 'speedex-auto-workshop',
+    desc: 'Advanced fleet maintenance diagnostics, mechanical repairs, and heavy equipment engineering solutions.',
+    url: 'https://www.speedexgroups.ae',
+    internal: false,
+    initials: 'SA',
+    logo: '/assets/logos/speedex-auto.png'
+  },
+  {
+    name: 'Excellent Field Contracting and Engineering Services',
+    slug: 'excellent-field-contracting-and-engineering-services',
+    desc: 'Turnkey civil construction, engineering infrastructure, infrastructure development, and structural project operations.',
+    url: 'https://excellentcontracting.ae/',
+    internal: false,
+    initials: 'EC',
+    logo: '/assets/logos/excellent-contracting.png'
+  },
+  {
+    name: 'Excellent General Trading',
+    slug: 'excellent-general-trading',
+    desc: 'Global B2B supply chain operations, general wholesale trading, and enterprise inventory logistics across the UAE.',
+    url: 'https://www.excellentgroup.ae',
+    internal: false,
+    initials: 'EG',
+    logo: '/assets/logos/excellent-trading.png'
+  },
+  {
+    name: 'Arabsat Transport Passengers by Buses LLC',
+    slug: 'arabsat-transport-passengers-by-buses-llc',
+    desc: 'Reliable car and bus transportation services with a modern fleet, experienced drivers, and efficient mobility solutions, ensuring safe, comfortable, and punctual travel across the MENA region.',
+    url: 'https://www.arabsat.ae',
+    internal: false,
+    initials: 'AS',
+    logo: '/assets/logos/arabsat.png'
+  }
 ];
