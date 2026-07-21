@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ArrowRight, Building2, Sparkles, Play, ShieldCheck, Phone, MapPin, Globe } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 function initialsOf(name: string) {
@@ -19,6 +19,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'LED, Acrylic & 3D Signage',
     description: 'Premier signage manufacturing, 2D/3D signboards, and vehicle graphics in UAE.',
     logo_url: '/assets/logos/speedex-signage.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '2',
@@ -27,6 +28,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'Luxury & Commercial Rental',
     description: 'Fleet rentals, vehicle leasing, and airport transfers across Dubai & Abu Dhabi.',
     logo_url: '/assets/logos/cars-rental.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '3',
@@ -35,6 +37,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'Building Maintenance & Care',
     description: 'Complete facility management and building maintenance services.',
     logo_url: '/assets/logos/facility-management.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '4',
@@ -43,6 +46,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'Technical & Auto Care',
     description: 'Advanced vehicle servicing, engine rebuilds, diagnostics, and bodywork.',
     logo_url: '/assets/logos/workshop.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '5',
@@ -51,6 +55,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'Civil & Interior Works',
     description: 'High-quality contracting and fit-out execution for commercial spaces.',
     logo_url: '/assets/logos/field-contracting.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '6',
@@ -59,6 +64,7 @@ const DEFAULT_COMPANIES = [
     tagline: 'Import, Export & Supply',
     description: 'Safety products, cleaning materials, building supplies, uniforms, and gifts.',
     logo_url: '/assets/logos/general-trading.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
   },
   {
     id: '7',
@@ -67,39 +73,59 @@ const DEFAULT_COMPANIES = [
     tagline: 'Passenger Transport & Bus Charter',
     description: 'Staff & labour transportation, airport transfers, and vehicle leasing.',
     logo_url: '/assets/logos/arabsat.jpg',
+    bg_url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80',
   },
 ];
 
 export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
-  const [companies, setCompanies] = useState(DEFAULT_COMPANIES);
-  const [videoUrl, setVideoUrl] = useState(
-    groupVideoUrl || ''
-  );
+  const [companies] = useState(DEFAULT_COMPANIES);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoUrl, setVideoUrl] = useState(groupVideoUrl || '');
 
+  // Supabase video fetch
   useEffect(() => {
-    // Dynamic Fetch from Supabase settings if configured
     async function loadCompanyData() {
       try {
-        const { data } = await supabase.from('site_settings').select('value').eq('key', 'group_video_url').single();
+        const { data } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'group_video_url')
+          .single();
         if (data?.value) {
           setVideoUrl(data.value);
         }
       } catch (e) {
-        // Fallback to static props/defaults
+        // Fallback to static props
       }
     }
     loadCompanyData();
   }, []);
 
+  // Next / Prev slide handlers
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev === companies.length - 1 ? 0 : prev + 1));
+  }, [companies.length]);
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? companies.length - 1 : prev - 1));
+  };
+
+  // Auto-play slider (every 5 seconds)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [nextSlide]);
+
+  const currentCompany = companies[currentIndex];
+
   return (
     <section className="py-12 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden w-full max-w-full">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,theme(colors.primary/0.08),transparent_60%)] pointer-events-none" />
-
-      {/* Main Container - Responsive Fit */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 box-border">
         
-        {/* HEADER */}
-        <div className="text-center mb-10 sm:mb-16 max-w-3xl mx-auto px-2">
+        {/* SECTION HEADER */}
+        <div className="text-center mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
           <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.2em] bg-primary/10 border border-primary/20 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 shrink-0" /> Speedex Group
           </p>
@@ -111,54 +137,105 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </p>
         </div>
 
-        {/* 3-COLUMN RESPONSIVE GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {/* 🚀 HERO FULL SLIDER SECTION WITH BACKGROUND IMAGE */}
+        <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
+          
+          {/* Background Images with Fade Effect */}
           {companies.map((c, i) => (
-            <div key={c.id || i} className="w-full">
-              <a
-                href={`/companies/${c.slug}`}
-                className="group block bg-card/90 backdrop-blur-sm border border-border/80 rounded-2xl p-5 sm:p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
-                    {c.logo_url ? (
-                      <img
-                        src={c.logo_url}
-                        alt={`${c.name} logo`}
-                        className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-base shadow-md">
-                        {initialsOf(c.name)}
-                      </div>
-                    )}
-                  </div>
-
-                  <h3 className="font-bold text-base sm:text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
-                    <Building2 className="w-4 h-4 text-primary shrink-0" />
-                    <span className="truncate">{c.name}</span>
-                  </h3>
-
-                  {c.tagline && (
-                    <p className="mt-1 text-[11px] sm:text-xs uppercase tracking-wider text-primary font-semibold">
-                      {c.tagline}
-                    </p>
-                  )}
-
-                  <p className="mt-2 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                    {c.description}
-                  </p>
-                </div>
-
-                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
-                  Explore Company <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </a>
+            <div
+              key={c.id || i}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                i === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none'
+              }`}
+            >
+              <img
+                src={c.bg_url}
+                alt={c.name}
+                className="w-full h-full object-cover"
+              />
+              {/* Dark Overlay for text legibility */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/30" />
             </div>
           ))}
+
+          {/* Active Card Content */}
+          <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
+            <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
+              
+              {/* White Box for Logo */}
+              <div className="w-full h-20 bg-white rounded-xl flex items-center justify-center p-3 mb-5 border border-white/30 shadow-inner">
+                {currentCompany.logo_url ? (
+                  <img
+                    src={currentCompany.logo_url}
+                    alt={`${currentCompany.name} logo`}
+                    className="max-h-full max-w-full w-auto object-contain drop-shadow-sm"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-base">
+                    {initialsOf(currentCompany.name)}
+                  </div>
+                )}
+              </div>
+
+              {/* Title & Tagline */}
+              <h3 className="text-xl sm:text-2xl font-bold flex items-center gap-2 text-white">
+                <Building2 className="w-5 h-5 text-primary shrink-0" />
+                <span className="truncate">{currentCompany.name}</span>
+              </h3>
+
+              {currentCompany.tagline && (
+                <p className="mt-1 text-xs sm:text-sm font-semibold tracking-wider text-primary uppercase">
+                  {currentCompany.tagline}
+                </p>
+              )}
+
+              <p className="mt-3 text-xs sm:text-sm text-zinc-200 leading-relaxed line-clamp-3">
+                {currentCompany.description}
+              </p>
+
+              {/* CTA Link */}
+              <a
+                href={`/companies/${currentCompany.slug}`}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all group"
+              >
+                Explore Company
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </div>
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all"
+            aria-label="Previous Slide"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all"
+            aria-label="Next Slide"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Navigation Dots */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {companies.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === currentIndex ? 'w-7 bg-primary' : 'w-2 bg-white/40 hover:bg-white/70'
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* 🎬 VIDEO SHOWCASE SECTION BELOW COMPANIES */}
+        {/* 🎬 VIDEO SHOWCASE SECTION */}
         <div className="mt-16 sm:mt-24 pt-12 border-t border-border/60">
           <div className="text-center mb-8 max-w-2xl mx-auto px-2">
             <span className="text-xs uppercase font-bold tracking-widest text-primary flex items-center justify-center gap-1.5 mb-2">
@@ -172,7 +249,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             </p>
           </div>
 
-          {/* Mobile-Fit Video Player Box */}
           <div className="w-full max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden border border-border/80 shadow-2xl bg-black/90 relative aspect-video">
             {videoUrl ? (
               <video
@@ -197,7 +273,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             )}
           </div>
 
-          {/* Quick Contact Bar from Video Info */}
+          {/* Quick Contact Bar */}
           <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4 text-primary shrink-0" />
