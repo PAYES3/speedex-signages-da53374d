@@ -20,7 +20,6 @@ export function FileUpload({
   const [tab, setTab] = useState<'upload' | 'link'>('upload');
   const [uploading, setUploading] = useState(false);
 
-  // PC-யில் இருந்து Direct Supabase Upload செய்யும் Function
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
@@ -38,11 +37,11 @@ export function FileUpload({
         throw uploadError;
       }
 
-      // Upload ஆன பிறகு Public URL-ஐ பெறுகிறோம்
       const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
       onChange(data.publicUrl);
-    } catch (error: any) {
-      alert('Upload failed: ' + (error.message || 'Error uploading file'));
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert('Upload failed: ' + (err.message || 'Error uploading file'));
     } finally {
       setUploading(false);
     }
@@ -62,7 +61,6 @@ export function FileUpload({
           {label}
         </label>
 
-        {/* 🎯 TAB TOGGLE: 1. UPLOAD FROM PC | 2. PASTE LINK */}
         <div className="flex bg-zinc-800/80 p-1 rounded-xl text-xs">
           <button
             type="button"
@@ -89,7 +87,6 @@ export function FileUpload({
         </div>
       </div>
 
-      {/* 📥 OPTION 1: UPLOAD FROM PC */}
       {tab === 'upload' && (
         <div className="relative border-2 border-dashed border-zinc-700 hover:border-primary/60 rounded-xl p-4 text-center transition-all bg-zinc-950/40">
           <input
@@ -123,7 +120,6 @@ export function FileUpload({
         </div>
       )}
 
-      {/* 🔗 OPTION 2: EXTERNAL URL LINK */}
       {tab === 'link' && (
         <div className="relative">
           <LinkIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -137,7 +133,6 @@ export function FileUpload({
         </div>
       )}
 
-      {/* 👁️ MEDIA PREVIEW BOX */}
       {value && (
         <div className="relative mt-2 rounded-xl overflow-hidden border border-zinc-700 bg-black max-h-48 flex items-center justify-center group">
           {isVideo ? (
