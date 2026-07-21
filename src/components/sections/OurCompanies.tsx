@@ -1,10 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { motion } from 'framer-motion';
 import { Reveal } from '@/components/Reveal';
 import { publicListCompanies } from '@/lib/admin/content.functions';
-import { ArrowRight, Building2, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, Building2, Sparkles } from 'lucide-react';
 
 function initialsOf(name: string) {
   return name
@@ -75,11 +74,7 @@ const FALLBACK_COMPANIES = [
   },
 ];
 
-type OurCompaniesProps = {
-  groupVideoUrl?: string;
-};
-
-export function OurCompanies({ groupVideoUrl = '/assets/group-showcase.mp4' }: OurCompaniesProps) {
+export function OurCompanies() {
   const fetcher = useServerFn(publicListCompanies);
   const { data } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
 
@@ -108,117 +103,69 @@ export function OurCompanies({ groupVideoUrl = '/assets/group-showcase.mp4' }: O
           </div>
         </Reveal>
 
-        {/* 🎯 MAIN SPLIT GRID: PROMO VIDEO COLUMN + COMPANY CARDS */}
-        <div className="grid lg:grid-cols-3 gap-8 items-stretch">
-          
-          {/* 🎬 1ST COLUMN: PROMO VIDEO COLUMN */}
-          <Reveal direction="left">
-            <div className="h-full min-h-[450px] relative rounded-3xl overflow-hidden border border-border shadow-xl bg-black flex flex-col justify-end group">
-              {/* Background Video */}
-              <video
-                src={groupVideoUrl}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
-              />
+        {/* 🖼️ 7 GROUP COMPANY CARDS GRID (3 Columns Layout) */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {companies.map((c: any, i: number) => {
+            const logoSrc = c.logo_url || c.image_url;
 
-              {/* Dark Gradient Overlay for Readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20 pointer-events-none" />
-
-              {/* Video Tag & Info Box */}
-              <div className="relative z-10 p-6 sm:p-8 space-y-3">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/90 text-white text-[11px] font-bold uppercase tracking-wider shadow-md backdrop-blur-md">
-                  <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                  Live Group Showcase
-                </div>
-
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                  Excellence in Action Across UAE
-                </h3>
-
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed line-clamp-3">
-                  Experience our state-of-the-art facilities, signage fabrication workshops, and corporate fleet operations.
-                </p>
-
-                <div className="pt-2">
-                  <Link to="/contact">
-                    <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold shadow-lg transition-all cursor-pointer">
-                      <Play className="w-3.5 h-3.5 fill-current" /> Watch Full Story
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* 🖼️ 2ND & 3RD COLUMNS: 7 GROUP COMPANY CARDS GRID */}
-          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
-            {companies.map((c: any, i: number) => {
-              const logoSrc = c.logo_url || c.image_url;
-
-              return (
-                <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
-                  <Link
-                    to="/companies/$slug"
-                    params={{ slug: c.slug || '' }}
-                    className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
-                  >
-                    <div>
-                      {/* 🎯 LOGO DISPLAY CONTAINER (Supports image logos & dark theme) */}
-                      <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
-                        {logoSrc ? (
-                          <img
-                            src={logoSrc}
-                            alt={`${c.name} logo`}
-                            className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                          />
-                        ) : (
-                          <div
-                            className="w-12 h-12 rounded-lg text-white grid place-items-center font-bold text-base shadow-md"
-                            style={{
-                              background: `linear-gradient(135deg, ${c.accent_color || '#006d68'}, #0f172a)`,
-                            }}
-                          >
-                            {initialsOf(c.name)}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
-                        <Building2 className="w-4 h-4 text-primary shrink-0" />
-                        <span>{c.name}</span>
-                      </h3>
-
-                      {/* Tagline */}
-                      {c.tagline && (
-                        <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
-                          {c.tagline}
-                        </p>
+            return (
+              <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
+                <Link
+                  to="/companies/$slug"
+                  params={{ slug: c.slug || '' }}
+                  className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div>
+                    {/* 🎯 LOGO CONTAINER */}
+                    <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
+                      {logoSrc ? (
+                        <img
+                          src={logoSrc}
+                          alt={`${c.name} logo`}
+                          className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div
+                          className="w-12 h-12 rounded-lg text-white grid place-items-center font-bold text-base shadow-md"
+                          style={{
+                            background: `linear-gradient(135deg, ${c.accent_color || '#006d68'}, #0f172a)`,
+                          }}
+                        >
+                          {initialsOf(c.name)}
+                        </div>
                       )}
-
-                      {/* Description */}
-                      <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                        {c.description}
-                      </p>
                     </div>
 
-                    {/* Action Link */}
-                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
-                      Explore Company <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </div>
+                    {/* Title */}
+                    <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
+                      <Building2 className="w-4 h-4 text-primary shrink-0" />
+                      <span>{c.name}</span>
+                    </h3>
 
+                    {/* Tagline */}
+                    {c.tagline && (
+                      <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
+                        {c.tagline}
+                      </p>
+                    )}
+
+                    {/* Description */}
+                    <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                      {c.description}
+                    </p>
+                  </div>
+
+                  {/* Action Link */}
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
+                    Explore Company <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              </Reveal>
+            );
+          })}
         </div>
 
-        {/* BOTTOM ACTION */}
+        {/* BOTTOM ACTION BUTTON */}
         <div className="text-center mt-14">
           <Link
             to="/companies"
