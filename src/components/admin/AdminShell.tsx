@@ -33,12 +33,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-secondary/20">
-      <aside className="fixed inset-y-0 left-0 w-60 bg-card border-r border-border flex flex-col">
+      <aside className="fixed inset-y-0 left-0 w-60 bg-card border-r border-border flex flex-col z-20">
         <div className="p-5 border-b border-border">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Speedex</p>
           <p className="font-bold text-lg">Admin Panel</p>
         </div>
-        <nav className="flex-1 p-3 space-y-1">
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {NAV.map((n) => {
             const active = n.exact ? path === n.to : path.startsWith(n.to);
             return (
@@ -53,16 +53,22 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="p-3 border-t border-border space-y-2">
+        <div className="p-3 border-t border-border space-y-2 bg-card">
           <Link to="/" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-accent/50">
             <Globe className="w-4 h-4" /> View site
           </Link>
-          <Button variant="ghost" size="sm" onClick={signOut} className="w-full justify-start">
+          <Button variant="ghost" size="sm" onClick={signOut} className="w-full justify-start text-destructive hover:text-destructive">
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
         </div>
       </aside>
-      <main className="ml-60 p-6 sm:p-8">{children}</main>
+
+      {/* Main Content Area - Top Padding & Spacing Fix */}
+      <main className="ml-60 p-6 sm:p-10 pt-10 sm:pt-12 min-h-screen overflow-y-auto">
+        <div className="max-w-7xl mx-auto">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }
