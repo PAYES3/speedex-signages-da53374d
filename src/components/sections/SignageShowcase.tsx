@@ -12,7 +12,7 @@ const SHOWCASE_SLIDES = [
     title: 'Pylons, billboards & wayfinding',
     desc: 'Large-format outdoor signage installed to municipal compliance across the Emirates.',
     link: '/explore',
-    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=1600' // Replace with your image / DB variable
+    image: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=1600'
   },
   {
     id: 2,
@@ -34,6 +34,14 @@ export function SignageShowcase() {
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + SHOWCASE_SLIDES.length) % SHOWCASE_SLIDES.length);
   };
+
+  // Optional: Auto-play slider every 6 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext();
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
 
   const current = SHOWCASE_SLIDES[currentIndex];
 
@@ -57,7 +65,7 @@ export function SignageShowcase() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
 
-      {/* 🎯 TEXT CONTAINER WITH GLASS CONTRAST BOX (Bright Pic Proof) */}
+      {/* 🎯 TEXT CONTAINER WITH GLASS CONTRAST BOX */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 flex items-center">
         <motion.div
           key={current.id}
@@ -117,6 +125,8 @@ export function SignageShowcase() {
           <button
             key={i}
             onClick={() => setCurrentIndex(i)}
+            type="button"
+            aria-label={`Go to slide ${i + 1}`}
             className={`h-2.5 rounded-full transition-all cursor-pointer ${
               i === currentIndex ? 'w-8 bg-primary' : 'w-2.5 bg-white/40 hover:bg-white'
             }`}
@@ -126,3 +136,5 @@ export function SignageShowcase() {
     </section>
   );
 }
+
+export default SignageShowcase;
