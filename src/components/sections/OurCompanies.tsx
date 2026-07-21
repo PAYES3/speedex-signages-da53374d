@@ -1,8 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { useServerFn } from '@tanstack/react-start';
 import { Reveal } from '@/components/Reveal';
-import { publicListCompanies } from '@/lib/admin/content.functions';
 import { ArrowRight, Building2, Sparkles } from 'lucide-react';
 
 function initialsOf(name: string) {
@@ -14,8 +11,8 @@ function initialsOf(name: string) {
     .join('');
 }
 
-// 🎯 Fallback 7 Group Companies (Admin DB-ல இருந்து வரலைனா இது தானா லோட் ஆகும்)
-const FALLBACK_COMPANIES = [
+// 7 Companies Static Array
+const COMPANIES_DATA = [
   {
     id: '1',
     name: 'Speedex Signages',
@@ -75,20 +72,13 @@ const FALLBACK_COMPANIES = [
 ];
 
 export function OurCompanies() {
-  const fetcher = useServerFn(publicListCompanies);
-  const { data } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
-
-  // Database companies or Fallback
-  const companies = (data && data.length > 0) ? data : FALLBACK_COMPANIES;
-
   return (
     <section className="py-24 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
-      {/* Background Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,theme(colors.primary/0.08),transparent_60%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* SECTION HEADER */}
+        {/* HEADER */}
         <Reveal>
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
@@ -103,69 +93,54 @@ export function OurCompanies() {
           </div>
         </Reveal>
 
-        {/* 🖼️ 7 GROUP COMPANY CARDS GRID (3 Columns Layout) */}
+        {/* 3-COLUMN GRID */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {companies.map((c: any, i: number) => {
-            const logoSrc = c.logo_url || c.image_url;
-
-            return (
-              <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
-                <Link
-                  to="/companies/$slug"
-                  params={{ slug: c.slug || '' }}
-                  className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
-                >
-                  <div>
-                    {/* 🎯 LOGO CONTAINER */}
-                    <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
-                      {logoSrc ? (
-                        <img
-                          src={logoSrc}
-                          alt={`${c.name} logo`}
-                          className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div
-                          className="w-12 h-12 rounded-lg text-white grid place-items-center font-bold text-base shadow-md"
-                          style={{
-                            background: `linear-gradient(135deg, ${c.accent_color || '#006d68'}, #0f172a)`,
-                          }}
-                        >
-                          {initialsOf(c.name)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
-                      <Building2 className="w-4 h-4 text-primary shrink-0" />
-                      <span>{c.name}</span>
-                    </h3>
-
-                    {/* Tagline */}
-                    {c.tagline && (
-                      <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
-                        {c.tagline}
-                      </p>
+          {COMPANIES_DATA.map((c, i) => (
+            <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
+              <Link
+                to="/companies/$slug"
+                params={{ slug: c.slug }}
+                className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
+                    {c.logo_url ? (
+                      <img
+                        src={c.logo_url}
+                        alt={`${c.name} logo`}
+                        className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-base shadow-md">
+                        {initialsOf(c.name)}
+                      </div>
                     )}
-
-                    {/* Description */}
-                    <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                      {c.description}
-                    </p>
                   </div>
 
-                  {/* Action Link */}
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
-                    Explore Company <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
-                </Link>
-              </Reveal>
-            );
-          })}
+                  <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
+                    <Building2 className="w-4 h-4 text-primary shrink-0" />
+                    <span>{c.name}</span>
+                  </h3>
+
+                  {c.tagline && (
+                    <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
+                      {c.tagline}
+                    </p>
+                  )}
+
+                  <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                    {c.description}
+                  </p>
+                </div>
+
+                <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
+                  Explore Company <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            </Reveal>
+          ))}
         </div>
 
-        {/* BOTTOM ACTION BUTTON */}
         <div className="text-center mt-14">
           <Link
             to="/companies"
