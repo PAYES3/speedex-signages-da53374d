@@ -68,10 +68,10 @@ const DEFAULT_COMPANIES = [
   },
   {
     id: '7',
-    name: 'Arabsat Media & Telecom',
+    name: 'Arabsat Transport Passengers by Buses LLC',
     slug: 'arabsat',
     tagline: 'Passenger Transport & Bus Charter',
-    description: 'Staff & labour transportation, airport transfers, and vehicle leasing.',
+    description: 'Staff & labour transportation, airport transfers, luxury bus charter, and fleet leasing across UAE.',
     logo_url: '/assets/logos/arabsat.jpg',
     bg_url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80',
   },
@@ -82,26 +82,26 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoUrl, setVideoUrl] = useState(groupVideoUrl || '');
 
-  // Supabase video fetch
+  // Supabase video fetch from site_settings
   useEffect(() => {
     async function loadCompanyData() {
       try {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('site_settings')
           .select('value')
           .eq('key', 'group_video_url')
           .single();
-        if (data?.value) {
+        if (data?.value && !error) {
           setVideoUrl(data.value);
         }
-      } catch (e) {
-        // Fallback to static props
+      } catch {
+        // Fallback to static props / default
       }
     }
     loadCompanyData();
   }, []);
 
-  // Next / Prev slide handlers
+  // Next / Prev slide handlers with useCallback
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === companies.length - 1 ? 0 : prev + 1));
   }, [companies.length]);
@@ -169,6 +169,10 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                     src={currentCompany.logo_url}
                     alt={`${currentCompany.name} logo`}
                     className="max-h-full max-w-full w-auto object-contain drop-shadow-sm"
+                    onError={(e) => {
+                      // Fallback if image path fails
+                      (e.currentTarget as HTMLElement).style.display = 'none';
+                    }}
                   />
                 ) : (
                   <div className="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-base">
@@ -207,14 +211,16 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all"
+            type="button"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all cursor-pointer"
             aria-label="Previous Slide"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all"
+            type="button"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-black/50 text-white hover:bg-black/80 border border-white/20 backdrop-blur-md transition-all cursor-pointer"
             aria-label="Next Slide"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -226,7 +232,8 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                type="button"
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   idx === currentIndex ? 'w-7 bg-primary' : 'w-2 bg-white/40 hover:bg-white/70'
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
@@ -274,7 +281,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
 
           {/* Quick Contact Bar */}
-          <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm">
+          <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm shadow-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4 text-primary shrink-0" />
               <span>Abu Dhabi - UAE</span>
@@ -296,3 +303,5 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
     </section>
   );
 }
+
+export default OurCompanies;
