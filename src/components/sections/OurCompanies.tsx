@@ -1,9 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
+import { motion } from 'framer-motion';
 import { Reveal } from '@/components/Reveal';
 import { publicListCompanies } from '@/lib/admin/content.functions';
-import { ArrowRight, Building2 } from 'lucide-react';
+import { ArrowRight, Building2, Play, Sparkles } from 'lucide-react';
 
 function initialsOf(name: string) {
   return name
@@ -14,85 +15,219 @@ function initialsOf(name: string) {
     .join('');
 }
 
-export function OurCompanies() {
+// 🎯 Fallback 7 Group Companies (Admin DB-ல இருந்து வரலைனா இது தானா லோட் ஆகும்)
+const FALLBACK_COMPANIES = [
+  {
+    id: '1',
+    name: 'Speedex Signages',
+    slug: 'speedex-signages',
+    tagline: 'LED, Acrylic & 3D Signage',
+    description: 'Premier signage manufacturing and installation across the UAE.',
+    logo_url: '/assets/logos/speedex-signage.jpg',
+  },
+  {
+    id: '2',
+    name: 'Speedex Rent A Car',
+    slug: 'speedex-rent-a-car',
+    tagline: 'Luxury & Commercial Rental',
+    description: 'Reliable vehicle rental and fleet management solutions in Dubai.',
+    logo_url: '/assets/logos/cars-rental.jpg',
+  },
+  {
+    id: '3',
+    name: 'Speedex Facility Management',
+    slug: 'speedex-facility-management',
+    tagline: 'Building Maintenance & Care',
+    description: 'Complete facility management and maintenance services.',
+    logo_url: '/assets/logos/facility-management.jpg',
+  },
+  {
+    id: '4',
+    name: 'Speedex Auto Workshop',
+    slug: 'speedex-workshop',
+    tagline: 'Technical & Auto Care',
+    description: 'Advanced vehicle servicing, bodywork and technical maintenance.',
+    logo_url: '/assets/logos/workshop.jpg',
+  },
+  {
+    id: '5',
+    name: 'Excellent Field Contracting',
+    slug: 'excellent-field-contracting',
+    tagline: 'Civil & Interior Works',
+    description: 'High-quality contracting and fit-out execution for commercial spaces.',
+    logo_url: '/assets/logos/field-contracting.jpg',
+  },
+  {
+    id: '6',
+    name: 'Excellent General Trading',
+    slug: 'excellent-general-trading',
+    tagline: 'Import, Export & Supply',
+    description: 'Global trading partner providing premium materials and equipment.',
+    logo_url: '/assets/logos/general-trading.jpg',
+  },
+  {
+    id: '7',
+    name: 'Arabsat Media & Telecom',
+    slug: 'arabsat',
+    tagline: 'Digital Media & Signage',
+    description: 'Innovative digital display solutions and telecom infrastructure.',
+    logo_url: '/assets/logos/arabsat.jpg',
+  },
+];
+
+type OurCompaniesProps = {
+  groupVideoUrl?: string;
+};
+
+export function OurCompanies({ groupVideoUrl = '/assets/group-showcase.mp4' }: OurCompaniesProps) {
   const fetcher = useServerFn(publicListCompanies);
   const { data } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
-  const companies = data ?? [];
+
+  // Database companies or Fallback
+  const companies = (data && data.length > 0) ? data : FALLBACK_COMPANIES;
 
   return (
-    <section className="py-24 bg-secondary/30 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,theme(colors.primary/0.07),transparent_50%)] pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
+    <section className="py-24 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,theme(colors.primary/0.08),transparent_60%)] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* SECTION HEADER */}
         <Reveal>
-          <div className="text-center mb-14 max-w-2xl mx-auto">
-            <p className="text-primary text-sm font-semibold uppercase tracking-wider">Speedex Group</p>
-            <h2 className="text-3xl sm:text-5xl font-bold mt-2">A trusted group of UAE businesses</h2>
-            <p className="mt-4 text-muted-foreground">
-              Specialized companies under one group — signage, workshop, transport, contracting, trading, and facilities management serving clients across the Emirates.
+          <div className="text-center mb-16 max-w-3xl mx-auto">
+            <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5" /> Speedex Group
+            </p>
+            <h2 className="text-3xl sm:text-5xl font-extrabold mt-4 tracking-tight leading-tight">
+              A Trusted Group of UAE Businesses
+            </h2>
+            <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              Specialized companies under one group — Signage, Workshop, Auto Rental, Contracting, Trading, and Facility Management serving clients across the Emirates.
             </p>
           </div>
         </Reveal>
-        
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {companies.map((c: any, i: number) => {
-            const logoSrc = c.logo_url || c.image_url;
 
-            return (
-              <Reveal key={c.id} direction="up" delay={i * 0.06}>
-                <Link
-                  to="/companies/$slug"
-                  params={{ slug: c.slug }}
-                  className="group block bg-card border border-border rounded-2xl p-6 h-full hover:shadow-[var(--shadow-elegant)] hover:-translate-y-1 hover:border-primary transition-all relative overflow-hidden flex flex-col justify-between"
-                >
-                  <div>
-                    {/* 🎯 LOGO SLOT FIX FOR ALL ASPECT RATIOS */}
-                    <div className="w-full h-20 mb-5 p-3 bg-white dark:bg-card rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
-                      {logoSrc ? (
-                        <img
-                          src={logoSrc}
-                          alt={`${c.name} logo`}
-                          className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div
-                          className="w-12 h-12 rounded-lg text-primary-foreground grid place-items-center font-bold text-base shadow-md"
-                          style={{ background: `linear-gradient(135deg, ${c.accent_color || '#000'}, color-mix(in oklab, ${c.accent_color || '#000'} 60%, white))` }}
-                        >
-                          {initialsOf(c.name)}
-                        </div>
+        {/* 🎯 MAIN SPLIT GRID: PROMO VIDEO COLUMN + COMPANY CARDS */}
+        <div className="grid lg:grid-cols-3 gap-8 items-stretch">
+          
+          {/* 🎬 1ST COLUMN: PROMO VIDEO COLUMN */}
+          <Reveal direction="left">
+            <div className="h-full min-h-[450px] relative rounded-3xl overflow-hidden border border-border shadow-xl bg-black flex flex-col justify-end group">
+              {/* Background Video */}
+              <video
+                src={groupVideoUrl}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
+              />
+
+              {/* Dark Gradient Overlay for Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20 pointer-events-none" />
+
+              {/* Video Tag & Info Box */}
+              <div className="relative z-10 p-6 sm:p-8 space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/90 text-white text-[11px] font-bold uppercase tracking-wider shadow-md backdrop-blur-md">
+                  <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                  Live Group Showcase
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                  Excellence in Action Across UAE
+                </h3>
+
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed line-clamp-3">
+                  Experience our state-of-the-art facilities, signage fabrication workshops, and corporate fleet operations.
+                </p>
+
+                <div className="pt-2">
+                  <Link to="/contact">
+                    <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold shadow-lg transition-all cursor-pointer">
+                      <Play className="w-3.5 h-3.5 fill-current" /> Watch Full Story
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* 🖼️ 2ND & 3RD COLUMNS: 7 GROUP COMPANY CARDS GRID */}
+          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-6">
+            {companies.map((c: any, i: number) => {
+              const logoSrc = c.logo_url || c.image_url;
+
+              return (
+                <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
+                  <Link
+                    to="/companies/$slug"
+                    params={{ slug: c.slug || '' }}
+                    className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* 🎯 LOGO DISPLAY CONTAINER (Supports image logos & dark theme) */}
+                      <div className="w-full h-20 mb-4 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-border/60 flex items-center justify-center shadow-sm group-hover:border-primary/50 transition-colors overflow-hidden">
+                        {logoSrc ? (
+                          <img
+                            src={logoSrc}
+                            alt={`${c.name} logo`}
+                            className="max-h-full max-w-full w-auto object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div
+                            className="w-12 h-12 rounded-lg text-white grid place-items-center font-bold text-base shadow-md"
+                            style={{
+                              background: `linear-gradient(135deg, ${c.accent_color || '#006d68'}, #0f172a)`,
+                            }}
+                          >
+                            {initialsOf(c.name)}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
+                        <Building2 className="w-4 h-4 text-primary shrink-0" />
+                        <span>{c.name}</span>
+                      </h3>
+
+                      {/* Tagline */}
+                      {c.tagline && (
+                        <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
+                          {c.tagline}
+                        </p>
                       )}
+
+                      {/* Description */}
+                      <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                        {c.description}
+                      </p>
                     </div>
 
-                    <h3 className="font-semibold text-lg flex items-center gap-2">
-                      <Building2 className="w-4 h-4 text-muted-foreground shrink-0" />
-                      <span>{c.name}</span>
-                    </h3>
-                    
-                    {c.tagline && (
-                      <p className="mt-1 text-xs uppercase tracking-wider text-primary font-semibold">
-                        {c.tagline}
-                      </p>
-                    )}
-                    
-                    <p className="mt-3 text-sm text-muted-foreground line-clamp-3">
-                      {c.description}
-                    </p>
-                  </div>
+                    {/* Action Link */}
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
+                      Explore Company <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
 
-                  <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
-                    Learn more <ArrowRight className="w-4 h-4" />
-                  </span>
-                </Link>
-              </Reveal>
-            );
-          })}
         </div>
 
-        <div className="text-center mt-12">
-          <Link to="/companies" className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
-            View all group companies <ArrowRight className="w-4 h-4" />
+        {/* BOTTOM ACTION */}
+        <div className="text-center mt-14">
+          <Link
+            to="/companies"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-primary/30 bg-primary/5 text-primary font-semibold text-sm hover:bg-primary hover:text-primary-foreground shadow-sm transition-all"
+          >
+            View All Group Companies <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+
       </div>
     </section>
   );
