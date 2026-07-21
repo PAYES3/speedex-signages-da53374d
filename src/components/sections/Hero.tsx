@@ -5,44 +5,44 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 
-interface Slide {
+interface VideoSlide {
   id: string;
   title: string;
   subtitle?: string;
   description: string;
-  image_url: string;
-  video_url?: string;
+  video_url: string;
   button_text: string;
   button_link: string;
 }
 
-const DEFAULT_SLIDES: Slide[] = [
+// Fallback Default Video (Admin-ல் வீடியோ இல்லை என்றால் இது ஓடும்)
+const DEFAULT_VIDEO_URL = 'https://vwllczhwqwplljckrinx.supabase.co/storage/v1/object/public/hero-videos/hero-3.mp4';
+
+const DEFAULT_SLIDES: VideoSlide[] = [
   {
-    id: '1',
+    id: 'default-1',
     title: 'Speedex Signages & Advertising',
     subtitle: 'PREMIUM SIGNAGE · UNITED ARAB EMIRATES',
     description: 'Cinematic LED, acrylic and 3D signage — designed, manufactured and installed in-house.',
-    image_url: 'https://images.unsplash.com/photo-1542744094-3a3121699f11?w=1920&q=80',
+    video_url: DEFAULT_VIDEO_URL,
     button_text: 'Get Free Quote',
     button_link: '/contact',
   },
 ];
 
 export function Hero() {
-  const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES);
+  const [slides, setSlides] = useState<VideoSlide[]>(DEFAULT_SLIDES);
   const [current, setCurrent] = useState(0);
-  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // Double Slash (//) பிரச்சனை வந்தால் அதை Auto-Fix செய்யும் Helper Function
+  // URL-ல் இரட்டை Slash (//) இருந்தால் அதை ஒற்றை Slash (/) ஆக மாற்றும் Helper
   const cleanMediaUrl = (url?: string) => {
     if (!url) return '';
-    // URL protocol (https://) தவிர மற்ற இடங்களில் வரும் // ஐ / ஆக மாற்றும்
     return url.replace(/([^:]\/)\/+/g, '$1');
   };
 
   useEffect(() => {
-    async function fetchSlides() {
+    async function fetchVideoSlides() {
       try {
         const { data, error } = await supabase
           .from('hero_slides')
@@ -51,39 +51,47 @@ export function Hero() {
 
         if (data && data.length > 0 && !error) {
           const formattedSlides = data.map((item) => {
-            let rawImageUrl = item.image_url || '';
-            let rawVideoUrl = item.video_url || '';
+            let rawVideoUrl = item.video_url || item.image_url || '';
 
-            if (rawImageUrl && !rawImageUrl.startsWith('http')) {
-              rawImageUrl = supabase.storage.from('hero-videos').getPublicUrl(rawImageUrl).data.publicUrl;
-            }
+            // Relative path ஆக இருந்தால் Public URL உருவாக்குதல்
             if (rawVideoUrl && !rawVideoUrl.startsWith('http')) {
               rawVideoUrl = supabase.storage.from('hero-videos').getPublicUrl(rawVideoUrl).data.publicUrl;
             }
 
+            const cleanUrl = cleanMediaUrl(rawVideoUrl);
+
             return {
-              ...item,
-              image_url: cleanMediaUrl(rawImageUrl) || DEFAULT_SLIDES[0].image_url,
-              video_url: cleanMediaUrl(rawVideoUrl),
+              id: item.id,
+              title: item.title || 'Speedex Signages & Advertising',
+              subtitle: item.subtitle || 'PREMIUM SIGNAGE · UNITED ARAB EMIRATES',
+              description: item.description || 'Cinematic LED, acrylic and 3D signage — designed, manufactured and installed in-house.',
+              video_url: cleanUrl || DEFAULT_VIDEO_URL,
+              button_text: item.button_text || 'Get Free Quote',
+              button_link: item.button_link || '/contact',
             };
           });
 
-          setSlides(formattedSlides);
+          // வீடியோ URL கொண்ட ஸ்லைடுகளை மட்டும் ফিল்டர் செய்தல்
+          const videoOnlySlides = formattedSlides.filter((s) => Boolean(s.video_url));
+
+          if (videoOnlySlides.length > 0) {
+            setSlides(videoOnlySlides);
+          }
         }
       } catch {
-        // Fallback
+        // Error வந்தால் DEFAULT_SLIDES சேஃப்பாக இருக்கும்
       }
     }
-    fetchSlides();
+    fetchVideoSlides();
   }, []);
 
+  // Slide மாறும்போது வீடியோவை Force-Autoplay செய்தல்
   useEffect(() => {
-    setVideoError(false);
     if (videoRef.current) {
       videoRef.current.muted = true;
       videoRef.current.currentTime = 0;
       videoRef.current.play().catch(() => {
-        // Autoplay Error handling
+        // Autoplay blocked handling
       });
     }
   }, [current]);
@@ -94,19 +102,10 @@ export function Hero() {
   if (!slides.length) return null;
   const activeSlide = slides[current];
 
-  const isVideoUrl = (url?: string) => {
-    if (!url) return false;
-    const cleanUrl = url.split('?')[0].toLowerCase();
-    return cleanUrl.endsWith('.mp4') || cleanUrl.endsWith('.webm') || cleanUrl.endsWith('.mov');
-  };
-
-  const rawMedia = activeSlide.video_url || activeSlide.image_url;
-  const showVideo = !videoError && isVideoUrl(rawMedia);
-
   return (
     <section className="relative min-h-[90svh] w-full max-w-full overflow-hidden bg-black flex items-center justify-center">
       
-      {/* Background Media Container */}
+      {/* 100% Video Background */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide.id || current}
@@ -116,41 +115,31 @@ export function Hero() {
           transition={{ duration: 0.8 }}
           className="absolute inset-0 w-full h-full bg-black"
         >
-          {showVideo ? (
-            <video
-              ref={videoRef}
-              key={rawMedia}
-              src={rawMedia}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              poster={activeSlide.image_url !== rawMedia ? activeSlide.image_url : undefined}
-              className="w-full h-full object-cover object-center"
-              onError={() => {
-                console.error("Video failed to load:", rawMedia);
-                setVideoError(true);
-              }}
-            />
-          ) : (
-            <img
-              src={activeSlide.image_url || DEFAULT_SLIDES[0].image_url}
-              alt={activeSlide.title}
-              className="w-full h-full object-cover object-center"
-              onError={(e) => {
-                e.currentTarget.src = DEFAULT_SLIDES[0].image_url;
-              }}
-            />
-          )}
+          <video
+            ref={videoRef}
+            key={activeSlide.video_url}
+            src={activeSlide.video_url}
+            autoPlay
+            loop={slides.length === 1} // ஒரே வீடியோ மட்டும் இருந்தால் Loop ஆகும்
+            muted
+            playsInline
+            preload="auto"
+            className="w-full h-full object-cover object-center"
+            onEnded={() => {
+              // வீடியோ முடிந்ததும் தானாக அடுத்த வீடியோவுக்கு மாறும்
+              if (slides.length > 1) {
+                nextSlide();
+              }
+            }}
+          />
         </motion.div>
       </AnimatePresence>
 
-      {/* Dark Gradient Overlays */}
+      {/* Dark Gradient Overlays for Text Contrast */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 z-10 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/50 z-10 pointer-events-none" />
 
-      {/* Hero Text Content */}
+      {/* Hero Content */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 box-border">
         <div className="max-w-3xl text-left">
           <AnimatePresence mode="wait">
@@ -192,14 +181,14 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows (ஒன்றிற்கும் மேற்பட்ட வீடியோக்கள் இருந்தால் மட்டும் காட்டும்) */}
       {slides.length > 1 && (
         <>
           <button
             onClick={prevSlide}
             type="button"
             className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white hover:bg-primary border border-white/20 backdrop-blur-md transition-all hover:scale-110 active:scale-95 cursor-pointer"
-            aria-label="Previous Slide"
+            aria-label="Previous Video"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
@@ -208,7 +197,7 @@ export function Hero() {
             onClick={nextSlide}
             type="button"
             className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white hover:bg-primary border border-white/20 backdrop-blur-md transition-all hover:scale-110 active:scale-95 cursor-pointer"
-            aria-label="Next Slide"
+            aria-label="Next Video"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
@@ -222,7 +211,7 @@ export function Hero() {
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === current ? 'w-8 bg-primary' : 'w-2 bg-white/40 hover:bg-white/80'
                 }`}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={`Go to video ${index + 1}`}
               />
             ))}
           </div>
