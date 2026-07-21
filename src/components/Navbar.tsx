@@ -7,14 +7,14 @@ import logo from '@/assets/speedex-logo.png.asset.json';
 import { COMPANY } from '@/lib/site-data';
 
 const NAV = [
-  { to: '/', key: 'home' },
-  { to: '/about', key: 'about' },
-  { to: '/companies', key: 'companies' },
-  { to: '/services', key: 'services' },
-  { to: '/portfolio', key: 'portfolio' },
-  { to: '/explore', key: 'explore' },
-  { to: '/products', key: 'products' },
-  { to: '/contact', key: 'contact' },
+  { to: '/', key: 'home', customLabel: 'Home' },
+  { to: '/about', key: 'about', customLabel: 'About' },
+  { to: '/companies', key: 'companies', customLabel: 'Our Groups' }, // 👈 Companies renamed to 'Our Groups'
+  { to: '/services', key: 'services', customLabel: 'Services' },
+  { to: '/portfolio', key: 'portfolio', customLabel: 'Portfolio' },
+  { to: '/explore', key: 'explore', customLabel: 'Explore' },
+  { to: '/products', key: 'products', customLabel: 'Products' },
+  { to: '/contact', key: 'contact', customLabel: 'Contact' },
 ] as const;
 
 export function Navbar() {
@@ -23,6 +23,11 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
+
+  // Hide Navbar on Admin pages
+  if (path.startsWith('/admin')) {
+    return null;
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -72,11 +77,12 @@ export function Navbar() {
             <Link
               key={n.to}
               to={n.to}
-              className="px-3 py-2 text-sm font-semibold text-foreground hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
-              activeProps={{ className: 'text-primary after:scale-x-100' }}
+              /* 💡 Added tracking-tight & font-medium for sharp modern font look */
+              className="px-3 py-2 text-sm font-medium tracking-tight text-foreground hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
+              activeProps={{ className: 'text-primary font-semibold after:scale-x-100' }}
               activeOptions={{ exact: n.to === '/' }}
             >
-              {t(`nav.${n.key}`)}
+              {n.customLabel ?? t(`nav.${n.key}`)}
             </Link>
           ))}
         </nav>
@@ -90,7 +96,7 @@ export function Navbar() {
             {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <Link to="/contact" className="hidden sm:block">
-            <Button className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm px-5">
+            <Button className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm px-5 font-medium">
               {t('nav.quote')}
             </Button>
           </Link>
@@ -105,7 +111,7 @@ export function Navbar() {
           <nav className="flex flex-col p-4 gap-1 max-w-7xl mx-auto">
             {NAV.map((n) => (
               <Link key={n.to} to={n.to} className="px-3 py-3 rounded-md hover:bg-accent/40 font-medium" activeProps={{ className: 'bg-accent/40 text-primary' }}>
-                {t(`nav.${n.key}`)}
+                {n.customLabel ?? t(`nav.${n.key}`)}
               </Link>
             ))}
           </nav>
