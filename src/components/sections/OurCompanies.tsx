@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { ArrowRight, Building2, Sparkles } from 'lucide-react';
 
 function initialsOf(name: string) {
@@ -93,9 +92,8 @@ export function OurCompanies() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {COMPANIES_DATA.map((c, i) => (
             <div key={c.id || i}>
-              <Link
-                to="/companies/$slug"
-                params={{ slug: c.slug }}
+              <a
+                href={`/companies/${c.slug}`}
                 className="group block bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl p-6 h-full hover:shadow-xl hover:-translate-y-1 hover:border-primary/60 transition-all relative overflow-hidden flex flex-col justify-between"
               >
                 <div>
@@ -132,18 +130,18 @@ export function OurCompanies() {
                 <span className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary group-hover:gap-2.5 transition-all">
                   Explore Company <ArrowRight className="w-3.5 h-3.5" />
                 </span>
-              </Link>
+              </a>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-14">
-          <Link
-            to="/companies"
+          <a
+            href="/companies"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-primary/30 bg-primary/5 text-primary font-semibold text-sm hover:bg-primary hover:text-primary-foreground shadow-sm transition-all"
           >
             View All Group Companies <ArrowRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
 
       </div>
