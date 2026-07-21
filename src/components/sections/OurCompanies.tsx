@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import { Reveal } from '@/components/Reveal';
 import { ArrowRight, Building2, Sparkles } from 'lucide-react';
 
 function initialsOf(name: string) {
@@ -11,7 +10,6 @@ function initialsOf(name: string) {
     .join('');
 }
 
-// 7 Companies Static Array
 const COMPANIES_DATA = [
   {
     id: '1',
@@ -79,24 +77,22 @@ export function OurCompanies() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* HEADER */}
-        <Reveal>
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5" /> Speedex Group
-            </p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold mt-4 tracking-tight leading-tight">
-              A Trusted Group of UAE Businesses
-            </h2>
-            <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Specialized companies under one group — Signage, Workshop, Auto Rental, Contracting, Trading, and Facility Management serving clients across the Emirates.
-            </p>
-          </div>
-        </Reveal>
+        <div className="text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.25em] bg-primary/10 border border-primary/20 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5" /> Speedex Group
+          </p>
+          <h2 className="text-3xl sm:text-5xl font-extrabold mt-4 tracking-tight leading-tight">
+            A Trusted Group of UAE Businesses
+          </h2>
+          <p className="mt-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Specialized companies under one group — Signage, Workshop, Auto Rental, Contracting, Trading, and Facility Management serving clients across the Emirates.
+          </p>
+        </div>
 
         {/* 3-COLUMN GRID */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {COMPANIES_DATA.map((c, i) => (
-            <Reveal key={c.id || i} direction="up" delay={i * 0.05}>
+            <div key={c.id || i}>
               <Link
                 to="/companies/$slug"
                 params={{ slug: c.slug }}
@@ -137,7 +133,7 @@ export function OurCompanies() {
                   Explore Company <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </Link>
-            </Reveal>
+            </div>
           ))}
         </div>
 
