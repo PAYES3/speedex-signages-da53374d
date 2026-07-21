@@ -31,7 +31,15 @@ const DEFAULT_SLIDES: Slide[] = [
 export function Hero() {
   const [slides, setSlides] = useState<Slide[]>(DEFAULT_SLIDES);
   const [current, setCurrent] = useState(0);
+  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Double Slash (//) பிரச்சனை வந்தால் அதை Auto-Fix செய்யும் Helper Function
+  const cleanMediaUrl = (url?: string) => {
+    if (!url) return '';
+    // URL protocol (https://) தவிர மற்ற இடங்களில் வரும் // ஐ / ஆக மாற்றும்
+    return url.replace(/([^:]\/)\/+/g, '$1');
+  };
 
   useEffect(() => {
     async function fetchSlides() {
@@ -43,50 +51,40 @@ export function Hero() {
 
         if (data && data.length > 0 && !error) {
           const formattedSlides = data.map((item) => {
-            let finalImageUrl = item.image_url;
-            let finalVideoUrl = item.video_url;
+            let rawImageUrl = item.image_url || '';
+            let rawVideoUrl = item.video_url || '';
 
-            // உங்கள் Supabase Bucket பெயரான 'hero-videos'-ல் இருந்து Permanent Public URL எடுத்தல்
-            if (finalImageUrl && !finalImageUrl.startsWith('http')) {
-              const { data: pubData } = supabase.storage.from('hero-videos').getPublicUrl(finalImageUrl);
-              finalImageUrl = pubData.publicUrl;
+            if (rawImageUrl && !rawImageUrl.startsWith('http')) {
+              rawImageUrl = supabase.storage.from('hero-videos').getPublicUrl(rawImageUrl).data.publicUrl;
             }
-            if (finalVideoUrl && !finalVideoUrl.startsWith('http')) {
-              const { data: pubData } = supabase.storage.from('hero-videos').getPublicUrl(finalVideoUrl);
-              finalVideoUrl = pubData.publicUrl;
+            if (rawVideoUrl && !rawVideoUrl.startsWith('http')) {
+              rawVideoUrl = supabase.storage.from('hero-videos').getPublicUrl(rawVideoUrl).data.publicUrl;
             }
 
             return {
               ...item,
-              image_url: finalImageUrl || DEFAULT_SLIDES[0].image_url,
-              video_url: finalVideoUrl,
+              image_url: cleanMediaUrl(rawImageUrl) || DEFAULT_SLIDES[0].image_url,
+              video_url: cleanMediaUrl(rawVideoUrl),
             };
           });
 
           setSlides(formattedSlides);
         }
       } catch {
-        // Fallback to default
+        // Fallback
       }
     }
     fetchSlides();
   }, []);
 
   useEffect(() => {
-    if (slides.length <= 1) return;
-    const activeSlide = slides[current];
-    if (activeSlide.video_url) return; 
-
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [slides, current]);
-
-  useEffect(() => {
+    setVideoError(false);
     if (videoRef.current) {
       videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {
+        // Autoplay Error handling
+      });
     }
   }, [current]);
 
@@ -96,16 +94,19 @@ export function Hero() {
   if (!slides.length) return null;
   const activeSlide = slides[current];
 
-  const isVideo = (url?: string) => {
+  const isVideoUrl = (url?: string) => {
     if (!url) return false;
-    return url.endsWith('.mp4') || url.endsWith('.webm') || url.includes('video');
+    const cleanUrl = url.split('?')[0].toLowerCase();
+    return cleanUrl.endsWith('.mp4') || cleanUrl.endsWith('.webm') || cleanUrl.endsWith('.mov');
   };
 
-  const hasVideo = isVideo(activeSlide.video_url) || isVideo(activeSlide.image_url);
-  const mediaSrc = activeSlide.video_url || activeSlide.image_url;
+  const rawMedia = activeSlide.video_url || activeSlide.image_url;
+  const showVideo = !videoError && isVideoUrl(rawMedia);
 
   return (
     <section className="relative min-h-[90svh] w-full max-w-full overflow-hidden bg-black flex items-center justify-center">
+      
+      {/* Background Media Container */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeSlide.id || current}
@@ -115,22 +116,26 @@ export function Hero() {
           transition={{ duration: 0.8 }}
           className="absolute inset-0 w-full h-full bg-black"
         >
-          {hasVideo ? (
+          {showVideo ? (
             <video
               ref={videoRef}
-              src={mediaSrc}
+              key={rawMedia}
+              src={rawMedia}
               autoPlay
               loop
               muted
               playsInline
               preload="auto"
-              poster={activeSlide.image_url}
+              poster={activeSlide.image_url !== rawMedia ? activeSlide.image_url : undefined}
               className="w-full h-full object-cover object-center"
-              onEnded={nextSlide}
+              onError={() => {
+                console.error("Video failed to load:", rawMedia);
+                setVideoError(true);
+              }}
             />
           ) : (
             <img
-              src={activeSlide.image_url}
+              src={activeSlide.image_url || DEFAULT_SLIDES[0].image_url}
               alt={activeSlide.title}
               className="w-full h-full object-cover object-center"
               onError={(e) => {
@@ -141,9 +146,11 @@ export function Hero() {
         </motion.div>
       </AnimatePresence>
 
+      {/* Dark Gradient Overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 z-10 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/50 z-10 pointer-events-none" />
 
+      {/* Hero Text Content */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 box-border">
         <div className="max-w-3xl text-left">
           <AnimatePresence mode="wait">
@@ -157,7 +164,7 @@ export function Hero() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-white text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase border border-white/20 backdrop-blur-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-[color:var(--gold,#d4af37)] shadow-[0_0_10px_rgba(212,175,55,0.9)]" />
-                {activeSlide.subtitle || 'SPEEDEX SIGNAGES · UAE'}
+                {activeSlide.subtitle || 'PREMIUM SIGNAGE · UNITED ARAB EMIRATES'}
               </div>
 
               <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-extrabold text-white leading-[1.1] tracking-[-0.02em]">
@@ -185,6 +192,7 @@ export function Hero() {
         </div>
       </div>
 
+      {/* Navigation Arrows */}
       {slides.length > 1 && (
         <>
           <button
