@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
+// 🎬 Local MP4 video import (Vite bundler will automatically generate valid asset URL)
+import defaultGroupVideo from '@/assets/hero/ALL-COMPANIES.mp4';
+
 function initialsOf(name: string) {
   return name
     .split(/\s+/)
@@ -80,9 +83,11 @@ const DEFAULT_COMPANIES = [
 export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   const [companies] = useState(DEFAULT_COMPANIES);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [videoUrl, setVideoUrl] = useState(groupVideoUrl || '');
 
-  // Supabase video fetch from site_settings
+  // 🔗 Initial fallback path set to imported local video file
+  const [videoUrl, setVideoUrl] = useState<string>(groupVideoUrl || defaultGroupVideo);
+
+  // Supabase dynamic video link fetch
   useEffect(() => {
     async function loadCompanyData() {
       try {
@@ -91,17 +96,18 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           .select('value')
           .eq('key', 'group_video_url')
           .single();
+
         if (data?.value && !error) {
           setVideoUrl(data.value);
         }
       } catch {
-        // Fallback to static props / default
+        // Fallback remains as defaultGroupVideo imported above
       }
     }
     loadCompanyData();
   }, []);
 
-  // Next / Prev slide handlers with useCallback
+  // Slider Navigation Logic
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === companies.length - 1 ? 0 : prev + 1));
   }, [companies.length]);
@@ -110,7 +116,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
     setCurrentIndex((prev) => (prev === 0 ? companies.length - 1 : prev - 1));
   };
 
-  // Auto-play slider (every 5 seconds)
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
@@ -137,10 +142,8 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </p>
         </div>
 
-        {/* 🚀 HERO FULL SLIDER SECTION WITH BACKGROUND IMAGE */}
+        {/* HERO FULL SLIDER SECTION WITH BACKGROUND IMAGE */}
         <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
-          
-          {/* Background Images with Fade Effect */}
           {companies.map((c, i) => (
             <div
               key={c.id || i}
@@ -153,7 +156,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                 alt={c.name}
                 className="w-full h-full object-cover"
               />
-              {/* Dark Overlay for text legibility */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/30" />
             </div>
           ))}
@@ -162,7 +164,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              {/* White Box for Logo */}
               <div className="w-full h-20 bg-white rounded-xl flex items-center justify-center p-3 mb-5 border border-white/30 shadow-inner">
                 {currentCompany.logo_url ? (
                   <img
@@ -170,7 +171,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                     alt={`${currentCompany.name} logo`}
                     className="max-h-full max-w-full w-auto object-contain drop-shadow-sm"
                     onError={(e) => {
-                      // Fallback if image path fails
                       (e.currentTarget as HTMLElement).style.display = 'none';
                     }}
                   />
@@ -181,7 +181,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                 )}
               </div>
 
-              {/* Title & Tagline */}
               <h3 className="text-xl sm:text-2xl font-bold flex items-center gap-2 text-white">
                 <Building2 className="w-5 h-5 text-primary shrink-0" />
                 <span className="truncate">{currentCompany.name}</span>
@@ -197,7 +196,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                 {currentCompany.description}
               </p>
 
-              {/* CTA Link */}
               <a
                 href={`/companies/${currentCompany.slug}`}
                 className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg transition-all group"
@@ -208,7 +206,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             </div>
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Controls */}
           <button
             onClick={prevSlide}
             type="button"
@@ -226,7 +224,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
-          {/* Navigation Dots */}
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {companies.map((_, idx) => (
               <button
