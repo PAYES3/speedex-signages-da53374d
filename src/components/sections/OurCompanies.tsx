@@ -254,28 +254,31 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
 
           <div className="w-full max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden border border-border/80 shadow-2xl bg-black/90 relative aspect-video">
-            {videoUrl ? (
-              <video
-                src={videoUrl}
-                controls
-                playsInline
-                className="w-full h-full object-contain"
-                poster="/assets/images/video-poster.jpg"
-              >
-                Your browser does not support video playback.
-              </video>
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-950">
-                <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
-                  <Play className="w-8 h-8 fill-current translate-x-0.5" />
-                </div>
-                <h4 className="text-lg font-bold text-white mb-1">Excellent Group Showcase Video</h4>
-                <p className="text-xs text-zinc-400 max-w-md">
-                  Upload the promo video in Admin Panel to play it directly here.
-                </p>
-              </div>
-            )}
-          </div>
+  {videoUrl ? (
+    <video
+      src={videoUrl}
+      autoPlay
+      muted
+      loop
+      controls
+      playsInline
+      className="w-full h-full object-contain"
+      poster="/assets/images/video-poster.jpg"
+    >
+      Your browser does not support video playback.
+    </video>
+  ) : (
+    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-950">
+      <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+        <Play className="w-8 h-8 fill-current translate-x-0.5" />
+      </div>
+      <h4 className="text-lg font-bold text-white mb-1">Excellent Group Showcase Video</h4>
+      <p className="text-xs text-zinc-400 max-w-md">
+        Upload the promo video in Admin Panel to play it directly here.
+      </p>
+    </div>
+  )}
+</div>
 
           {/* Quick Contact Bar */}
           <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm shadow-sm">
