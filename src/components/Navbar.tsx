@@ -6,15 +6,16 @@ import { Button } from '@/components/ui/button';
 import logo from '@/assets/speedex-logo.png.asset.json';
 import { COMPANY } from '@/lib/site-data';
 
+// Updated NAV with Section Hash Links for Smooth Scroll + Fallback Routes
 const NAV = [
-  { to: '/', key: 'home', customLabel: 'Home' },
-  { to: '/about', key: 'about', customLabel: 'About' },
-  { to: '/companies', key: 'companies', customLabel: 'Our Groups' }, // 👈 Companies renamed to 'Our Groups'
-  { to: '/services', key: 'services', customLabel: 'Services' },
-  { to: '/portfolio', key: 'portfolio', customLabel: 'Portfolio' },
-  { to: '/explore', key: 'explore', customLabel: 'Explore' },
-  { to: '/products', key: 'products', customLabel: 'Products' },
-  { to: '/contact', key: 'contact', customLabel: 'Contact' },
+  { to: '/', hash: '', key: 'home', customLabel: 'Home' },
+  { to: '/', hash: 'about', key: 'about', customLabel: 'About' },
+  { to: '/', hash: 'our-groups', key: 'companies', customLabel: 'Our Groups' }, // 👈 Smooth-scrolls directly to Our Groups Section
+  { to: '/services', hash: '', key: 'services', customLabel: 'Services' },
+  { to: '/portfolio', hash: '', key: 'portfolio', customLabel: 'Portfolio' },
+  { to: '/explore', hash: '', key: 'explore', customLabel: 'Explore' },
+  { to: '/products', hash: '', key: 'products', customLabel: 'Products' },
+  { to: '/contact', hash: '', key: 'contact', customLabel: 'Contact' },
 ] as const;
 
 export function Navbar() {
@@ -42,7 +43,9 @@ export function Navbar() {
     document.documentElement.classList.toggle('dark', isDark);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [path]);
+  useEffect(() => {
+    setOpen(false);
+  }, [path]);
 
   const toggleTheme = () => {
     const next = !dark;
@@ -75,12 +78,12 @@ export function Navbar() {
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n) => (
             <Link
-              key={n.to}
+              key={n.key}
               to={n.to}
-              /* 💡 Added tracking-tight & font-medium for sharp modern font look */
+              hash={n.hash ? n.hash : undefined}
               className="px-3 py-2 text-sm font-medium tracking-tight text-foreground hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
               activeProps={{ className: 'text-primary font-semibold after:scale-x-100' }}
-              activeOptions={{ exact: n.to === '/' }}
+              activeOptions={{ exact: n.to === '/' && !n.hash }}
             >
               {n.customLabel ?? t(`nav.${n.key}`)}
             </Link>
@@ -110,7 +113,13 @@ export function Navbar() {
         <div className="lg:hidden glass border-t border-border mt-2">
           <nav className="flex flex-col p-4 gap-1 max-w-7xl mx-auto">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} className="px-3 py-3 rounded-md hover:bg-accent/40 font-medium" activeProps={{ className: 'bg-accent/40 text-primary' }}>
+              <Link
+                key={n.key}
+                to={n.to}
+                hash={n.hash ? n.hash : undefined}
+                className="px-3 py-3 rounded-md hover:bg-accent/40 font-medium"
+                activeProps={{ className: 'bg-accent/40 text-primary' }}
+              >
                 {n.customLabel ?? t(`nav.${n.key}`)}
               </Link>
             ))}
