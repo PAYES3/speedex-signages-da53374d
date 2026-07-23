@@ -11,7 +11,6 @@ function initialsOf(name: string) {
     .join('');
 }
 
-// Static Public Assets Paths
 const DEFAULT_VIDEO = '/assets/hero/ALL-COMPANIES.mp4';
 
 interface Company {
@@ -57,7 +56,7 @@ const DEFAULT_COMPANIES: Company[] = [
     name: 'Speedex Auto Workshop',
     slug: 'speedex-workshop',
     tagline: 'Technical & Auto Care',
-    description: 'Advanced vehicle servicing, engine rebuilds, diagnostics, and bodywork.',
+    description: 'Advanced vehicle servicing, engine rebuilds, diagnostics, mechanical & bodywork.',
     logo_url: '/assets/logos/workshop.jpg',
     bg_url: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1920&q=80',
   },
@@ -109,7 +108,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           setVideoUrl(data.value);
         }
       } catch {
-        // Safe fallback to DEFAULT_VIDEO
+        // Fallback to DEFAULT_VIDEO
       }
     }
     loadCompanyData();
@@ -134,23 +133,23 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   const isCurrentImageFailed = imageError[currentCompany.id];
 
   return (
-    <section className="py-12 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden w-full max-w-full">
+    <section id="our-groups" className="py-12 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden w-full max-w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 box-border">
         
-        {/* SECTION HEADER */}
+        {/* HEADER */}
         <div className="text-center mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
           <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.2em] bg-primary/10 border border-primary/20 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
-            <Sparkles className="w-3.5 h-3.5 shrink-0" /> Speedex Group
+            <Sparkles className="w-3.5 h-3.5 shrink-0" /> Our Groups
           </p>
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold mt-4 tracking-tight leading-tight text-foreground">
             A Trusted Group of UAE Businesses
           </h2>
           <p className="mt-3 text-xs sm:text-base text-muted-foreground leading-relaxed">
-            Specialized companies serving clients across the Emirates — Signage, Workshop, Rental, Trading, Contracting & Transport.
+            7 Specialized companies serving clients across the Emirates — Signage, Auto Workshop, Rent a Car, Facility Management, Trading, Contracting & Transport.
           </p>
         </div>
 
-        {/* HERO FULL SLIDER SECTION */}
+        {/* HERO SLIDER SECTION WITH ALL 7 COMPANIES */}
         <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
           {companies.map((c, i) => (
             <div
@@ -172,19 +171,19 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              {/* LOGO CONTAINER WITH SAFE FALLBACK */}
-              <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-2 mb-5 border border-white/30 shadow-inner overflow-hidden">
+              {/* LOGO CONTAINER */}
+              <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-3 mb-5 border border-white/30 shadow-inner overflow-hidden">
                 {!isCurrentImageFailed && currentCompany.logo_url ? (
                   <img
                     src={currentCompany.logo_url}
                     alt={`${currentCompany.name} logo`}
-                    className="max-h-full max-w-full w-auto h-auto object-contain drop-shadow-sm select-none"
+                    className="max-h-full max-w-full w-auto h-auto object-contain select-none"
                     onError={() => {
                       setImageError((prev) => ({ ...prev, [currentCompany.id]: true }));
                     }}
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shadow-md border border-primary/20">
+                  <div className="w-14 h-14 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg shadow-md">
                     {initialsOf(currentCompany.name)}
                   </div>
                 )}
@@ -215,7 +214,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             </div>
           </div>
 
-          {/* Navigation Controls */}
+          {/* Controls */}
           <button
             onClick={prevSlide}
             type="button"
@@ -248,47 +247,35 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
         </div>
 
-        {/* 🎬 VIDEO SHOWCASE SECTION */}
+        {/* 🎬 CORPORATE VIDEO SHOWCASE (HERE IN OUR GROUPS) */}
         <div className="mt-16 sm:mt-24 pt-12 border-t border-border/60">
           <div className="text-center mb-8 max-w-2xl mx-auto px-2">
             <span className="text-xs uppercase font-bold tracking-widest text-primary flex items-center justify-center gap-1.5 mb-2">
               <Play className="w-3.5 h-3.5 fill-current" /> Corporate Video
             </span>
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
-              Excellent Group of Companies
+              Excellent Group Showcase
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground mt-2">
-              Watch our full corporate presentation showcasing our facilities, services, and fleet across Abu Dhabi and UAE.
+              Watch our full corporate presentation showcasing our multi-sector operations and facilities across Abu Dhabi and UAE.
             </p>
           </div>
 
           <div className="w-full max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden border border-border/80 shadow-2xl bg-black/90 relative aspect-video">
-            {videoUrl ? (
-              <video
-                src={videoUrl}
-                autoPlay
-                muted
-                loop
-                controls
-                playsInline
-                className="w-full h-full object-contain"
-              >
-                Your browser does not support video playback.
-              </video>
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-950">
-                <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
-                  <Play className="w-8 h-8 fill-current translate-x-0.5" />
-                </div>
-                <h4 className="text-lg font-bold text-white mb-1">Excellent Group Showcase Video</h4>
-                <p className="text-xs text-zinc-400 max-w-md">
-                  Upload the promo video in Admin Panel to play it directly here.
-                </p>
-              </div>
-            )}
+            <video
+              src={videoUrl}
+              autoPlay
+              muted
+              loop
+              controls
+              playsInline
+              className="w-full h-full object-contain"
+            >
+              Your browser does not support video playback.
+            </video>
           </div>
 
-          {/* Contact Bar */}
+          {/* Quick Contact Bar */}
           <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm shadow-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4 text-primary shrink-0" />
