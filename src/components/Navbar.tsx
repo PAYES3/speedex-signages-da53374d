@@ -9,7 +9,7 @@ import { COMPANY } from '@/lib/site-data';
 const NAV = [
   { to: '/', key: 'home' },
   { to: '/about', key: 'about' },
-  { to: '/our-groups', key: 'ourGroups' }, // Updated from /companies to /our-groups
+  { to: '/companies', key: 'ourGroups' }, // Updated from /companies to /our-groups
   { label: 'Services', to: '/services', key: 'services' },
   { to: '/portfolio', key: 'portfolio' },
   { to: '/explore', key: 'explore' },
