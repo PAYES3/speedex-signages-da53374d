@@ -6,16 +6,23 @@ import { Button } from '@/components/ui/button';
 import logo from '@/assets/speedex-logo.png.asset.json';
 import { COMPANY } from '@/lib/site-data';
 
-const NAV = [
+interface NavItem {
+  to: string;
+  hash?: string;
+  key: string;
+  customLabel: string;
+}
+
+const NAV: NavItem[] = [
   { to: '/', key: 'home', customLabel: 'Home' },
-  { to: '/about', key: 'about', customLabel: 'About' },
-  { to: '/companies', key: 'companies', customLabel: 'Our Groups' },
+  { to: '/', hash: 'about', key: 'about', customLabel: 'About' },
+  { to: '/', hash: 'our-groups', key: 'companies', customLabel: 'Our Groups' },
   { to: '/services', key: 'services', customLabel: 'Services' },
   { to: '/portfolio', key: 'portfolio', customLabel: 'Portfolio' },
   { to: '/explore', key: 'explore', customLabel: 'Explore' },
   { to: '/products', key: 'products', customLabel: 'Products' },
   { to: '/contact', key: 'contact', customLabel: 'Contact' },
-] as const;
+];
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
@@ -61,6 +68,17 @@ export function Navbar() {
     document.documentElement.lang = next;
   };
 
+  const handleNavClick = (hash?: string) => {
+    if (hash) {
+      setTimeout(() => {
+        const elem = document.getElementById(hash);
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <header className={`fixed top-0 inset-x-0 z-50 transition-all ${scrolled ? 'bg-background/95 backdrop-blur shadow-sm border-b border-border py-2' : 'bg-background/80 backdrop-blur border-b border-transparent py-3'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -77,11 +95,11 @@ export function Navbar() {
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n) => (
             <Link
-              key={n.to}
-              to={n.to}
+              key={n.key}
+              to={n.to as any}
+              onClick={() => handleNavClick(n.hash)}
               className="px-3 py-2 text-sm font-medium tracking-tight text-foreground hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left"
               activeProps={{ className: 'text-primary font-semibold after:scale-x-100' }}
-              activeOptions={{ exact: n.to === '/' }}
             >
               {n.customLabel ?? t(`nav.${n.key}`)}
             </Link>
@@ -89,11 +107,11 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button onClick={toggleLang} aria-label="Toggle language" className="p-2 rounded-md hover:bg-accent/40 transition">
+          <button onClick={toggleLang} aria-label="Toggle language" className="p-2 rounded-md hover:bg-accent/40 transition cursor-pointer">
             <Languages className="w-4 h-4" />
             <span className="sr-only">{i18n.language === 'ar' ? 'EN' : 'AR'}</span>
           </button>
-          <button onClick={toggleTheme} aria-label="Toggle theme" className="p-2 rounded-md hover:bg-accent/40 transition">
+          <button onClick={toggleTheme} aria-label="Toggle theme" className="p-2 rounded-md hover:bg-accent/40 transition cursor-pointer">
             {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <Link to="/contact" className="hidden sm:block">
@@ -111,7 +129,16 @@ export function Navbar() {
         <div className="lg:hidden glass border-t border-border mt-2">
           <nav className="flex flex-col p-4 gap-1 max-w-7xl mx-auto">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} className="px-3 py-3 rounded-md hover:bg-accent/40 font-medium" activeProps={{ className: 'bg-accent/40 text-primary' }}>
+              <Link
+                key={n.key}
+                to={n.to as any}
+                onClick={() => {
+                  setOpen(false);
+                  handleNavClick(n.hash);
+                }}
+                className="px-3 py-3 rounded-md hover:bg-accent/40 font-medium"
+                activeProps={{ className: 'bg-accent/40 text-primary' }}
+              >
                 {n.customLabel ?? t(`nav.${n.key}`)}
               </Link>
             ))}
