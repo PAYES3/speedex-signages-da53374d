@@ -2,8 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
-// 🎬 Local MP4 video import (Vite bundler will automatically generate valid asset URL)
+// 🎬 Video Asset Import
 import defaultGroupVideo from '@/assets/hero/ALL-COMPANIES.mp4';
+
+// 🖼️ Logo Asset Imports (Resolves paths properly in Vite build)
+import speedexSignageLogo from '@/assets/hero/speedex-signage.jpg';
+import rentACarLogo from '@/assets/hero/cars-rental.jpg';
+import facilityManagementLogo from '@/assets/hero/facility-management.jpg';
+import workshopLogo from '@/assets/hero/workshop.jpg';
+import fieldContractingLogo from '@/assets/hero/field-contracting.jpg';
+import generalTradingLogo from '@/assets/hero/general-trading.jpg';
+import arabsatLogo from '@/assets/hero/arabsat.jpg';
 
 function initialsOf(name: string) {
   return name
@@ -21,7 +30,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-signages',
     tagline: 'LED, Acrylic & 3D Signage',
     description: 'Premier signage manufacturing, 2D/3D signboards, and vehicle graphics in UAE.',
-    logo_url: '/assets/logos/speedex-signage.jpg',
+    logo_url: speedexSignageLogo,
     bg_url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -30,7 +39,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-rent-a-car',
     tagline: 'Luxury & Commercial Rental',
     description: 'Fleet rentals, vehicle leasing, and airport transfers across Dubai & Abu Dhabi.',
-    logo_url: '/assets/logos/cars-rental.jpg',
+    logo_url: rentACarLogo,
     bg_url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -39,7 +48,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-facility-management',
     tagline: 'Building Maintenance & Care',
     description: 'Complete facility management and building maintenance services.',
-    logo_url: '/assets/logos/facility-management.jpg',
+    logo_url: facilityManagementLogo,
     bg_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -48,7 +57,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-workshop',
     tagline: 'Technical & Auto Care',
     description: 'Advanced vehicle servicing, engine rebuilds, diagnostics, and bodywork.',
-    logo_url: '/assets/logos/workshop.jpg',
+    logo_url: workshopLogo,
     bg_url: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -57,7 +66,7 @@ const DEFAULT_COMPANIES = [
     slug: 'excellent-field-contracting',
     tagline: 'Civil & Interior Works',
     description: 'High-quality contracting and fit-out execution for commercial spaces.',
-    logo_url: '/assets/logos/field-contracting.jpg',
+    logo_url: fieldContractingLogo,
     bg_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -66,7 +75,7 @@ const DEFAULT_COMPANIES = [
     slug: 'excellent-general-trading',
     tagline: 'Import, Export & Supply',
     description: 'Safety products, cleaning materials, building supplies, uniforms, and gifts.',
-    logo_url: '/assets/logos/general-trading.jpg',
+    logo_url: generalTradingLogo,
     bg_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -75,7 +84,7 @@ const DEFAULT_COMPANIES = [
     slug: 'arabsat',
     tagline: 'Passenger Transport & Bus Charter',
     description: 'Staff & labour transportation, airport transfers, luxury bus charter, and fleet leasing across UAE.',
-    logo_url: '/assets/logos/arabsat.jpg',
+    logo_url: arabsatLogo,
     bg_url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80',
   },
 ];
@@ -84,10 +93,9 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   const [companies] = useState(DEFAULT_COMPANIES);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 🔗 Initial fallback path set to imported local video file
   const [videoUrl, setVideoUrl] = useState<string>(groupVideoUrl || defaultGroupVideo);
 
-  // Supabase dynamic video link fetch
+  // Supabase dynamic video fetch
   useEffect(() => {
     async function loadCompanyData() {
       try {
@@ -101,7 +109,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           setVideoUrl(data.value);
         }
       } catch {
-        // Fallback remains as defaultGroupVideo imported above
+        // Fallback remains as defaultGroupVideo
       }
     }
     loadCompanyData();
@@ -142,7 +150,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </p>
         </div>
 
-        {/* HERO FULL SLIDER SECTION WITH BACKGROUND IMAGE */}
+        {/* HERO FULL SLIDER SECTION */}
         <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
           {companies.map((c, i) => (
             <div
@@ -164,12 +172,13 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              <div className="w-full h-20 bg-white rounded-xl flex items-center justify-center p-3 mb-5 border border-white/30 shadow-inner">
+              {/* 🎯 LOGO BOX: Always displays full logo inside box without crop */}
+              <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-2 mb-5 border border-white/30 shadow-inner overflow-hidden">
                 {currentCompany.logo_url ? (
                   <img
                     src={currentCompany.logo_url}
                     alt={`${currentCompany.name} logo`}
-                    className="max-h-full max-w-full w-auto object-contain drop-shadow-sm"
+                    className="max-h-full max-w-full w-auto h-auto object-contain drop-shadow-sm select-none"
                     onError={(e) => {
                       (e.currentTarget as HTMLElement).style.display = 'none';
                     }}
@@ -254,31 +263,31 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
 
           <div className="w-full max-w-4xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden border border-border/80 shadow-2xl bg-black/90 relative aspect-video">
-  {videoUrl ? (
-    <video
-      src={videoUrl}
-      autoPlay
-      muted
-      loop
-      controls
-      playsInline
-      className="w-full h-full object-contain"
-      poster="/assets/images/video-poster.jpg"
-    >
-      Your browser does not support video playback.
-    </video>
-  ) : (
-    <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-950">
-      <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
-        <Play className="w-8 h-8 fill-current translate-x-0.5" />
-      </div>
-      <h4 className="text-lg font-bold text-white mb-1">Excellent Group Showcase Video</h4>
-      <p className="text-xs text-zinc-400 max-w-md">
-        Upload the promo video in Admin Panel to play it directly here.
-      </p>
-    </div>
-  )}
-</div>
+            {videoUrl ? (
+              <video
+                src={videoUrl}
+                autoPlay
+                muted
+                loop
+                controls
+                playsInline
+                className="w-full h-full object-contain"
+                poster="/assets/images/video-poster.jpg"
+              >
+                Your browser does not support video playback.
+              </video>
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-zinc-950">
+                <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+                  <Play className="w-8 h-8 fill-current translate-x-0.5" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-1">Excellent Group Showcase Video</h4>
+                <p className="text-xs text-zinc-400 max-w-md">
+                  Upload the promo video in Admin Panel to play it directly here.
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* Quick Contact Bar */}
           <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm shadow-sm">
