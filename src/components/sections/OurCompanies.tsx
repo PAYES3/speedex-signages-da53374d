@@ -11,10 +11,20 @@ function initialsOf(name: string) {
     .join('');
 }
 
-// 🌐 Public directory paths (Vite build crash aagadhu)
+// Static Public Assets Paths
 const DEFAULT_VIDEO = '/assets/hero/ALL-COMPANIES.mp4';
 
-const DEFAULT_COMPANIES = [
+interface Company {
+  id: string;
+  name: string;
+  slug: string;
+  tagline: string;
+  description: string;
+  logo_url: string;
+  bg_url: string;
+}
+
+const DEFAULT_COMPANIES: Company[] = [
   {
     id: '1',
     name: 'Speedex Signages',
@@ -81,9 +91,10 @@ const DEFAULT_COMPANIES = [
 ];
 
 export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
-  const [companies] = useState(DEFAULT_COMPANIES);
+  const [companies] = useState<Company[]>(DEFAULT_COMPANIES);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string>(groupVideoUrl || DEFAULT_VIDEO);
+  const [imageError, setImageError] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     async function loadCompanyData() {
@@ -92,13 +103,13 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           .from('site_settings')
           .select('value')
           .eq('key', 'group_video_url')
-          .single();
+          .maybeSingle();
 
         if (data?.value && !error) {
           setVideoUrl(data.value);
         }
       } catch {
-        // Fallback remains DEFAULT_VIDEO
+        // Safe fallback to DEFAULT_VIDEO
       }
     }
     loadCompanyData();
@@ -120,12 +131,13 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   }, [nextSlide]);
 
   const currentCompany = companies[currentIndex];
+  const isCurrentImageFailed = imageError[currentCompany.id];
 
   return (
     <section className="py-12 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden w-full max-w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 box-border">
         
-        {/* HEADER */}
+        {/* SECTION HEADER */}
         <div className="text-center mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
           <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.2em] bg-primary/10 border border-primary/20 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 shrink-0" /> Speedex Group
@@ -138,7 +150,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </p>
         </div>
 
-        {/* HERO SLIDER */}
+        {/* HERO FULL SLIDER SECTION */}
         <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
           {companies.map((c, i) => (
             <div
@@ -160,19 +172,19 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              {/* LOGO BOX */}
+              {/* LOGO CONTAINER WITH SAFE FALLBACK */}
               <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-2 mb-5 border border-white/30 shadow-inner overflow-hidden">
-                {currentCompany.logo_url ? (
+                {!isCurrentImageFailed && currentCompany.logo_url ? (
                   <img
                     src={currentCompany.logo_url}
                     alt={`${currentCompany.name} logo`}
                     className="max-h-full max-w-full w-auto h-auto object-contain drop-shadow-sm select-none"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLElement).style.display = 'none';
+                    onError={() => {
+                      setImageError((prev) => ({ ...prev, [currentCompany.id]: true }));
                     }}
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-lg bg-primary text-white grid place-items-center font-bold text-base">
+                  <div className="w-14 h-14 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg shadow-md border border-primary/20">
                     {initialsOf(currentCompany.name)}
                   </div>
                 )}
@@ -203,7 +215,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             </div>
           </div>
 
-          {/* Controls */}
+          {/* Navigation Controls */}
           <button
             onClick={prevSlide}
             type="button"
@@ -236,7 +248,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
         </div>
 
-        {/* VIDEO SHOWCASE */}
+        {/* 🎬 VIDEO SHOWCASE SECTION */}
         <div className="mt-16 sm:mt-24 pt-12 border-t border-border/60">
           <div className="text-center mb-8 max-w-2xl mx-auto px-2">
             <span className="text-xs uppercase font-bold tracking-widest text-primary flex items-center justify-center gap-1.5 mb-2">
