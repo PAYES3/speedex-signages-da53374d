@@ -2,18 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
-// 🎬 Video Asset Import
-import defaultGroupVideo from '@/assets/hero/ALL-COMPANIES.mp4';
-
-// 🖼️ Logo Asset Imports (Direct Bundler Imports)
-import speedexSignageLogo from '@/assets/logos/speedex-signage.jpg';
-import rentACarLogo from '@/assets/logos/cars-rental.jpg';
-import facilityManagementLogo from '@/assets/logos/facility-management.jpg';
-import workshopLogo from '@/assets/logos/workshop.jpg';
-import fieldContractingLogo from '@/assets/logos/field-contracting.jpg';
-import generalTradingLogo from '@/assets/logos/general-trading.jpg';
-import arabsatLogo from '@/assets/logos/arabsat.jpg';
-
 function initialsOf(name: string) {
   return name
     .split(/\s+/)
@@ -23,6 +11,9 @@ function initialsOf(name: string) {
     .join('');
 }
 
+// 🌐 Public directory paths (Vite build crash aagadhu)
+const DEFAULT_VIDEO = '/assets/hero/ALL-COMPANIES.mp4';
+
 const DEFAULT_COMPANIES = [
   {
     id: '1',
@@ -30,7 +21,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-signages',
     tagline: 'LED, Acrylic & 3D Signage',
     description: 'Premier signage manufacturing, 2D/3D signboards, and vehicle graphics in UAE.',
-    logo_url: speedexSignageLogo,
+    logo_url: '/assets/logos/speedex-signage.jpg',
     bg_url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -39,7 +30,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-rent-a-car',
     tagline: 'Luxury & Commercial Rental',
     description: 'Fleet rentals, vehicle leasing, and airport transfers across Dubai & Abu Dhabi.',
-    logo_url: rentACarLogo,
+    logo_url: '/assets/logos/cars-rental.jpg',
     bg_url: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -48,7 +39,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-facility-management',
     tagline: 'Building Maintenance & Care',
     description: 'Complete facility management and building maintenance services.',
-    logo_url: facilityManagementLogo,
+    logo_url: '/assets/logos/facility-management.jpg',
     bg_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -57,7 +48,7 @@ const DEFAULT_COMPANIES = [
     slug: 'speedex-workshop',
     tagline: 'Technical & Auto Care',
     description: 'Advanced vehicle servicing, engine rebuilds, diagnostics, and bodywork.',
-    logo_url: workshopLogo,
+    logo_url: '/assets/logos/workshop.jpg',
     bg_url: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -66,7 +57,7 @@ const DEFAULT_COMPANIES = [
     slug: 'excellent-field-contracting',
     tagline: 'Civil & Interior Works',
     description: 'High-quality contracting and fit-out execution for commercial spaces.',
-    logo_url: fieldContractingLogo,
+    logo_url: '/assets/logos/field-contracting.jpg',
     bg_url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -75,7 +66,7 @@ const DEFAULT_COMPANIES = [
     slug: 'excellent-general-trading',
     tagline: 'Import, Export & Supply',
     description: 'Safety products, cleaning materials, building supplies, uniforms, and gifts.',
-    logo_url: generalTradingLogo,
+    logo_url: '/assets/logos/general-trading.jpg',
     bg_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80',
   },
   {
@@ -84,7 +75,7 @@ const DEFAULT_COMPANIES = [
     slug: 'arabsat',
     tagline: 'Passenger Transport & Bus Charter',
     description: 'Staff & labour transportation, airport transfers, luxury bus charter, and fleet leasing across UAE.',
-    logo_url: arabsatLogo,
+    logo_url: '/assets/logos/arabsat.jpg',
     bg_url: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=80',
   },
 ];
@@ -92,10 +83,8 @@ const DEFAULT_COMPANIES = [
 export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
   const [companies] = useState(DEFAULT_COMPANIES);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoUrl, setVideoUrl] = useState<string>(groupVideoUrl || DEFAULT_VIDEO);
 
-  const [videoUrl, setVideoUrl] = useState<string>(groupVideoUrl || defaultGroupVideo);
-
-  // Supabase dynamic video fetch
   useEffect(() => {
     async function loadCompanyData() {
       try {
@@ -109,13 +98,12 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           setVideoUrl(data.value);
         }
       } catch {
-        // Fallback remains as defaultGroupVideo
+        // Fallback remains DEFAULT_VIDEO
       }
     }
     loadCompanyData();
   }, []);
 
-  // Slider Navigation Logic
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === companies.length - 1 ? 0 : prev + 1));
   }, [companies.length]);
@@ -137,7 +125,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
     <section className="py-12 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden w-full max-w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 box-border">
         
-        {/* SECTION HEADER */}
+        {/* HEADER */}
         <div className="text-center mb-8 sm:mb-12 max-w-3xl mx-auto px-2">
           <p className="text-primary text-xs sm:text-sm font-bold uppercase tracking-[0.2em] bg-primary/10 border border-primary/20 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 shrink-0" /> Speedex Group
@@ -150,7 +138,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </p>
         </div>
 
-        {/* HERO FULL SLIDER SECTION */}
+        {/* HERO SLIDER */}
         <div className="relative w-full h-[520px] sm:h-[580px] rounded-3xl overflow-hidden shadow-2xl border border-border/80 bg-zinc-950 text-white">
           {companies.map((c, i) => (
             <div
@@ -172,7 +160,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              {/* 🎯 LOGO BOX: Responsive sizing with object-contain */}
+              {/* LOGO BOX */}
               <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-2 mb-5 border border-white/30 shadow-inner overflow-hidden">
                 {currentCompany.logo_url ? (
                   <img
@@ -215,7 +203,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             </div>
           </div>
 
-          {/* Navigation Controls */}
+          {/* Controls */}
           <button
             onClick={prevSlide}
             type="button"
@@ -248,7 +236,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           </div>
         </div>
 
-        {/* 🎬 VIDEO SHOWCASE SECTION */}
+        {/* VIDEO SHOWCASE */}
         <div className="mt-16 sm:mt-24 pt-12 border-t border-border/60">
           <div className="text-center mb-8 max-w-2xl mx-auto px-2">
             <span className="text-xs uppercase font-bold tracking-widest text-primary flex items-center justify-center gap-1.5 mb-2">
@@ -288,7 +276,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
             )}
           </div>
 
-          {/* Quick Contact Bar */}
+          {/* Contact Bar */}
           <div className="mt-6 max-w-4xl mx-auto bg-card/60 border border-border/80 rounded-2xl p-4 sm:p-6 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm shadow-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="w-4 h-4 text-primary shrink-0" />
