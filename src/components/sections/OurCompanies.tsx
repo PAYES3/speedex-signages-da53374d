@@ -5,14 +5,14 @@ import { supabase } from '@/integrations/supabase/client';
 // 🎬 Video Asset Import
 import defaultGroupVideo from '@/assets/hero/ALL-COMPANIES.mp4';
 
-// 🖼️ Logo Asset Imports (Resolves paths properly in Vite build)
-import speedexSignageLogo from '@/assets/hero/speedex-signage.jpg';
-import rentACarLogo from '@/assets/hero/cars-rental.jpg';
-import facilityManagementLogo from '@/assets/hero/facility-management.jpg';
-import workshopLogo from '@/assets/hero/workshop.jpg';
-import fieldContractingLogo from '@/assets/hero/field-contracting.jpg';
-import generalTradingLogo from '@/assets/hero/general-trading.jpg';
-import arabsatLogo from '@/assets/hero/arabsat.jpg';
+// 🖼️ Logo Asset Imports (Direct Bundler Imports)
+import speedexSignageLogo from '@/assets/logos/speedex-signage.jpg';
+import rentACarLogo from '@/assets/logos/cars-rental.jpg';
+import facilityManagementLogo from '@/assets/logos/facility-management.jpg';
+import workshopLogo from '@/assets/logos/workshop.jpg';
+import fieldContractingLogo from '@/assets/logos/field-contracting.jpg';
+import generalTradingLogo from '@/assets/logos/general-trading.jpg';
+import arabsatLogo from '@/assets/logos/arabsat.jpg';
 
 function initialsOf(name: string) {
   return name
@@ -172,7 +172,7 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
           <div className="relative z-10 max-w-xl h-full p-6 sm:p-10 flex flex-col justify-center">
             <div className="bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/20 shadow-xl">
               
-              {/* 🎯 LOGO BOX: Always displays full logo inside box without crop */}
+              {/* 🎯 LOGO BOX: Responsive sizing with object-contain */}
               <div className="w-full h-24 bg-white rounded-xl flex items-center justify-center p-2 mb-5 border border-white/30 shadow-inner overflow-hidden">
                 {currentCompany.logo_url ? (
                   <img
@@ -272,7 +272,6 @@ export function OurCompanies({ groupVideoUrl }: { groupVideoUrl?: string }) {
                 controls
                 playsInline
                 className="w-full h-full object-contain"
-                poster="/assets/images/video-poster.jpg"
               >
                 Your browser does not support video playback.
               </video>
