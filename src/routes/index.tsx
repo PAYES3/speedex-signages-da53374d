@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicGetSettings } from '@/lib/admin/content.functions';
+import { usePageContent } from '@/hooks/usePageContent';
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -56,18 +57,29 @@ function Home() {
   const getSettings = useServerFn(publicGetSettings);
   const { data: settings } = useQuery({ queryKey: ['site-settings'], queryFn: () => getSettings() });
   const s = (settings ?? {}) as Record<string, string>;
+  const hero = usePageContent('home_hero');
+  const svc = usePageContent('home_services');
+  const proj = usePageContent('home_projects');
   return (
     <>
-      <Hero videoUrl={s.hero_video_url} posterUrl={s.hero_poster_url} />
+      <Hero
+        videoUrl={hero('video_url', s.hero_video_url)}
+        posterUrl={hero('poster_url', s.hero_poster_url)}
+        eyebrow={hero('eyebrow')}
+        title={hero('title')}
+        subtitle={hero('subtitle')}
+        primaryLabel={hero('cta_label')}
+        primaryHref={hero('cta_href')}
+      />
       <ClientLogos />
       <SignageShowcase />
       <section className="py-24 lg:py-32 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">What we do</p>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight leading-[1.05]">A full-service signage partner</h2>
-              <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed">From concept and design to fabrication, installation and maintenance — all under one roof.</p>
+              <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">{svc('eyebrow', 'What we do')}</p>
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight leading-[1.05]">{svc('title', 'A full-service signage partner')}</h2>
+              <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed">{svc('subtitle', 'From concept and design to fabrication, installation and maintenance — all under one roof.')}</p>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
@@ -84,7 +96,7 @@ function Home() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link to="/services"><Button variant="outline" size="lg" className="rounded-full border-2">View all services <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
+            <Link to="/services"><Button variant="outline" size="lg" className="rounded-full border-2"> {svc('cta_label','View all services')} <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
           </div>
         </div>
       </section>
@@ -101,10 +113,10 @@ function Home() {
           <Reveal>
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">Recent work</p>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight">Featured projects</h2>
+                <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">{proj('eyebrow', 'Recent work')}</p>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight">{proj('title', 'Featured projects')}</h2>
               </div>
-              <Link to="/explore"><Button variant="outline" size="lg" className="rounded-full border-2">Explore all <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
+              <Link to="/explore"><Button variant="outline" size="lg" className="rounded-full border-2"> {proj('cta_label','Explore all')} <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
             </div>
           </Reveal>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
