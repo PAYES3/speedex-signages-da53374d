@@ -30,7 +30,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     await qc.cancelQueries();
     qc.clear();
     await supabase.auth.signOut();
-    navigate({ to: '/admin/login', replace: true });
+    navigate({ to: '/admin/login', search: { next: undefined }, replace: true });
   };
 
   return (
