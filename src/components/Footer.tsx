@@ -4,7 +4,7 @@ import { useServerFn } from '@tanstack/react-start';
 import { publicListCompanies } from '@/lib/admin/content.functions';
 import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react'; // Youtube removed from imports
 import { COMPANY } from '@/lib/site-data';
-import logo from '@/assets/speedex-logo.png.asset.json';
+import { useSiteLogo } from '@/hooks/useSiteSettings';
 
 const QUICK_LINKS = [
   { to: '/about', label: 'About' },
@@ -23,6 +23,7 @@ const SOCIAL_LINKS = [
 
 export function Footer() {
   const fetcher = useServerFn(publicListCompanies);
+  const logo = useSiteLogo();
   const { data: companies } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
   
   return (
@@ -30,7 +31,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
           <div className="mb-4 inline-block bg-white rounded-lg p-2">
-            <img src={logo.url} alt={COMPANY.name} className="h-10 w-auto" width={180} height={40} />
+            <img src={logo} alt={COMPANY.name} className="h-10 w-auto" width={180} height={40} />
           </div>
           <p className="text-white/65 text-base leading-relaxed">
             Speedex Group — UAE's trusted partner across signage, automotive, transport, contracting and trading since 2007.

@@ -68,11 +68,20 @@ export type Database = {
         Row: {
           accent_color: string | null
           active: boolean
+          address: string | null
+          banner_url: string | null
           created_at: string
           description: string | null
+          email: string | null
+          gallery: Json
           hero_image: string | null
           id: string
+          industry: string | null
+          logo_url: string | null
           name: string
+          phone: string | null
+          seo_description: string | null
+          seo_title: string | null
           services: Json
           slug: string
           sort_order: number
@@ -83,11 +92,20 @@ export type Database = {
         Insert: {
           accent_color?: string | null
           active?: boolean
+          address?: string | null
+          banner_url?: string | null
           created_at?: string
           description?: string | null
+          email?: string | null
+          gallery?: Json
           hero_image?: string | null
           id?: string
+          industry?: string | null
+          logo_url?: string | null
           name: string
+          phone?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
           services?: Json
           slug: string
           sort_order?: number
@@ -98,11 +116,20 @@ export type Database = {
         Update: {
           accent_color?: string | null
           active?: boolean
+          address?: string | null
+          banner_url?: string | null
           created_at?: string
           description?: string | null
+          email?: string | null
+          gallery?: Json
           hero_image?: string | null
           id?: string
+          industry?: string | null
+          logo_url?: string | null
           name?: string
+          phone?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
           services?: Json
           slug?: string
           sort_order?: number
@@ -175,6 +202,78 @@ export type Database = {
         }
         Relationships: []
       }
+      media_assets: {
+        Row: {
+          alt: string
+          created_at: string
+          folder: string
+          height: number | null
+          id: string
+          mime_type: string
+          name: string
+          path: string
+          size_bytes: number
+          updated_at: string
+          url: string
+          width: number | null
+        }
+        Insert: {
+          alt?: string
+          created_at?: string
+          folder?: string
+          height?: number | null
+          id?: string
+          mime_type?: string
+          name: string
+          path: string
+          size_bytes?: number
+          updated_at?: string
+          url: string
+          width?: number | null
+        }
+        Update: {
+          alt?: string
+          created_at?: string
+          folder?: string
+          height?: number | null
+          id?: string
+          mime_type?: string
+          name?: string
+          path?: string
+          size_bytes?: number
+          updated_at?: string
+          url?: string
+          width?: number | null
+        }
+        Relationships: []
+      }
+      page_content: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          page: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          page: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          page?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       portfolio_categories: {
         Row: {
           created_at: string
@@ -203,12 +302,15 @@ export type Database = {
         Row: {
           category_slug: string | null
           client: string | null
+          completed_on: string | null
           cover_url: string | null
           created_at: string
           description: string
           id: string
+          location: string | null
           media: Json
           published: boolean
+          seo_description: string | null
           slug: string
           sort_order: number
           title: string
@@ -218,12 +320,15 @@ export type Database = {
         Insert: {
           category_slug?: string | null
           client?: string | null
+          completed_on?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string
           id?: string
+          location?: string | null
           media?: Json
           published?: boolean
+          seo_description?: string | null
           slug: string
           sort_order?: number
           title: string
@@ -233,12 +338,15 @@ export type Database = {
         Update: {
           category_slug?: string | null
           client?: string | null
+          completed_on?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string
           id?: string
+          location?: string | null
           media?: Json
           published?: boolean
+          seo_description?: string | null
           slug?: string
           sort_order?: number
           title?: string
@@ -281,10 +389,14 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          features: Json
+          gallery: Json
           icon: string | null
           id: string
           image_url: string | null
           published: boolean
+          seo_description: string | null
+          seo_title: string | null
           slug: string
           sort_order: number
           title: string
@@ -293,10 +405,14 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string
+          features?: Json
+          gallery?: Json
           icon?: string | null
           id?: string
           image_url?: string | null
           published?: boolean
+          seo_description?: string | null
+          seo_title?: string | null
           slug: string
           sort_order?: number
           title: string
@@ -305,10 +421,14 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          features?: Json
+          gallery?: Json
           icon?: string | null
           id?: string
           image_url?: string | null
           published?: boolean
+          seo_description?: string | null
+          seo_title?: string | null
           slug?: string
           sort_order?: number
           title?: string

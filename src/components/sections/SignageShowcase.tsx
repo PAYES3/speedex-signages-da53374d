@@ -46,7 +46,7 @@ export function SignageShowcase() {
   const current = SHOWCASE_SLIDES[currentIndex];
 
   return (
-    <section className="relative w-full h-[80vh] min-h-[550px] max-h-[750px] overflow-hidden bg-black">
+    <section className="relative w-full h-[80vh] min-h-[550px] max-h-[750px] overflow-hidden bg-white">
       {/* 🖼️ BACKGROUND IMAGE WITH FADE ANIMATION */}
       <AnimatePresence mode="wait">
         <motion.img
@@ -62,8 +62,8 @@ export function SignageShowcase() {
       </AnimatePresence>
 
       {/* 🎯 LIGHT CONTRAST OVERLAY (Ensures image visibility while preserving readability) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/55 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-transparent to-white/40 pointer-events-none" />
 
       {/* 🎯 TEXT CONTAINER WITH GLASS CONTRAST BOX */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 flex items-center">
@@ -72,27 +72,27 @@ export function SignageShowcase() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-xl p-6 sm:p-8 rounded-3xl bg-black/50 backdrop-blur-md border border-white/15 shadow-2xl space-y-4"
+          className="max-w-xl p-6 sm:p-8 rounded-3xl bg-white/85 backdrop-blur-xl border border-black/5 shadow-[0_40px_80px_-40px_rgba(0,0,0,0.3)] space-y-4"
         >
           {/* Subtitle / Tagline */}
-          <p className="text-xs sm:text-sm font-bold tracking-[0.25em] uppercase text-primary bg-primary/20 border border-primary/30 px-3.5 py-1 rounded-full inline-block">
+          <p className="text-xs sm:text-sm font-bold tracking-[0.25em] uppercase text-primary bg-primary/10 border border-primary/20 px-3.5 py-1 rounded-full inline-block">
             {current.tagline}
           </p>
 
           {/* Title */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight drop-shadow-md">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground leading-tight">
             {current.title}
           </h2>
 
           {/* Description */}
-          <p className="text-sm sm:text-base text-gray-200 leading-relaxed drop-shadow">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             {current.desc}
           </p>
 
           {/* CTA Button with Brand Gradient */}
           <div className="pt-2">
             <Link to={current.link}>
-              <Button size="lg" className="rounded-full bg-gradient-to-r from-primary via-teal-600 to-emerald-600 hover:opacity-95 text-white font-semibold px-7 py-3 shadow-lg hover:shadow-primary/40 transition-all cursor-pointer">
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-7 py-3 shadow-lg hover:shadow-primary/40 transition-all cursor-pointer">
                 Explore Projects <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
@@ -105,7 +105,7 @@ export function SignageShowcase() {
         onClick={handlePrev}
         type="button"
         aria-label="Previous Slide"
-        className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 hover:bg-primary hover:border-primary hover:scale-110 transition-all cursor-pointer shadow-2xl"
+        className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-white/90 text-foreground backdrop-blur-md border border-black/10 hover:bg-primary hover:border-primary hover:scale-110 transition-all cursor-pointer shadow-2xl"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
@@ -114,7 +114,7 @@ export function SignageShowcase() {
         onClick={handleNext}
         type="button"
         aria-label="Next Slide"
-        className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-black/50 text-white backdrop-blur-md border border-white/20 hover:bg-primary hover:border-primary hover:scale-110 transition-all cursor-pointer shadow-2xl"
+        className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 p-3.5 rounded-full bg-white/90 text-foreground backdrop-blur-md border border-black/10 hover:bg-primary hover:border-primary hover:scale-110 transition-all cursor-pointer shadow-2xl"
       >
         <ChevronRight className="w-6 h-6" />
       </button>

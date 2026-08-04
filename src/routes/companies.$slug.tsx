@@ -70,7 +70,9 @@ function CompanyDetailPage() {
   }
 
   const accent = company.accent_color || '#F58220';
-  const servicesList = Array.isArray(company.services) ? company.services : [];
+  const servicesList: string[] = Array.isArray(company.services)
+    ? (company.services as unknown[]).filter((v): v is string => typeof v === 'string')
+    : [];
 
   return (
     <>

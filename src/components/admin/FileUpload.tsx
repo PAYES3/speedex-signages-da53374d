@@ -3,17 +3,65 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Upload, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { optimizeImage } from '@/lib/image-optimize';
+import { bucketForFolder } from '@/lib/media-folders';
 
-type Uploaded = { url: string; type: 'image' | 'video'; path: string };
+export type Uploaded = {
+  url: string;
+  type: 'image' | 'video';
+  path: string;
+  name: string;
+  mime: string;
+  size: number;
+  width: number;
+  height: number;
+  bucket: string;
+};
+
+export async function uploadFiles(
+  files: File[],
+  opts: { bucket?: string; folder?: string } = {},
+): Promise<Uploaded[]> {
+  const bucket = opts.bucket ?? bucketForFolder(opts.folder ?? 'general');
+  const prefix = opts.folder ? `${opts.folder}/` : '';
+  const results: Uploaded[] = [];
+
+  for (const file of files) {
+    const optimized = await optimizeImage(file);
+    const ext = optimized.name.split('.').pop() || 'bin';
+    const path = `${prefix}${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const { error } = await supabase.storage.from(bucket).upload(path, optimized.blob, {
+      cacheControl: '31536000',
+      upsert: false,
+      contentType: optimized.type || undefined,
+    });
+    if (error) throw error;
+    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+    results.push({
+      url: data.publicUrl,
+      type: (optimized.type || file.type).startsWith('video/') ? 'video' : 'image',
+      path,
+      name: optimized.name,
+      mime: optimized.type || file.type,
+      size: optimized.blob.size,
+      width: optimized.width,
+      height: optimized.height,
+      bucket,
+    });
+  }
+  return results;
+}
 
 export function FileUpload({
   bucket,
+  folder,
   onUploaded,
   accept = 'image/*,video/*',
   label = 'Upload file',
   multiple = false,
 }: {
-  bucket: 'services-media' | 'portfolio-media' | 'testimonial-avatars';
+  bucket?: string;
+  folder?: string;
   onUploaded: (files: Uploaded[]) => void;
   accept?: string;
   label?: string;
@@ -21,28 +69,13 @@ export function FileUpload({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [over, setOver] = useState(false);
 
-  const handle = async (files: FileList | null) => {
-    if (!files || !files.length) return;
+  const handle = async (fileList: FileList | null) => {
+    if (!fileList || !fileList.length) return;
     setBusy(true);
-    const results: Uploaded[] = [];
     try {
-      for (const file of Array.from(files)) {
-        const ext = file.name.split('.').pop() || 'bin';
-        const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-        const { error } = await supabase.storage.from(bucket).upload(path, file, {
-          cacheControl: '31536000',
-          upsert: false,
-          contentType: file.type || undefined,
-        });
-        if (error) throw error;
-        const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-        results.push({
-          url: data.publicUrl,
-          type: file.type.startsWith('video/') ? 'video' : 'image',
-          path,
-        });
-      }
+      const results = await uploadFiles(Array.from(fileList), { bucket, folder });
       onUploaded(results);
       toast.success(`Uploaded ${results.length} file${results.length === 1 ? '' : 's'}`);
     } catch (err: any) {
@@ -54,7 +87,21 @@ export function FileUpload({
   };
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <div
+      onDragOver={(e) => {
+        e.preventDefault();
+        setOver(true);
+      }}
+      onDragLeave={() => setOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setOver(false);
+        handle(e.dataTransfer.files);
+      }}
+      className={`inline-flex items-center gap-3 rounded-xl border-2 border-dashed px-4 py-3 transition-colors ${
+        over ? 'border-primary bg-primary/5' : 'border-border'
+      }`}
+    >
       <input
         ref={inputRef}
         type="file"
@@ -67,6 +114,7 @@ export function FileUpload({
         {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
         {busy ? 'Uploading…' : label}
       </Button>
+      <span className="text-xs text-muted-foreground hidden sm:inline">or drag &amp; drop — auto WebP + compressed</span>
     </div>
   );
 }
