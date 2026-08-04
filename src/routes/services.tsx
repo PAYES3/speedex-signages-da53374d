@@ -95,7 +95,7 @@ function ServicesPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-secondary/30">
+      <section className="py-16 bg-[color:var(--surface-gray)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Reveal>
             <div className="text-center mb-10">

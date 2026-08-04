@@ -37,7 +37,7 @@ export function CustomerFeedback() {
   const avg = items.length ? items.reduce((s: number, t: any) => s + t.rating, 0) / items.length : 0;
 
   return (
-    <section className="py-20 bg-secondary/30">
+    <section className="py-20 bg-[color:var(--surface-gray)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <Reveal>
           <div className="text-center mb-10">

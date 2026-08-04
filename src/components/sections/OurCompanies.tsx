@@ -126,7 +126,7 @@ export function OurCompanies() {
         </div>
 
         {/* Carousel Container */}
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-black shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-white shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentCompany.id}
@@ -139,9 +139,9 @@ export function OurCompanies() {
               <img
                 src={currentCompany.bg_url}
                 alt={currentCompany.name}
-                className="h-full w-full object-cover opacity-60"
+                className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/10" />
             </motion.div>
           </AnimatePresence>
 
@@ -153,10 +153,10 @@ export function OurCompanies() {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl border border-white/20 bg-black/50 p-6 sm:p-8 backdrop-blur-md"
+                className="rounded-2xl border border-black/5 bg-white/85 p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_60px_-40px_rgba(0,0,0,0.35)]"
               >
                 {/* Logo Display Container */}
-                <div className="mb-6 flex h-24 items-center justify-center rounded-xl bg-white p-3 shadow-inner">
+                <div className="mb-6 flex h-24 items-center justify-center rounded-xl bg-white p-3 border border-border">
                   <img
                     src={currentCompany.logo_url}
                     alt={currentCompany.name}
@@ -164,16 +164,16 @@ export function OurCompanies() {
                   />
                 </div>
 
-                <div className="mb-3 inline-block rounded-lg bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                <div className="mb-3 inline-block rounded-lg bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
                   {currentCompany.tagline}
                 </div>
 
-                <h3 className="flex items-center gap-3 text-2xl sm:text-3xl font-extrabold text-white">
+                <h3 className="flex items-center gap-3 text-2xl sm:text-3xl font-extrabold text-foreground">
                   <Building2 className="h-7 w-7 text-primary" />
                   {currentCompany.name}
                 </h3>
 
-                <p className="mt-3 text-sm sm:text-base text-gray-200 leading-relaxed">
+                <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
                   {currentCompany.description}
                 </p>
 
@@ -191,7 +191,7 @@ export function OurCompanies() {
           {/* Controls */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-3 text-white backdrop-blur hover:bg-primary transition-all"
+            className="absolute left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
             aria-label="Previous Company"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -199,7 +199,7 @@ export function OurCompanies() {
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-white/20 bg-black/60 p-3 text-white backdrop-blur hover:bg-primary transition-all"
+            className="absolute right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
             aria-label="Next Company"
           >
             <ChevronRight className="h-6 w-6" />
@@ -212,7 +212,7 @@ export function OurCompanies() {
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={`transition-all duration-300 rounded-full ${
-                  index === currentIndex ? "h-2.5 w-8 bg-primary" : "h-2.5 w-2.5 bg-white/40 hover:bg-white/70"
+                  index === currentIndex ? "h-2.5 w-8 bg-primary" : "h-2.5 w-2.5 bg-foreground/20 hover:bg-foreground/40"
                 }`}
               />
             ))}

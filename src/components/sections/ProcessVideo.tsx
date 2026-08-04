@@ -26,7 +26,7 @@ export function ProcessVideo() {
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-center">
           {/* Left Column: Video Showcase */}
           <Reveal direction="left" className="lg:col-span-3">
-            <div className="relative rounded-3xl overflow-hidden shadow-[0_40px_80px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5 bg-black">
+            <div className="relative rounded-3xl overflow-hidden shadow-[0_40px_80px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5 bg-muted">
               <video
                 autoPlay
                 muted
@@ -38,7 +38,7 @@ export function ProcessVideo() {
                 <source src={hero1.url} type="video/mp4" />
                 Your browser does not support video playback.
               </video>
-              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/30 to-transparent" />
+              <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent" />
             </div>
           </Reveal>
 

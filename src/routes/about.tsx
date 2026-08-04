@@ -60,7 +60,7 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-secondary/30">
+      <section className="py-20 bg-[color:var(--surface-gray)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-6">
           <Reveal direction="left">
             <div className="bg-card border border-border rounded-2xl p-8 h-full">
