@@ -1,93 +1,104 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Clean file imports (brackets remove paniya piragu)
+// Assets folder-il irukkum EXACT filenames
 import signage1 from '@/assets/hero/SIGNAGE-1.jpg';
 import signage2 from '@/assets/hero/SIGNAGE-2.jpg';
 import signage3 from '@/assets/hero/SIGNAGE-3.jpg';
-import signage5 from '@/assets/hero/signage5.jpg';
+import signage5 from '@/assets/hero/SIGNAGE-5-(BASCOM).jpg';
+import signage6 from '@/assets/hero/SIGNAGE-6-(NMC).jpg';
+import signage7 from '@/assets/hero/SIGNAGE-7-(DANAT).jpg';
 
-export type Slide = {
-  id: string;
-  media_url: string;
-  subtitle: string;
-  title: string;
-  description: string;
-  cta_primary_label: string;
-  cta_primary_href: string;
-};
-
-const LOCAL_SLIDES: Slide[] = [
+const SECONDARY_SLIDES = [
   {
-    id: 'slide-1',
-    media_url: signage1,
-    subtitle: 'INDOOR & 3D SIGNAGE',
+    id: 1,
+    image: signage1,
+    badge: 'INDOOR & 3D SIGNAGE',
     title: 'Precision 3D Acrylic & Metallic Letters',
-    description: 'Premium LED illuminated logo displays designed and fabricated for high-end retail.',
-    cta_primary_label: 'Explore Projects',
-    cta_primary_href: '/portfolio',
+    subtitle: 'Premium LED illuminated logo displays designed and fabricated for high-end retail.',
+    buttonText: 'Explore Projects',
+    buttonHref: '/portfolio',
   },
   {
-    id: 'slide-2',
-    media_url: signage2,
-    subtitle: 'OUTDOOR & ARCHITECTURAL',
+    id: 2,
+    image: signage2,
+    badge: 'OUTDOOR & ARCHITECTURAL',
     title: 'Building & Exterior Signages',
-    description: 'High-visibility architectural signages engineered for corporate environments across the UAE.',
-    cta_primary_label: 'Get a Free Quote',
-    cta_primary_href: '/contact',
+    subtitle: 'High-visibility architectural signages engineered for corporate environments across the UAE.',
+    buttonText: 'View Portfolio',
+    buttonHref: '/portfolio',
   },
   {
-    id: 'slide-3',
-    media_url: signage3,
-    subtitle: 'COMMERCIAL BRANDING',
+    id: 3,
+    image: signage3,
+    badge: 'COMMERCIAL BRANDING',
     title: 'Corporate Retail & Reception Displays',
-    description: 'Custom indoor branding and illuminated displays crafted with high precision.',
-    cta_primary_label: 'Contact Us',
-    cta_primary_href: '/contact',
+    subtitle: 'Custom indoor branding and illuminated displays crafted with high precision.',
+    buttonText: 'Contact Us',
+    buttonHref: '/contact',
   },
   {
-    id: 'slide-4',
-    media_url: signage5,
-    subtitle: 'VEHICLE GRAPHICS',
+    id: 4,
+    image: signage5,
+    badge: 'FLEET GRAPHICS',
     title: 'Custom Commercial Fleet Branding',
-    description: 'Transform your commercial vehicles into mobile brand assets with durable wraps.',
-    cta_primary_label: 'Our Services',
-    cta_primary_href: '/services',
+    subtitle: 'Transform commercial vehicles into mobile brand assets with durable wraps.',
+    buttonText: 'Our Services',
+    buttonHref: '/services',
+  },
+  {
+    id: 5,
+    image: signage6,
+    badge: 'HEALTHCARE & CORPORATE',
+    title: 'Medical & Commercial Signage',
+    subtitle: 'Turnkey interior and exterior visual identity solutions for facilities.',
+    buttonText: 'Explore Projects',
+    buttonHref: '/portfolio',
+  },
+  {
+    id: 6,
+    image: signage7,
+    badge: 'LUXURY & ARCHITECTURAL',
+    title: 'Premium Project Fabrication',
+    subtitle: 'Engineered signage assets designed to match exact brand specifications.',
+    buttonText: 'Get a Free Quote',
+    buttonHref: '/contact',
   },
 ];
 
-export function HeroSlider() {
-  const [index, setIndex] = useState(0);
-  const current = LOCAL_SLIDES[index];
+export function SecondarySlider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % LOCAL_SLIDES.length);
+      setCurrentIndex((prev) => (prev + 1) % SECONDARY_SLIDES.length);
     }, 5000);
     return () => clearInterval(timer);
   }, []);
 
+  const currentSlide = SECONDARY_SLIDES[currentIndex];
+
   return (
-    <section className="relative isolate min-h-[85vh] w-full overflow-hidden bg-slate-100 flex items-center">
+    <section className="relative w-full h-[600px] sm:h-[650px] overflow-hidden bg-slate-100 flex items-center my-6">
       {/* Background Image Layer */}
       <AnimatePresence mode="wait">
         <motion.div
-          key={current.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          key={currentSlide.id}
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
           className="absolute inset-0 z-0"
         >
           <img
-            src={current.media_url}
-            alt={current.title}
+            src={currentSlide.image}
+            alt={currentSlide.title}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
         </motion.div>
       </AnimatePresence>
 
@@ -95,29 +106,29 @@ export function HeroSlider() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
-            key={current.id}
+            key={currentSlide.id}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-md bg-white/95 backdrop-blur-md border border-white/80 p-8 sm:p-10 rounded-3xl shadow-xl"
+            className="w-full max-w-md bg-white/95 backdrop-blur-md border border-white/80 p-6 sm:p-10 rounded-3xl shadow-xl"
           >
-            <span className="inline-block px-3 py-1 text-[11px] font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded-full border border-slate-200">
-              {current.subtitle}
+            <span className="inline-block px-3.5 py-1 text-[11px] font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded-full border border-slate-200">
+              {currentSlide.badge}
             </span>
 
             <h2 className="mt-4 text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
-              {current.title}
+              {currentSlide.title}
             </h2>
 
             <p className="mt-3 text-sm text-slate-600 leading-relaxed font-medium">
-              {current.description}
+              {currentSlide.subtitle}
             </p>
 
             <div className="mt-6">
-              <Link to={current.cta_primary_href}>
-                <Button className="h-11 px-6 rounded-full bg-[#2D4A43] hover:bg-[#1E332E] text-white font-medium text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
-                  {current.cta_primary_label}
+              <Link to={currentSlide.buttonHref}>
+                <Button className="h-11 px-6 rounded-full bg-[#35524A] hover:bg-[#253B35] text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
+                  {currentSlide.buttonText}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
@@ -126,30 +137,33 @@ export function HeroSlider() {
         </AnimatePresence>
       </div>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Controls */}
       <button
-        onClick={() => setIndex((i) => (i - 1 + LOCAL_SLIDES.length) % LOCAL_SLIDES.length)}
+        onClick={() => setCurrentIndex((prev) => (prev - 1 + SECONDARY_SLIDES.length) % SECONDARY_SLIDES.length)}
         className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        aria-label="Previous slide"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
 
       <button
-        onClick={() => setIndex((i) => (i + 1) % LOCAL_SLIDES.length)}
+        onClick={() => setCurrentIndex((prev) => (prev + 1) % SECONDARY_SLIDES.length)}
         className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        aria-label="Next slide"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
 
       {/* Pagination Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-        {LOCAL_SLIDES.map((_, i) => (
+        {SECONDARY_SLIDES.map((_, idx) => (
           <button
-            key={i}
-            onClick={() => setIndex(i)}
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
             className={`h-2 rounded-full transition-all duration-300 ${
-              i === index ? 'w-8 bg-[#2D4A43]' : 'w-2 bg-slate-300'
+              currentIndex === idx ? 'w-7 bg-[#35524A]' : 'w-2 bg-slate-400/60'
             }`}
+            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
@@ -157,4 +171,4 @@ export function HeroSlider() {
   );
 }
 
-export default HeroSlider;
+export default SecondarySlider;
