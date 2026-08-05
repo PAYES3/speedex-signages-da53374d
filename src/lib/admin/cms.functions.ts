@@ -236,7 +236,7 @@ export const restoreVersion = createServerFn({ method: 'POST' })
     if (error || !v) throw new Error('Version not found');
     const table = RESTORE_TABLES[(v as any).entity_type];
     if (!table) throw new Error('This item cannot be restored automatically');
-    const { error: upErr } = await context.supabase.from(table).upsert((v as any).payload);
+    const { error: upErr } = await (context.supabase as any).from(table).upsert((v as any).payload);
     if (upErr) throw new Error(upErr.message);
     return { ok: true };
   });
