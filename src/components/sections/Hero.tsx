@@ -47,8 +47,9 @@ export function Hero({
   }, [src]);
 
   return (
-    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-black flex items-center">
-      {/* Background video — normal original clarity */}
+    // Background color completely removed (bg-transparent)
+    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-transparent flex items-center">
+      {/* Original clear video without washed-out filters */}
       <div className="absolute inset-0 -z-10">
         <video
           ref={videoRef}
@@ -61,12 +62,11 @@ export function Hero({
           playsInline
           preload="metadata"
           onCanPlay={() => setReady(true)}
-          className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${ready ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${
+            ready ? 'opacity-100' : 'opacity-0'
+          }`}
         />
       </div>
-
-      {/* Optional: Mild dark overlay if text visibility needs a boost */}
-      <div className="absolute inset-0 -z-10 bg-black/30 pointer-events-none" />
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <motion.div
@@ -75,25 +75,29 @@ export function Hero({
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl"
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-primary border border-primary/15 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+          {/* Badge using Speedex Brand Teal */}
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#1E3E37]/10 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#1E3E37] border border-[#1E3E37]/20 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#1E3E37]" />
             {eyebrow || 'Premium signage · United Arab Emirates'}
           </span>
 
-          <h1 className="mt-6 font-extrabold text-foreground leading-[1.05] tracking-tight">
+          {/* Heading */}
+          <h1 className="mt-6 font-extrabold text-[#142C27] leading-[1.05] tracking-tight text-4xl sm:text-6xl">
             {title || 'Transforming ideas into powerful visual identities'}
           </h1>
 
-          <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+          {/* Subtitle */}
+          <p className="mt-6 text-lg sm:text-xl text-[#2D6A5E] max-w-2xl leading-relaxed font-medium">
             {subtitle ||
               'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.'}
           </p>
 
+          {/* Action Buttons with Logo Brand Palette */}
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <Link to={(primaryHref as string) || '/contact'}>
               <Button
                 size="lg"
-                className="h-14 px-8 rounded-full text-base font-semibold shadow-[var(--shadow-glow)] hover:-translate-y-0.5 transition-transform"
+                className="h-14 px-8 rounded-full text-base font-semibold bg-[#1E3E37] hover:bg-[#142C27] text-white shadow-lg transition-all hover:-translate-y-0.5"
               >
                 {primaryLabel || 'Get a free quote'}
                 <ArrowRight className="ml-2 w-5 h-5" />
@@ -104,7 +108,7 @@ export function Hero({
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-foreground/15 bg-white/85 backdrop-blur hover:bg-white"
+                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-[#1E3E37]/20 text-[#1E3E37] bg-white/90 backdrop-blur hover:bg-[#1E3E37] hover:text-white transition-all"
               >
                 Explore our companies
               </Button>
@@ -112,7 +116,7 @@ export function Hero({
 
             <Link
               to="/portfolio"
-              className="inline-flex items-center gap-2 text-base font-semibold text-foreground/80 hover:text-primary transition-colors"
+              className="inline-flex items-center gap-2 text-base font-semibold text-[#1E3E37] hover:text-[#2D6A5E] transition-colors"
             >
               <PlayCircle className="w-5 h-5" /> View our projects
             </Link>
