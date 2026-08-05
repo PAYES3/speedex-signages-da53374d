@@ -169,6 +169,90 @@ export type Database = {
         }
         Relationships: []
       }
+      content_versions: {
+        Row: {
+          author_id: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          label: string
+          payload: Json
+        }
+        Insert: {
+          author_id?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          label?: string
+          payload?: Json
+        }
+        Update: {
+          author_id?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          label?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
+      hero_slides: {
+        Row: {
+          active: boolean
+          created_at: string
+          cta_primary_href: string
+          cta_primary_label: string
+          cta_secondary_href: string
+          cta_secondary_label: string
+          description: string
+          id: string
+          media_type: string
+          media_url: string
+          poster_url: string | null
+          sort_order: number
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          cta_primary_href?: string
+          cta_primary_label?: string
+          cta_secondary_href?: string
+          cta_secondary_label?: string
+          description?: string
+          id?: string
+          media_type?: string
+          media_url?: string
+          poster_url?: string | null
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          cta_primary_href?: string
+          cta_primary_label?: string
+          cta_secondary_href?: string
+          cta_secondary_label?: string
+          description?: string
+          id?: string
+          media_type?: string
+          media_url?: string
+          poster_url?: string | null
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           cover_letter: string | null
@@ -204,43 +288,64 @@ export type Database = {
       }
       media_assets: {
         Row: {
+          active: boolean
           alt: string
           created_at: string
+          description: string
+          duplicated_from: string | null
           folder: string
           height: number | null
+          hidden: boolean
           id: string
           mime_type: string
           name: string
           path: string
           size_bytes: number
+          sort_order: number
+          thumbnail_url: string | null
+          title: string
           updated_at: string
           url: string
           width: number | null
         }
         Insert: {
+          active?: boolean
           alt?: string
           created_at?: string
+          description?: string
+          duplicated_from?: string | null
           folder?: string
           height?: number | null
+          hidden?: boolean
           id?: string
           mime_type?: string
           name: string
           path: string
           size_bytes?: number
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
           updated_at?: string
           url: string
           width?: number | null
         }
         Update: {
+          active?: boolean
           alt?: string
           created_at?: string
+          description?: string
+          duplicated_from?: string | null
           folder?: string
           height?: number | null
+          hidden?: boolean
           id?: string
           mime_type?: string
           name?: string
           path?: string
           size_bytes?: number
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
           updated_at?: string
           url?: string
           width?: number | null
@@ -253,6 +358,8 @@ export type Database = {
           id: string
           key: string
           page: string
+          publish_at: string | null
+          status: string
           updated_at: string
           value: string
         }
@@ -261,6 +368,8 @@ export type Database = {
           id?: string
           key: string
           page: string
+          publish_at?: string | null
+          status?: string
           updated_at?: string
           value?: string
         }
@@ -269,8 +378,49 @@ export type Database = {
           id?: string
           key?: string
           page?: string
+          publish_at?: string | null
+          status?: string
           updated_at?: string
           value?: string
+        }
+        Relationships: []
+      }
+      page_sections: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          page: string
+          publish_at: string | null
+          section_type: string
+          sort_order: number
+          status: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          page?: string
+          publish_at?: string | null
+          section_type: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          page?: string
+          publish_at?: string | null
+          section_type?: string
+          sort_order?: number
+          status?: string
+          updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }
@@ -513,6 +663,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_manage_content: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
