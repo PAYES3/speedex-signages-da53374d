@@ -33,7 +33,6 @@ export function Hero({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
-  // Pick one of the 5 cinematic clips at random on each page load.
   const randomClip = useMemo(
     () => HERO_VIDEOS[Math.floor(Math.random() * HERO_VIDEOS.length)],
     [],
@@ -48,8 +47,8 @@ export function Hero({
   }, [src]);
 
   return (
-    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-white flex items-center">
-      {/* Background video — bright, high exposure */}
+    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-black flex items-center">
+      {/* Background video — normal original clarity */}
       <div className="absolute inset-0 -z-10">
         <video
           ref={videoRef}
@@ -63,13 +62,11 @@ export function Hero({
           preload="metadata"
           onCanPlay={() => setReady(true)}
           className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${ready ? 'opacity-100' : 'opacity-0'}`}
-          style={{ filter: 'brightness(1.28) contrast(0.92) saturate(1.05)' }}
         />
       </div>
 
-      {/* Soft white overlays keep the frame bright while protecting text contrast */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-white/92 via-white/72 to-white/25 pointer-events-none" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-white via-white/20 to-white/45 pointer-events-none" />
+      {/* Optional: Mild dark overlay if text visibility needs a boost */}
+      <div className="absolute inset-0 -z-10 bg-black/30 pointer-events-none" />
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <motion.div
