@@ -66,7 +66,7 @@ export function Hero({
           }`}
         />
         {/* Dark Gradient Overlay: Video theriya thadukkaamal text clear-ah theriya idhu udhavum */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+        
       </div>
 
       {/* Content Layer (z-10 added to stay on top) */}
