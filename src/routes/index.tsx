@@ -1,27 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { Hero } from '@/components/sections/Hero';
-import { Stats } from '@/components/sections/Stats';
-import { CustomerFeedback } from '@/components/sections/CustomerFeedback';
-import { ClientLogos } from '@/components/sections/ClientLogos';
-import { FAQ } from '@/components/sections/FAQ';
-import { CTABanner } from '@/components/sections/CTABanner';
-import { OurCompanies } from '@/components/sections/OurCompanies';
-import { SeoContent } from '@/components/sections/SeoContent';
-import { Location } from '@/components/sections/Location';
-import { SignageShowcase } from '@/components/sections/SignageShowcase';
-import { ProcessVideo } from '@/components/sections/ProcessVideo';
-import { WhyChoose } from '@/components/sections/WhyChoose';
-import { BeforeAfter } from '@/components/sections/BeforeAfter';
-import { ProcessTimeline } from '@/components/sections/ProcessTimeline';
-import { FactoryShowcase } from '@/components/sections/FactoryShowcase';
-import { Reveal } from '@/components/Reveal';
-import { SERVICES, PROJECTS, FAQ as FAQ_DATA } from '@/lib/site-data';
-import { ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { publicGetSettings } from '@/lib/admin/content.functions';
-import { usePageContent } from '@/hooks/usePageContent';
+import { publicListSections } from '@/lib/admin/cms.functions';
+import { SectionRenderer, type SectionRow } from '@/components/sections/SectionRenderer';
+import { DEFAULT_HOME_ORDER } from '@/lib/cms/section-types';
+import { FAQ as FAQ_DATA } from '@/lib/site-data';
 
 export const Route = createFileRoute('/')({
   head: () => ({
@@ -32,19 +15,17 @@ export const Route = createFileRoute('/')({
       { property: 'og:description', content: 'Premium signage manufacturing, fabrication and installation across the United Arab Emirates.' },
       { property: 'og:url', content: '/' },
     ],
-    links: [
-      { rel: 'canonical', href: '/' },
-    ],
+    links: [{ rel: 'canonical', href: '/' }],
     scripts: [
       {
         type: 'application/ld+json',
         children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
           mainEntity: FAQ_DATA.map((f) => ({
-            "@type": "Question",
+            '@type': 'Question',
             name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
+            acceptedAnswer: { '@type': 'Answer', text: f.a },
           })),
         }),
       },
@@ -54,100 +35,26 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
-  const getSettings = useServerFn(publicGetSettings);
-  const { data: settings } = useQuery({ queryKey: ['site-settings'], queryFn: () => getSettings() });
-  const s = (settings ?? {}) as Record<string, string>;
-  const hero = usePageContent('home_hero');
-  const svc = usePageContent('home_services');
-  const proj = usePageContent('home_projects');
+  const fetcher = useServerFn(publicListSections);
+  const { data } = useQuery({
+    queryKey: ['page-sections', 'home'],
+    queryFn: () => fetcher({ data: { page: 'home' } }),
+    staleTime: 15_000,
+  });
+
+  const rows = (data ?? []) as SectionRow[];
+
+  // Until the Homepage Builder has been saved for the first time, fall back to
+  // the standard section order so the site is never empty.
+  const sections: SectionRow[] = rows.length
+    ? rows
+    : DEFAULT_HOME_ORDER.map((type) => ({ id: type, section_type: type, data: {} }));
+
   return (
     <>
-      <Hero
-        videoUrl={hero('video_url', s.hero_video_url)}
-        posterUrl={hero('poster_url', s.hero_poster_url)}
-        eyebrow={hero('eyebrow')}
-        title={hero('title')}
-        subtitle={hero('subtitle')}
-        primaryLabel={hero('cta_label')}
-        primaryHref={hero('cta_href')}
-      />
-      <ClientLogos />
-      <SignageShowcase />
-      <section className="py-24 lg:py-32 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="text-center max-w-3xl mx-auto mb-16">
-              <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">{svc('eyebrow', 'What we do')}</p>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight leading-[1.05]">{svc('title', 'A full-service signage partner')}</h2>
-              <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed">{svc('subtitle', 'From concept and design to fabrication, installation and maintenance — all under one roof.')}</p>
-            </div>
-          </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-            {SERVICES.slice(0, 6).map((s, i) => (
-              <Reveal key={s.title} direction="up" delay={i * 0.08}>
-                <div className="group glass-panel p-8 hover-glow h-full">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 grid place-items-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <s.icon className="w-7 h-7" strokeWidth={1.75} />
-                  </div>
-                  <h3 className="mt-5 text-2xl font-bold">{s.title}</h3>
-                  <p className="mt-3 text-base text-muted-foreground leading-relaxed">{s.desc}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-          <div className="text-center mt-12">
-            <Link to="/services"><Button variant="outline" size="lg" className="rounded-full border-2"> {svc('cta_label','View all services')} <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
-          </div>
-        </div>
-      </section>
-
-      <BeforeAfter />
-      <ProcessTimeline />
-      <FactoryShowcase />
-      <WhyChoose />
-      <Stats />
-      <ProcessVideo />
-
-      <section className="py-24 lg:py-32 bg-[color:var(--surface-gray)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-              <div>
-                <p className="text-primary text-sm font-semibold uppercase tracking-[0.25em]">{proj('eyebrow', 'Recent work')}</p>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight">{proj('title', 'Featured projects')}</h2>
-              </div>
-              <Link to="/explore"><Button variant="outline" size="lg" className="rounded-full border-2"> {proj('cta_label','Explore all')} <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
-            </div>
-          </Reveal>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROJECTS.slice(0, 6).map((p, i) => (
-              <Reveal key={p.id} direction="up" delay={i * 0.05}>
-                <Link to="/explore" className="group block relative overflow-hidden rounded-2xl aspect-[4/3] bg-muted shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all">
-                  <img src={p.img} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <p className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">{p.category}</p>
-                    <h3 className="font-bold text-xl mt-2">{p.title}</h3>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <SeoContent />
-      <CustomerFeedback />
-      <OurCompanies />
-      <Location
-        address={s.office_address}
-        phone={s.contact_phone}
-        email={s.contact_email}
-        mapsEmbedUrl={s.maps_embed_url}
-        mapsDirectionsUrl={s.maps_directions_url || 'https://www.google.com/maps/place/Speedex+Auto+Workshop+L.L.C/@24.3564359,54.4925938,514m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3e5e4195316879d7:0xd4cfbd6175b97d6c!8m2!3d24.3564342!4d54.4935042'}
-      />
-      <FAQ />
-      <CTABanner />
+      {sections.map((s) => (
+        <SectionRenderer key={s.id} section={s} />
+      ))}
     </>
   );
 }
