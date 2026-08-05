@@ -5,7 +5,7 @@ import { ArrowRight, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
-import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
+import hero3 from '@/assets/hero/hero-4.mp4.asset.json';
 import hero4 from '@/assets/hero/hero-4.mp4.asset.json';
 import hero5 from '@/assets/hero/hero-5.mp4.asset.json';
 
@@ -47,10 +47,9 @@ export function Hero({
   }, [src]);
 
   return (
-    // Background color completely removed (bg-transparent)
-    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-transparent flex items-center">
-      {/* Original clear video without washed-out filters */}
-      <div className="absolute inset-0 -z-10">
+    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-black flex items-center">
+      {/* Background Video Layer */}
+      <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
           key={src}
@@ -60,44 +59,47 @@ export function Hero({
           loop
           muted
           playsInline
-          preload="metadata"
-          onCanPlay={() => setReady(true)}
-          className={`w-full h-full object-cover object-center transition-opacity duration-1000 ${
-            ready ? 'opacity-100' : 'opacity-0'
+          preload="auto"
+          onLoadedData={() => setReady(true)}
+          className={`w-full h-full object-cover object-center transition-opacity duration-700 ${
+            ready ? 'opacity-100' : 'opacity-70'
           }`}
         />
+        {/* Dark Gradient Overlay: Video theriya thadukkaamal text clear-ah theriya idhu udhavum */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none" />
       </div>
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+      {/* Content Layer (z-10 added to stay on top) */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl"
         >
-          {/* Badge using Speedex Brand Teal */}
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#1E3E37]/10 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#1E3E37] border border-[#1E3E37]/20 shadow-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#1E3E37]" />
+          {/* Badge using primary theme token */}
+          <span className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-primary border border-primary/20 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
             {eyebrow || 'Premium signage · United Arab Emirates'}
           </span>
 
-          {/* Heading */}
-          <h1 className="mt-6 font-extrabold text-[#142C27] leading-[1.05] tracking-tight text-4xl sm:text-6xl">
+          {/* Heading using theme foreground token */}
+          <h1 className="mt-6 font-extrabold text-foreground leading-[1.05] tracking-tight text-4xl sm:text-6xl">
             {title || 'Transforming ideas into powerful visual identities'}
           </h1>
 
-          {/* Subtitle */}
-          <p className="mt-6 text-lg sm:text-xl text-[#2D6A5E] max-w-2xl leading-relaxed font-medium">
+          {/* Subtitle using muted foreground token */}
+          <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed font-medium">
             {subtitle ||
               'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.'}
           </p>
 
-          {/* Action Buttons with Logo Brand Palette */}
+          {/* Action Buttons */}
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <Link to={(primaryHref as string) || '/contact'}>
               <Button
                 size="lg"
-                className="h-14 px-8 rounded-full text-base font-semibold bg-[#1E3E37] hover:bg-[#142C27] text-white shadow-lg transition-all hover:-translate-y-0.5"
+                className="h-14 px-8 rounded-full text-base font-semibold bg-primary text-primary-foreground hover-glow hover:bg-primary/90 transition-all"
               >
                 {primaryLabel || 'Get a free quote'}
                 <ArrowRight className="ml-2 w-5 h-5" />
@@ -108,7 +110,7 @@ export function Hero({
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-[#1E3E37]/20 text-[#1E3E37] bg-white/90 backdrop-blur hover:bg-[#1E3E37] hover:text-white transition-all"
+                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-border glass hover:bg-primary hover:text-primary-foreground transition-all"
               >
                 Explore our companies
               </Button>
@@ -116,7 +118,7 @@ export function Hero({
 
             <Link
               to="/portfolio"
-              className="inline-flex items-center gap-2 text-base font-semibold text-[#1E3E37] hover:text-[#2D6A5E] transition-colors"
+              className="inline-flex items-center gap-2 text-base font-semibold text-primary hover:text-primary/80 transition-colors"
             >
               <PlayCircle className="w-5 h-5" /> View our projects
             </Link>
@@ -128,4 +130,3 @@ export function Hero({
 }
 
 export default Hero;
-
