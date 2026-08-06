@@ -74,25 +74,24 @@ export function HeroSlider() {
   if (!current) return null;
 
   return (
-    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-white flex items-center">
+    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-black flex items-center">
       <div className="absolute inset-0 -z-10">
-        {current.media_type === 'image' ? (
-          <img src={current.media_url} alt={current.title} className="w-full h-full object-cover" />
-        ) : (
-          <video
-            ref={videoRef}
-            key={current.media_url}
-            src={current.media_url}
-            poster={current.poster_url || undefined}
-            autoPlay loop muted playsInline preload="metadata"
-            className="w-full h-full object-cover object-center"
-            style={{ filter: 'brightness(1.28) contrast(0.92) saturate(1.05)' }}
-          />
-        )}
+        {current.media_type === 'image' ? (
+          <img src={current.media_url} alt={current.title} className="w-full h-full object-cover" />
+        ) : (
+          <video
+            ref={videoRef}
+            key={current.media_url}
+            src={current.media_url}
+            poster={current.poster_url || undefined}
+            autoPlay loop muted playsInline preload="metadata"
+            className="w-full h-full object-cover object-center"
+          />
+        )}
       </div>
 
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-white/92 via-white/72 to-white/25 pointer-events-none" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-white via-white/20 to-white/45 pointer-events-none" />
+      {/* Single soft scrim for text legibility only — the video stays fully visible */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/65 via-black/35 to-transparent pointer-events-none" />
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
         <AnimatePresence mode="wait">
@@ -104,18 +103,18 @@ export function HeroSlider() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl"
           >
-            {current.subtitle && (
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-primary border border-primary/15 shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            {current.subtitle && (
+              <span className="inline-flex items-center gap-2 rounded-full bg-black/40 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white border border-white/25 shadow-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 {current.subtitle}
               </span>
             )}
 
-            <h1 className="mt-6 font-extrabold text-foreground leading-[1.05] tracking-tight">{current.title}</h1>
+            <h1 className="mt-6 font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">{current.title}</h1>
 
-            {current.description && (
-              <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">{current.description}</p>
-            )}
+            {current.description && (
+              <p className="mt-6 text-lg sm:text-xl text-white/85 max-w-2xl leading-relaxed">{current.description}</p>
+            )}
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
               {current.cta_primary_label && (
@@ -127,12 +126,12 @@ export function HeroSlider() {
               )}
               {current.cta_secondary_label && (
                 <Link to={current.cta_secondary_href || '/companies'}>
-                  <Button size="lg" variant="outline" className="h-14 px-8 rounded-full text-base font-semibold border-2 border-foreground/15 bg-white/85 backdrop-blur hover:bg-white">
+                  <Button size="lg" variant="outline" className="h-14 px-8 rounded-full text-base font-semibold border-2 border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:text-white">
                     {current.cta_secondary_label}
                   </Button>
                 </Link>
               )}
-              <Link to="/portfolio" className="inline-flex items-center gap-2 text-base font-semibold text-foreground/80 hover:text-primary transition-colors">
+              <Link to="/portfolio" className="inline-flex items-center gap-2 text-base font-semibold text-white/85 hover:text-white transition-colors">
                 <PlayCircle className="w-5 h-5" /> View our projects
               </Link>
             </div>
@@ -141,18 +140,18 @@ export function HeroSlider() {
 
         {slides.length > 1 && (
           <div className="mt-12 flex items-center gap-3">
-            <button aria-label="Previous slide" onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
-              className="w-11 h-11 rounded-full bg-white/85 border border-border grid place-items-center hover:bg-white">
+            <button aria-label="Previous slide" onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
+              className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <button aria-label="Next slide" onClick={() => setIndex((i) => (i + 1) % slides.length)}
-              className="w-11 h-11 rounded-full bg-white/85 border border-border grid place-items-center hover:bg-white">
+            <button aria-label="Next slide" onClick={() => setIndex((i) => (i + 1) % slides.length)}
+              className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
               <ChevronRight className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-2 ml-2">
               {slides.map((s, i) => (
                 <button key={s.id} aria-label={`Go to slide ${i + 1}`} onClick={() => setIndex(i)}
-                  className={`h-1.5 rounded-full transition-all ${i === index ? 'w-8 bg-primary' : 'w-3 bg-foreground/25'}`} />
+                  className={`h-1.5 rounded-full transition-all ${i === index ? 'w-8 bg-primary' : 'w-3 bg-white/45'}`} />
               ))}
             </div>
           </div>
