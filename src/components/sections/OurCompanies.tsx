@@ -12,6 +12,14 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import SIGNAGE from '@/assets/hero/SIGNAGE-4.jpg';
+import ARABSAT from '@/assets/hero/ARAB-2.jpg';
+import EFC from '@/assets/hero/EXL-FC-4.jpg';
+
+import FCM from '@/assets/hero/FC-M-4.jpg';
+
+import WORKSHOP from '@/assets/hero/WRKSHP-2.png';
+
 interface Company {
   id: string;
   name: string;
@@ -27,11 +35,12 @@ const ALL_COMPANIES: Company[] = [
   {
     id: "1",
     name: "Speedex Signages",
+    image: SIGNAGE,
     slug: "speedex-signages",
     tagline: "LED, Acrylic & 3D Signage",
     description: "Premier signage manufacturing, LED display solutions, acrylic fabrication, 3D signboards and vehicle branding across UAE.",
     logo_url: "/assets/logos/Speedex Signages LOGO_page-0001.jpg",
-    bg_url: "https://images.unsplash.com/photo-1542744094-3a31b272c490?auto=format&fit=crop&w=1200&q=80",
+    //bg_url: "https://images.unsplash.com/photo-1542744094-3a31b272c490?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "2",
@@ -45,29 +54,32 @@ const ALL_COMPANIES: Company[] = [
   {
     id: "3",
     name: "Speedex Facility Management",
+    image: FCM,
     slug: "speedex-facility-management",
     tagline: "Building Maintenance",
     description: "Professional building maintenance, cleaning, MEP and complete facility management services.",
     logo_url: "/assets/logos/Facility management logo_page-0001.jpg",
-    bg_url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80",
+    //bg_url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "4",
     name: "Speedex Auto Workshop",
+    image: WORKSHOP,
     slug: "speedex-workshop",
     tagline: "Auto Repair Experts",
     description: "Mechanical repairs, diagnostics, engine rebuilding, painting and complete automotive care.",
     logo_url: "/assets/logos/workshop logo ( updated )_page-0001.jpg",
-    bg_url: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80",
+    //bg_url: "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "5",
     name: "Excellent Field Contracting",
+    image: EFC,
     slug: "excellent-field-contracting",
     tagline: "Civil & Interior",
     description: "Civil contracting, fit-out works, renovation and commercial construction solutions.",
-    logo_url: "/assets/logos/Excellent Feild contract_page-0001.jpg",
-    bg_url: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=1200&q=80",
+    logo_url: "/assets/logos/Excellent Field contract_page-0001.jpg",
+    //bg_url: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=1200&q=80",
   },
   {
     id: "6",
@@ -81,11 +93,12 @@ const ALL_COMPANIES: Company[] = [
   {
     id: "7",
     name: "Arabsat Transport",
+    image: ARABSAT,
     slug: "arabsat",
     tagline: "Passenger Transport",
     description: "Luxury buses, staff transportation, labour transport and airport transfer solutions.",
     logo_url: "/assets/logos/ARABSAT LOGO_page-0001.jpg",
-    bg_url: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1200&q=80",
+    //bg_url: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
