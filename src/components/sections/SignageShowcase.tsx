@@ -3,12 +3,16 @@ import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SIGNAGE1 from '@/assets/hero/SIGNAGE-1.jpg';
+import SIGNAGE2 from '@/assets/hero/SIGNAGE-2.jpg';
+import SIGNAGE3 from '@/assets/hero/SIGNAGE-3.jpg';
+import SIGNAGE5 from '@/assets/hero/SIGNAGE-5-(BASCOM).jpg';
 
 // Direct path rendering (Prevents Vite import bundle crashes)
 const SECONDARY_SLIDES = [
   {
     id: 1,
-    image: '/src/assets/hero/SIGNAGE-1.jpg',
+    image: SIGNAGE1,
     badge: 'INDOOR & 3D SIGNAGE',
     title: 'Precision 3D Acrylic & Metallic Letters',
     subtitle: 'Premium LED illuminated logo displays designed and fabricated for high-end retail.',
@@ -17,7 +21,7 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 2,
-    image: '/src/assets/hero/SIGNAGE-2.jpg',
+    image: SIGNAGE2,
     badge: 'OUTDOOR & ARCHITECTURAL',
     title: 'Building & Exterior Signages',
     subtitle: 'High-visibility architectural signages engineered for corporate environments across the UAE.',
@@ -26,7 +30,7 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 3,
-    image: '/src/assets/hero/SIGNAGE-3.jpg',
+    image: SIGNAGE3,
     badge: 'COMMERCIAL BRANDING',
     title: 'Corporate Retail & Reception Displays',
     subtitle: 'Custom indoor branding and illuminated displays crafted with high precision.',
@@ -35,7 +39,7 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 4,
-    image: '/src/assets/hero/SIGNAGE-5-(BASCOM).jpg',
+    image: SIGNAGE5,
     badge: 'FLEET GRAPHICS',
     title: 'Custom Commercial Fleet Branding',
     subtitle: 'Transform commercial vehicles into mobile brand assets with durable wraps.',
