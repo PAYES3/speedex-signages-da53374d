@@ -1,6 +1,6 @@
 import { HeroSlider } from './HeroSlider';
 import { ClientLogos } from './ClientLogos';
-import { SignageShowcase } from './SignageShowcase';
+import SignageShowcase from './SignageShowcase';
 import { ServicesSection } from './ServicesSection';
 import { ProjectsSection } from './ProjectsSection';
 import { AboutSection } from './AboutSection';
