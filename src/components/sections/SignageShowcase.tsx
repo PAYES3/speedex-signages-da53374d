@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import SIGNAGE1 from '@/assets/hero/SIGNAGE-1.jpg';
-import SIGNAGE2 from '@/assets/hero/SIGNAGE-2.jpg';
-import SIGNAGE3 from '@/assets/hero/SIGNAGE-3.jpg';
-import SIGNAGE5 from '@/assets/hero/SIGNAGE-5-(BASCOM).jpg';
 
-// Direct path rendering (Prevents Vite import bundle crashes)
+const SLIDE_MS = 6000;
+
 const SECONDARY_SLIDES = [
   {
     id: 1,
-    image: SIGNAGE1,
+    image: '/images/showcase/signage-1.jpg',
     badge: 'INDOOR & 3D SIGNAGE',
     title: 'Precision 3D Acrylic & Metallic Letters',
     subtitle: 'Premium LED illuminated logo displays designed and fabricated for high-end retail.',
@@ -21,7 +18,7 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 2,
-    image: SIGNAGE2,
+    image: '/images/showcase/signage-2.jpg',
     badge: 'OUTDOOR & ARCHITECTURAL',
     title: 'Building & Exterior Signages',
     subtitle: 'High-visibility architectural signages engineered for corporate environments across the UAE.',
@@ -30,7 +27,7 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 3,
-    image: SIGNAGE3,
+    image: '/images/showcase/signage-3.jpg',
     badge: 'COMMERCIAL BRANDING',
     title: 'Corporate Retail & Reception Displays',
     subtitle: 'Custom indoor branding and illuminated displays crafted with high precision.',
@@ -39,7 +36,16 @@ const SECONDARY_SLIDES = [
   },
   {
     id: 4,
-    image: SIGNAGE5,
+    image: '/images/showcase/signage-4.jpg',
+    badge: 'WAYFINDING & PYLONS',
+    title: 'Pylon, Wayfinding & Directory Signage',
+    subtitle: 'Durable illuminated pylons and wayfinding systems built for malls, clinics and campuses.',
+    buttonText: 'Our Services',
+    buttonHref: '/services',
+  },
+  {
+    id: 5,
+    image: '/images/showcase/signage-5.jpg',
     badge: 'FLEET GRAPHICS',
     title: 'Custom Commercial Fleet Branding',
     subtitle: 'Transform commercial vehicles into mobile brand assets with durable wraps.',
@@ -51,18 +57,22 @@ const SECONDARY_SLIDES = [
 export function SecondarySlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % SECONDARY_SLIDES.length);
-    }, 5000);
-    return () => clearInterval(timer);
+  const goTo = useCallback((i: number) => {
+    setCurrentIndex(((i % SECONDARY_SLIDES.length) + SECONDARY_SLIDES.length) % SECONDARY_SLIDES.length);
   }, []);
+
+  // Single timer, restarted whenever the index changes (auto or manual)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % SECONDARY_SLIDES.length);
+    }, SLIDE_MS);
+    return () => clearTimeout(timer);
+  }, [currentIndex]);
 
   const currentSlide = SECONDARY_SLIDES[currentIndex];
 
   return (
-    <section className="relative w-full h-[600px] overflow-hidden bg-slate-100 flex items-center my-6">
-      {/* Background Image */}
+    <section className="relative w-full h-[600px] overflow-hidden bg-black flex items-center my-6">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide.id}
@@ -75,13 +85,13 @@ export function SecondarySlider() {
           <img
             src={currentSlide.image}
             alt={currentSlide.title}
+            loading={currentSlide.id === 1 ? 'eager' : 'lazy'}
+            decoding="async"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Card Overlay */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
@@ -96,17 +106,13 @@ export function SecondarySlider() {
               {currentSlide.badge}
             </span>
 
-            <h2 className="mt-4 text-2xl font-extrabold text-slate-900 leading-tight">
-              {currentSlide.title}
-            </h2>
+            <h2 className="mt-4 text-2xl font-extrabold text-slate-900 leading-tight">{currentSlide.title}</h2>
 
-            <p className="mt-3 text-sm text-slate-600 leading-relaxed font-medium">
-              {currentSlide.subtitle}
-            </p>
+            <p className="mt-3 text-sm text-slate-600 leading-relaxed font-medium">{currentSlide.subtitle}</p>
 
             <div className="mt-6">
               <Link to={currentSlide.buttonHref}>
-                <Button className="h-11 px-6 rounded-full bg-[#35524A] hover:bg-[#253B35] text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
+                <Button className="h-11 px-6 rounded-full bg-[#35524A] hover:bg-[#253B35] !text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
                   {currentSlide.buttonText}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -116,20 +122,32 @@ export function SecondarySlider() {
         </AnimatePresence>
       </div>
 
-      {/* Arrows */}
       <button
-        onClick={() => setCurrentIndex((prev) => (prev - 1 + SECONDARY_SLIDES.length) % SECONDARY_SLIDES.length)}
+        onClick={() => goTo(currentIndex - 1)}
+        aria-label="Previous slide"
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
 
       <button
-        onClick={() => setCurrentIndex((prev) => (prev + 1) % SECONDARY_SLIDES.length)}
+        onClick={() => goTo(currentIndex + 1)}
+        aria-label="Next slide"
         className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
+
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {SECONDARY_SLIDES.map((s, i) => (
+          <button
+            key={s.id}
+            onClick={() => goTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className={`h-2.5 rounded-full transition-all ${i === currentIndex ? 'w-8 bg-white' : 'w-2.5 bg-white/50 hover:bg-white/80'}`}
+          />
+        ))}
+      </div>
     </section>
   );
 }
