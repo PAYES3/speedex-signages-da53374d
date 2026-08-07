@@ -30,7 +30,7 @@ export function ProjectsSection({ data = {} }: { data?: Record<string, string> }
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mt-3 tracking-tight">{data.title || 'Featured projects'}</h2>
             </div>
             <Link to={(data.cta_href as any) || '/portfolio'}>
-              <Button variant="outline" size="lg" className="rounded-full border-2">
+              <Button size="lg" className="rounded-full border-2 border-primary bg-primary !text-white hover:bg-primary/90">
                 {data.cta_label || 'Explore all'} <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
