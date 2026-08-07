@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListHeroSlides } from '@/lib/admin/cms.functions';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
 import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
@@ -31,17 +32,19 @@ export type Slide = {
 export function HeroSlider() {
   const fetcher = useServerFn(publicListHeroSlides);
   const { data } = useQuery({ queryKey: ['hero-slides'], queryFn: () => fetcher(), staleTime: 30_000 });
+  const settings = useSiteSettings();
 
   const randomClip = useMemo(() => BUNDLED[Math.floor(Math.random() * BUNDLED.length)], []);
 
   const slides: Slide[] = useMemo(() => {
     const rows = (data ?? []) as Slide[];
     if (rows.length) return rows;
+    const cmsVideo = settings.hero_video_url?.trim();
     return [{
       id: 'default',
-      media_url: randomClip,
+      media_url: cmsVideo || randomClip,
       media_type: 'video',
-      poster_url: null,
+      poster_url: settings.hero_poster_url?.trim() || null,
       title: 'Transforming ideas into powerful visual identities',
       subtitle: 'Premium signage · United Arab Emirates',
       description: 'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.',
@@ -50,7 +53,7 @@ export function HeroSlider() {
       cta_secondary_label: 'Explore our companies',
       cta_secondary_href: '/companies',
     }];
-  }, [data, randomClip]);
+  }, [data, randomClip, settings.hero_video_url, settings.hero_poster_url]);
 
   const [index, setIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
