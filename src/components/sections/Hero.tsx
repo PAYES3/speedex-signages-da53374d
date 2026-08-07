@@ -110,7 +110,7 @@ export function Hero({
               <Button
                 size="lg"
                 variant="outline"
-                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-border glass hover:bg-primary hover:text-primary-foreground transition-all"
+                className="h-14 px-8 rounded-full text-base font-semibold border-2 border-primary bg-primary !text-white hover:bg-primary/90 transition-all"
               >
                 Explore our companies
               </Button>

@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -157,12 +158,18 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
+      {isAdmin ? (
         <Outlet />
-      </Layout>
+      ) : (
+        <Layout>
+          <Outlet />
+        </Layout>
+      )}
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
