@@ -271,6 +271,8 @@ const companySchema = z.object({
   description: z.string().trim().max(8000).default(''),
   services: z.array(z.string().trim().min(1).max(200)).default([]),
   hero_image: z.string().trim().max(1200).nullable().optional(),
+  logo_url: z.string().trim().max(1200).nullable().optional(),
+  banner_url: z.string().trim().max(1200).nullable().optional(),
   accent_color: z.string().trim().max(20).default('#F58220'),
   website_url: z.string().trim().max(800).nullable().optional(),
   sort_order: z.number().int().default(0),

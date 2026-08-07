@@ -32,6 +32,8 @@ type Company = {
   description: string;
   services: string[];
   hero_image: string | null;
+  logo_url: string | null;
+  banner_url: string | null;
   accent_color: string;
   website_url: string | null;
   sort_order: number;
@@ -45,6 +47,8 @@ const blank: Company = {
   description: '',
   services: [],
   hero_image: null,
+  logo_url: null,
+  banner_url: null,
   accent_color: '#F58220',
   website_url: null,
   sort_order: 0,
@@ -137,6 +141,58 @@ function AdminCompaniesPage() {
             <div className="flex items-end gap-2">
               <Switch checked={editing.active} onCheckedChange={(v) => setEditing({ ...editing, active: v })} />
               <Label>Active</Label>
+            </div>
+          </div>
+          <div>
+            <Label>Website URL</Label>
+            <Input
+              value={editing.website_url ?? ''}
+              placeholder="https://speedexsignages.ae"
+              onChange={(e) => setEditing({ ...editing, website_url: e.target.value.trim() || null })}
+              maxLength={800}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              If this starts with http:// or https://, the "Explore Company" button opens this website in a new tab. Leave empty to use the internal company page.
+            </p>
+          </div>
+          <div>
+            <Label>Logo</Label>
+            <div className="flex items-center gap-3 mt-1">
+              {editing.logo_url && (
+                <img src={editing.logo_url} alt="" className="h-16 w-16 object-contain rounded-md border border-border bg-white p-1" />
+              )}
+              <FileUpload
+                bucket="company-logos"
+                accept="image/*"
+                label={editing.logo_url ? 'Replace logo' : 'Upload logo'}
+                onUploaded={(files) => {
+                  const first = files[0];
+                  if (first) setEditing({ ...editing, logo_url: first.url });
+                }}
+              />
+              {editing.logo_url && (
+                <Button variant="ghost" size="sm" onClick={() => setEditing({ ...editing, logo_url: null })}>Remove</Button>
+              )}
+            </div>
+          </div>
+          <div>
+            <Label>Background image</Label>
+            <div className="flex items-center gap-3 mt-1">
+              {editing.banner_url && (
+                <img src={editing.banner_url} alt="" className="h-16 w-24 object-cover rounded-md border border-border" />
+              )}
+              <FileUpload
+                bucket="portfolio-media"
+                accept="image/*"
+                label={editing.banner_url ? 'Replace background' : 'Upload background'}
+                onUploaded={(files) => {
+                  const first = files[0];
+                  if (first) setEditing({ ...editing, banner_url: first.url });
+                }}
+              />
+              {editing.banner_url && (
+                <Button variant="ghost" size="sm" onClick={() => setEditing({ ...editing, banner_url: null })}>Remove</Button>
+              )}
             </div>
           </div>
           <div>
