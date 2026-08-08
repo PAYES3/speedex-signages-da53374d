@@ -43,7 +43,7 @@ export function SectionRenderer({ section }: { section: SectionRow }) {
     case 'about': return <AboutSection data={data} />;
     case 'services': return <ServicesSection data={data} />;
     case 'our_groups': return <OurGroupsBlock data={data} />;
-    case 'before_after': return <BeforeAfter />;
+    case 'before_after': return <BeforeAfter data={data} />;
     case 'process_timeline': return <ProcessTimeline />;
     case 'factory_showcase': return <FactoryShowcase />;
     case 'why_choose': return <WhyChoose />;
