@@ -80,20 +80,20 @@ export function OurCompanies() {
   const currentCompany = companies[Math.min(currentIndex, companies.length - 1)];
   if (!currentCompany) return null;
 
-  const background = currentCompany.image || currentCompany.bg_url || FALLBACK_BG;
+  const background = currentCompany.bg_url || currentCompany.image || FALLBACK_BG;
   const external = isExternal(currentCompany.website_url);
   const exploreHref = external ? currentCompany.website_url! : `/companies/${currentCompany.slug}`;
 
   return (
-    <section id="our-groups" className="relative overflow-hidden bg-background py-16 sm:py-24">
+    <section id="our-groups" className="relative overflow-hidden bg-background" style={{ paddingBlock: 'clamp(3rem, 7vw, 6rem)' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-14 max-w-3xl text-center">
+        <div className="mx-auto max-w-3xl text-center" style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-primary">
             <Sparkles className="h-4 w-4" />
             Speedex Group
           </div>
-          <h2 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl text-foreground">Our Companies</h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
+          <h2 className="mt-5 sm:mt-6 font-extrabold tracking-tight text-foreground" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>Our Companies</h2>
+          <p className="mt-4 text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.9rem, 1.6vw, 1.05rem)' }}>
             {companies.length} industry-leading entities delivering excellence across signage, automotive, facilities, contracting, trading, and transportation in the UAE.
           </p>
         </div>
@@ -119,16 +119,17 @@ export function OurCompanies() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="relative z-10 flex min-h-[520px] items-center">
-            <div className="max-w-xl px-6 py-10 sm:px-12">
+          <div className="relative z-10 flex items-center" style={{ minHeight: 'clamp(420px, 60svh, 560px)' }}>
+            <div className="w-full max-w-xl px-4 py-8 sm:px-12 sm:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl border border-black/5 bg-card/95 p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_60px_-40px_rgba(0,0,0,0.45)]"
+                className="rounded-2xl border border-black/5 bg-card/95 backdrop-blur-xl shadow-[0_30px_60px_-40px_rgba(0,0,0,0.45)]"
+                style={{ padding: 'clamp(1.15rem, 3vw, 2rem)' }}
               >
-                <div className="mb-6 flex h-24 items-center justify-center rounded-xl bg-background p-3 border border-border">
+                <div className="mb-4 sm:mb-6 flex items-center justify-center rounded-xl bg-background p-3 border border-border" style={{ height: 'clamp(4rem, 10vw, 6rem)' }}>
                   {currentCompany.logo_url && !logoFailed[currentCompany.id] ? (
                     <img
                       src={currentCompany.logo_url}
@@ -139,29 +140,29 @@ export function OurCompanies() {
                       onError={() => setLogoFailed((s) => ({ ...s, [currentCompany.id]: true }))}
                     />
                   ) : (
-                    <span className="grid h-16 w-16 place-items-center rounded-xl bg-primary text-xl font-extrabold text-primary-foreground">
+                    <span className="grid h-12 w-12 sm:h-16 sm:w-16 place-items-center rounded-xl bg-primary text-lg sm:text-xl font-extrabold text-primary-foreground">
                       {initials(currentCompany.name)}
                     </span>
                   )}
                 </div>
 
                 {currentCompany.tagline && (
-                  <div className="mb-3 inline-block rounded-lg bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                  <div className="mb-3 inline-block rounded-lg bg-primary/10 px-2.5 py-1 sm:px-3 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary">
                     {currentCompany.tagline}
                   </div>
                 )}
 
-                <h3 className="flex items-center gap-3 text-2xl sm:text-3xl font-extrabold text-foreground">
-                  <Building2 className="h-7 w-7 text-primary" />
-                  {currentCompany.name}
+                <h3 className="flex items-center gap-2 sm:gap-3 font-extrabold text-foreground" style={{ fontSize: 'clamp(1.25rem, 3.2vw, 1.875rem)' }}>
+                  <Building2 className="h-5 w-5 sm:h-7 sm:w-7 shrink-0 text-primary" />
+                  <span className="min-w-0">{currentCompany.name}</span>
                 </h3>
 
-                <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">{currentCompany.description}</p>
+                <p className="mt-3 text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1rem)' }}>{currentCompany.description}</p>
 
                 <a
                   href={exploreHref}
                   {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
+                  className="mt-5 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
                 >
                   Explore Company
                   <ArrowRight className="h-4 w-4" />
@@ -172,21 +173,21 @@ export function OurCompanies() {
 
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
+            className="absolute left-2 sm:left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
             aria-label="Previous Company"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
+            className="absolute right-2 sm:right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
             aria-label="Next Company"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
 
-          <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
             {companies.map((c, index) => (
               <button
                 key={c.id}

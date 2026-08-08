@@ -77,7 +77,10 @@ export function HeroSlider() {
   if (!current) return null;
 
   return (
-    <section className="relative isolate min-h-[92svh] w-full overflow-hidden bg-black flex items-center">
+    <section
+      className="relative isolate w-full overflow-hidden bg-black flex items-center"
+      style={{ minHeight: 'clamp(520px, 88svh, 900px)' }}
+    >
       <div className="absolute inset-0 -z-10">
         {current.media_type === 'image' ? (
           <img src={current.media_url} alt={current.title} className="w-full h-full object-cover" />
@@ -96,7 +99,10 @@ export function HeroSlider() {
       {/* Single soft scrim for text legibility only — the video stays fully visible */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/65 via-black/35 to-transparent pointer-events-none" />
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24">
+      <div
+        className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        style={{ paddingTop: 'clamp(6rem, 14vh, 9rem)', paddingBottom: 'clamp(3rem, 9vh, 6rem)' }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
@@ -107,42 +113,47 @@ export function HeroSlider() {
             className="max-w-3xl"
           >
             {current.subtitle && (
-              <span className="inline-flex items-center gap-2 rounded-full bg-black/40 backdrop-blur px-4 py-2 text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase text-white border border-white/25 shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full bg-black/40 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-bold tracking-[0.18em] sm:tracking-[0.25em] uppercase text-white border border-white/25 shadow-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                 {current.subtitle}
               </span>
             )}
 
-            <h1 className="mt-6 font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">{current.title}</h1>
+            <h1
+              className="mt-5 sm:mt-6 font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]"
+              style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
+            >
+              {current.title}
+            </h1>
 
             {current.description && (
-              <p className="mt-6 text-lg sm:text-xl text-white/85 max-w-2xl leading-relaxed">{current.description}</p>
+              <p className="mt-4 sm:mt-6 text-white/85 max-w-2xl leading-relaxed" style={{ fontSize: 'clamp(0.95rem, 1.9vw, 1.25rem)' }}>{current.description}</p>
             )}
 
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div className="mt-6 sm:mt-9 flex flex-wrap items-center gap-3 sm:gap-4">
               {current.cta_primary_label && (
                 <Link to={current.cta_primary_href || '/contact'}>
-                  <Button size="lg" className="h-14 px-8 rounded-full text-base font-semibold shadow-[var(--shadow-glow)] hover:-translate-y-0.5 transition-transform">
+                  <Button size="lg" className="h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-semibold shadow-[var(--shadow-glow)] hover:-translate-y-0.5 transition-transform">
                     {current.cta_primary_label} <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
               )}
               {current.cta_secondary_label && (
                 <Link to={current.cta_secondary_href || '/companies'}>
-                  <Button size="lg" variant="outline" className="h-14 px-8 rounded-full text-base font-semibold border-2 border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:text-white">
+                  <Button size="lg" variant="outline" className="h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-semibold border-2 border-white/40 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:text-white">
                     {current.cta_secondary_label}
                   </Button>
                 </Link>
               )}
-              <Link to="/portfolio" className="inline-flex items-center gap-2 text-base font-semibold text-white/85 hover:text-white transition-colors">
-                <PlayCircle className="w-5 h-5" /> View our projects
+              <Link to="/portfolio" className="inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white/85 hover:text-white transition-colors">
+                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> View our projects
               </Link>
             </div>
           </motion.div>
         </AnimatePresence>
 
         {slides.length > 1 && (
-          <div className="mt-12 flex items-center gap-3">
+          <div className="mt-8 sm:mt-12 flex items-center gap-3">
             <button aria-label="Previous slide" onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
               className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
               <ChevronLeft className="w-5 h-5" />

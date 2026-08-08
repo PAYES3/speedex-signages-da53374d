@@ -72,7 +72,10 @@ export function SecondarySlider() {
   const currentSlide = SECONDARY_SLIDES[currentIndex];
 
   return (
-    <section className="relative w-full h-[600px] overflow-hidden bg-black flex items-center my-6">
+    <section
+      className="relative w-full overflow-hidden bg-black flex items-center my-6"
+      style={{ minHeight: 'clamp(360px, 62svh, 600px)' }}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide.id}
@@ -92,7 +95,7 @@ export function SecondarySlider() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide.id}
@@ -100,19 +103,20 @@ export function SecondarySlider() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-md bg-white/95 backdrop-blur-md border border-white/80 p-8 rounded-3xl shadow-xl"
+            className="w-full max-w-[min(28rem,92%)] bg-white/95 backdrop-blur-md border border-white/80 rounded-2xl sm:rounded-3xl shadow-xl"
+            style={{ padding: 'clamp(1.25rem, 3vw, 2rem)' }}
           >
-            <span className="inline-block px-3 py-1 text-[11px] font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded-full border border-slate-200">
+            <span className="inline-block px-2.5 py-1 sm:px-3 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase bg-slate-100 text-slate-700 rounded-full border border-slate-200">
               {currentSlide.badge}
             </span>
 
-            <h2 className="mt-4 text-2xl font-extrabold text-slate-900 leading-tight">{currentSlide.title}</h2>
+            <h2 className="mt-3 sm:mt-4 font-extrabold text-slate-900 leading-tight" style={{ fontSize: 'clamp(1.15rem, 2.6vw, 1.6rem)' }}>{currentSlide.title}</h2>
 
-            <p className="mt-3 text-sm text-slate-600 leading-relaxed font-medium">{currentSlide.subtitle}</p>
+            <p className="mt-2 sm:mt-3 text-slate-600 leading-relaxed font-medium" style={{ fontSize: 'clamp(0.8rem, 1.5vw, 0.9rem)' }}>{currentSlide.subtitle}</p>
 
-            <div className="mt-6">
+            <div className="mt-4 sm:mt-6">
               <Link to={currentSlide.buttonHref}>
-                <Button className="h-11 px-6 rounded-full bg-[#35524A] hover:bg-[#253B35] !text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
+                <Button className="h-10 sm:h-11 px-5 sm:px-6 rounded-full bg-[#35524A] hover:bg-[#253B35] !text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
                   {currentSlide.buttonText}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -125,7 +129,7 @@ export function SecondarySlider() {
       <button
         onClick={() => goTo(currentIndex - 1)}
         aria-label="Previous slide"
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
@@ -133,12 +137,12 @@ export function SecondarySlider() {
       <button
         onClick={() => goTo(currentIndex + 1)}
         aria-label="Next slide"
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {SECONDARY_SLIDES.map((s, i) => (
           <button
             key={s.id}

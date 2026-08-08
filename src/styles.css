@@ -165,10 +165,12 @@
     -webkit-font-smoothing: antialiased;
     line-height: 1.7;
     font-size: 1.125rem;
+    overflow-x: clip;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5, h6 {

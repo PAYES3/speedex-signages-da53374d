@@ -73,7 +73,17 @@ export const SECTION_TYPES: SectionTypeDef[] = [
       { key: 'video_poster', label: 'Video poster image', kind: 'image' },
     ],
   },
-  { type: 'before_after', label: 'Before & After', description: 'Transformation slider.', fields: HEADING_FIELDS },
+  {
+    type: 'before_after',
+    label: 'Before & After',
+    description: 'Transformation slider.',
+    fields: [
+      ...HEADING_FIELDS,
+      { key: 'before_image', label: 'Before image', kind: 'image' },
+      { key: 'after_image', label: 'After image', kind: 'image' },
+      { key: 'image_label', label: 'Image caption', kind: 'text' },
+    ],
+  },
   { type: 'process_timeline', label: 'Process Timeline', description: 'Step-by-step delivery process.', fields: HEADING_FIELDS },
   { type: 'factory_showcase', label: 'Factory Showcase', description: 'In-house manufacturing highlights.', fields: HEADING_FIELDS },
   { type: 'why_choose', label: 'Why Choose Us', description: 'Reasons to pick Speedex.', fields: HEADING_FIELDS },
