@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS "Public can view media" ON public.media_assets;
+CREATE POLICY "Public can view visible media" ON public.media_assets FOR SELECT TO anon, authenticated USING (active = true AND hidden = false);
