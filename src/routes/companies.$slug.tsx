@@ -81,10 +81,11 @@ function CompanyDetailPage() {
         className="relative pt-32 pb-20 overflow-hidden text-white"
         style={{ background: `linear-gradient(135deg, ${accent}, color-mix(in oklab, ${accent} 30%, black))` }}
       >
-        {company.hero_image && (
+        {(company.banner_url || company.hero_image) && (
           <img 
-            src={company.hero_image} 
+            src={company.banner_url || company.hero_image} 
             alt={company.name} 
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover opacity-30 select-none pointer-events-none" 
           />
         )}

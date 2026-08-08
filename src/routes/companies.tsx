@@ -57,8 +57,8 @@ function CompaniesPage() {
                     className="aspect-[16/9] relative overflow-hidden"
                     style={{ background: `linear-gradient(135deg, ${c.accent_color}, color-mix(in oklab, ${c.accent_color} 30%, black))` }}
                   >
-                    {c.hero_image ? (
-                      <img src={c.hero_image} alt={c.name} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+                    {c.banner_url || c.hero_image ? (
+                      <img src={c.banner_url || c.hero_image} alt={c.name} className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async" />
                     ) : (
                       <div className="absolute inset-0 grid place-items-center text-white/90">
                         <span className="text-5xl font-bold tracking-tight">{initialsOf(c.name)}</span>
