@@ -83,7 +83,7 @@ function CompanyDetailPage() {
       >
         {(company.banner_url || company.hero_image) && (
           <img 
-            src={company.banner_url || company.hero_image} 
+            src={company.banner_url || company.hero_image || undefined} 
             alt={company.name} 
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover opacity-30 select-none pointer-events-none" 
