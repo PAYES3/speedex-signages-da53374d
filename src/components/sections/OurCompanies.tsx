@@ -6,6 +6,7 @@ import { useServerFn } from '@tanstack/react-start';
 import { publicListCompanies } from '@/lib/admin/content.functions';
 import { AdaptiveImage } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
+import { useLang } from '@/hooks/useLang';
 
 export interface Company {
   id: string;
@@ -64,6 +65,7 @@ export function OurCompanies() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [logoFailed, setLogoFailed] = useState<Record<string, boolean>>({});
   const vp = useViewport();
+  const { T, pick } = useLang();
 
   useEffect(() => { setCurrentIndex(0); }, [companies.length]);
 
@@ -93,9 +95,9 @@ export function OurCompanies() {
         <div className="mx-auto max-w-3xl text-center" style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-primary">
             <Sparkles className="h-4 w-4" />
-            Speedex Group
+            {T('companies.eyebrow', 'Speedex Group')}
           </div>
-          <h2 className="mt-5 sm:mt-6 font-extrabold tracking-tight text-foreground" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>Our Companies</h2>
+          <h2 className="mt-5 sm:mt-6 font-extrabold tracking-tight text-foreground" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>{T('companies.title', 'Our Companies')}</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.9rem, 1.6vw, 1.05rem)' }}>
             {companies.length} industry-leading entities delivering excellence across signage, automotive, facilities, contracting, trading, and transportation in the UAE.
           </p>
@@ -178,8 +180,8 @@ export function OurCompanies() {
                   {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
                   className="mt-5 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
                 >
-                  Explore Company
-                  <ArrowRight className="h-4 w-4" />
+                  {T('companies.explore', 'Explore Company')}
+                  <ArrowRight className="h-4 w-4 rtl-flip" />
                 </a>
               </motion.div>
             </div>
@@ -188,17 +190,17 @@ export function OurCompanies() {
           <button
             onClick={prevSlide}
             className="absolute left-2 sm:left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
-            aria-label="Previous Company"
+            aria-label={T('companies.prev', 'Previous Company')}
           >
-            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 rtl-flip" />
           </button>
 
           <button
             onClick={nextSlide}
             className="absolute right-2 sm:right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
-            aria-label="Next Company"
+            aria-label={T('companies.next', 'Next Company')}
           >
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 rtl-flip" />
           </button>
 
           <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
@@ -217,9 +219,9 @@ export function OurCompanies() {
           <div className="mx-auto mb-8 max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
               <Play className="h-3.5 w-3.5 fill-current" />
-              Corporate Showcase
+              {T('companies.showcase', 'Corporate Showcase')}
             </div>
-            <h3 className="mt-4 text-3xl font-bold text-foreground">Excellent Group of Companies</h3>
+            <h3 className="mt-4 text-3xl font-bold text-foreground">{T('companies.group', 'Excellent Group of Companies')}</h3>
           </div>
 
           <div className="mx-auto max-w-4xl rounded-2xl border border-border bg-card p-6 shadow-sm">
@@ -227,7 +229,7 @@ export function OurCompanies() {
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><MapPin className="h-5 w-5" /></div>
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Location</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">{T('companies.location', 'Location')}</p>
                   <p className="text-sm font-bold text-foreground">Abu Dhabi, UAE</p>
                 </div>
               </div>
@@ -235,7 +237,7 @@ export function OurCompanies() {
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Phone className="h-5 w-5" /></div>
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Contact</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">{T('companies.contact', 'Contact')}</p>
                   <a href="tel:+971557178432" className="block text-sm font-bold text-foreground hover:text-primary">+971 55 717 8432</a>
                 </div>
               </div>
@@ -243,7 +245,7 @@ export function OurCompanies() {
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-primary/10 text-primary"><Globe className="h-5 w-5" /></div>
                 <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">Website</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">{T('companies.website', 'Website')}</p>
                   <a href="https://www.excellentgroup.ae" target="_blank" rel="noreferrer" className="text-sm font-bold text-foreground hover:text-primary">www.excellentgroup.ae</a>
                 </div>
               </div>

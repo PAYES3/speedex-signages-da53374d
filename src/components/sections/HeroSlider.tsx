@@ -9,6 +9,7 @@ import { publicListHeroSlides } from '@/lib/admin/cms.functions';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { AdaptiveImage, AdaptiveVideo } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
+import { useLang } from '@/hooks/useLang';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
 import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
@@ -35,6 +36,7 @@ export function HeroSlider() {
   const fetcher = useServerFn(publicListHeroSlides);
   const { data } = useQuery({ queryKey: ['hero-slides'], queryFn: () => fetcher(), staleTime: 30_000 });
   const settings = useSiteSettings();
+  const { T } = useLang();
 
   const randomClip = useMemo(() => BUNDLED[Math.floor(Math.random() * BUNDLED.length)], []);
 
@@ -47,15 +49,15 @@ export function HeroSlider() {
       media_url: cmsVideo || randomClip,
       media_type: 'video',
       poster_url: settings.hero_poster_url?.trim() || null,
-      title: 'Transforming ideas into powerful visual identities',
-      subtitle: 'Premium signage · United Arab Emirates',
-      description: 'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.',
-      cta_primary_label: 'Get a free quote',
+      title: T('hero.title', 'Transforming ideas into powerful visual identities'),
+      subtitle: T('hero.badge', 'Premium signage · United Arab Emirates'),
+      description: T('hero.subtitle', 'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.'),
+      cta_primary_label: T('hero.quote', 'Get a free quote'),
       cta_primary_href: '/contact',
-      cta_secondary_label: 'Explore our companies',
+      cta_secondary_label: T('hero.companies', 'Explore our companies'),
       cta_secondary_href: '/companies',
     }];
-  }, [data, randomClip, settings.hero_video_url, settings.hero_poster_url]);
+  }, [data, randomClip, settings.hero_video_url, settings.hero_poster_url, T]);
 
   const [index, setIndex] = useState(0);
   const current = slides[Math.min(index, slides.length - 1)];
@@ -139,7 +141,7 @@ export function HeroSlider() {
               {current.cta_primary_label && (
                 <Link to={current.cta_primary_href || '/contact'}>
                   <Button size="lg" className="h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-semibold shadow-[var(--shadow-glow)] hover:-translate-y-0.5 transition-transform">
-                    {current.cta_primary_label} <ArrowRight className="ml-2 w-5 h-5" />
+                    {current.cta_primary_label} <ArrowRight className="ms-2 w-5 h-5 rtl-flip" />
                   </Button>
                 </Link>
               )}
@@ -151,7 +153,7 @@ export function HeroSlider() {
                 </Link>
               )}
               <Link to="/portfolio" className="inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white/85 hover:text-white transition-colors">
-                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> View our projects
+                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> {T('hero.projects', 'View our projects')}
               </Link>
             </div>
           </motion.div>
@@ -159,13 +161,13 @@ export function HeroSlider() {
 
         {slides.length > 1 && (
           <div className="mt-8 sm:mt-12 flex items-center gap-3">
-            <button aria-label="Previous slide" onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
+            <button aria-label={T('hero.prev', 'Previous slide')} onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
               className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 rtl-flip" />
             </button>
-            <button aria-label="Next slide" onClick={() => setIndex((i) => (i + 1) % slides.length)}
+            <button aria-label={T('hero.next', 'Next slide')} onClick={() => setIndex((i) => (i + 1) % slides.length)}
               className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5 rtl-flip" />
             </button>
             <div className="flex items-center gap-2 ml-2">
               {slides.map((s, i) => (
