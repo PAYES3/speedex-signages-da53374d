@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { publicListCompanies } from '@/lib/admin/content.functions';
 import { useSiteLogo, useFaviconSync } from '@/hooks/useSiteSettings';
 import { COMPANY } from '@/lib/site-data';
+import { useLang } from '@/hooks/useLang';
 
 const NAV = [
   { to: '/', key: 'home' },
@@ -21,6 +22,7 @@ const NAV = [
 
 export function Navbar() {
   const { t, i18n } = useTranslation();
+  const { lang, toggle, T } = useLang();
   const [open, setOpen] = useState(false);
   const [mega, setMega] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -47,13 +49,7 @@ export function Navbar() {
     setMega(false);
   }, [path]);
 
-  const toggleLang = () => {
-    const next = i18n.language === 'ar' ? 'en' : 'ar';
-    i18n.changeLanguage(next);
-    localStorage.setItem('lang', next);
-    document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = next;
-  };
+  const toggleLang = toggle;
 
   const linkClass =
     'px-3 py-2 text-[15px] font-semibold text-foreground/85 hover:text-primary transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-[2px] after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left';
@@ -93,7 +89,7 @@ export function Navbar() {
               className={`${linkClass} inline-flex items-center gap-1`}
               activeProps={{ className: 'text-primary after:scale-x-100' }}
             >
-              Our Groups
+              {T('nav.groups', 'Our Groups')}
               <ChevronDown className={`w-4 h-4 transition-transform ${mega ? 'rotate-180' : ''}`} />
             </Link>
           </div>
@@ -111,9 +107,14 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button onClick={toggleLang} aria-label="Toggle language" className="p-2 rounded-full hover:bg-muted transition">
+          <button
+            onClick={toggleLang}
+            aria-label={T('nav.language', 'Language')}
+            title={lang === 'ar' ? 'English' : 'العربية'}
+            className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-full hover:bg-muted transition text-sm font-semibold"
+          >
             <Languages className="w-4 h-4" />
-            <span className="sr-only">{i18n.language === 'ar' ? 'EN' : 'AR'}</span>
+            <span>{lang === 'ar' ? 'EN' : 'العربية'}</span>
           </button>
           <Link to="/contact" className="hidden sm:block">
             <Button className="rounded-full px-6 h-11 font-semibold shadow-[var(--shadow-glow)]">{t('nav.quote')}</Button>
