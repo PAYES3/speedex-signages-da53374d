@@ -5,13 +5,14 @@ import { publicListCompanies } from '@/lib/admin/content.functions';
 import { Mail, Phone, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react'; // Youtube removed from imports
 import { COMPANY } from '@/lib/site-data';
 import { useSiteLogo } from '@/hooks/useSiteSettings';
+import { useLang } from '@/hooks/useLang';
 
 const QUICK_LINKS = [
-  { to: '/about', label: 'About' },
-  { to: '/companies', label: 'Companies' },
-  { to: '/services', label: 'Services' },
-  { to: '/portfolio', label: 'Portfolio' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/about', label: 'About', key: 'nav.about' },
+  { to: '/companies', label: 'Companies', key: 'nav.companies' },
+  { to: '/services', label: 'Services', key: 'nav.services' },
+  { to: '/portfolio', label: 'Portfolio', key: 'nav.portfolio' },
+  { to: '/contact', label: 'Contact', key: 'nav.contact' },
 ] as const;
 
 // Clean array without Youtube
@@ -24,6 +25,7 @@ const SOCIAL_LINKS = [
 export function Footer() {
   const fetcher = useServerFn(publicListCompanies);
   const logo = useSiteLogo();
+  const { T, pick } = useLang();
   const { data: companies } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher() });
   
   return (
@@ -34,7 +36,7 @@ export function Footer() {
             <img src={logo} alt={COMPANY.name} className="h-10 w-auto" width={180} height={40} />
           </div>
           <p className="text-white/65 text-base leading-relaxed">
-            Speedex Group — UAE's trusted partner across signage, automotive, transport, contracting and trading since 2007.
+            {T('footer.tagline', "Speedex Group — UAE's trusted partner across signage, automotive, transport, contracting and trading since 2007.")}
           </p>
           
           <div className="flex gap-3 mt-5">
@@ -53,27 +55,27 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="font-bold mb-5 text-white text-lg">Group Companies</h4>
+          <h4 className="font-bold mb-5 text-white text-lg">{T('footer.ourGroups', 'Group Companies')}</h4>
           <ul className="space-y-3 text-base text-white/65">
             {(companies ?? []).map((c: any) => (
               <li key={c.id}>
-                <Link to="/companies/$slug" params={{ slug: c.slug }} className="hover:text-primary">{c.name}</Link>
+                <Link to="/companies/$slug" params={{ slug: c.slug }} className="hover:text-primary">{pick(c.name, c.name_ar)}</Link>
               </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h4 className="font-bold mb-5 text-white text-lg">Quick Links</h4>
+          <h4 className="font-bold mb-5 text-white text-lg">{T('footer.quickLinks', 'Quick Links')}</h4>
           <ul className="space-y-3 text-base text-white/65">
             {QUICK_LINKS.map((l) => (
-              <li key={l.to}><Link to={l.to} className="hover:text-primary">{l.label}</Link></li>
+              <li key={l.to}><Link to={l.to} className="hover:text-primary">{T(l.key, l.label)}</Link></li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h4 className="font-bold mb-5 text-white text-lg">Contact</h4>
+          <h4 className="font-bold mb-5 text-white text-lg">{T('footer.contact', 'Contact')}</h4>
           <ul className="space-y-3 text-base text-white/65">
             <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-1 shrink-0" /><span>{COMPANY.address}</span></li>
             <li className="flex items-center gap-2"><Phone className="w-4 h-4" /><a href={`tel:${COMPANY.phone}`} className="hover:text-primary">{COMPANY.phone}</a></li>
@@ -84,7 +86,7 @@ export function Footer() {
       
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-sm text-white/55 flex flex-col md:flex-row justify-between gap-2">
-          <p>© {new Date().getFullYear()} {COMPANY.name}. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {COMPANY.name}. {T('footer.rights', 'All rights reserved.')}</p>
           <p>Designed and built in the UAE.</p>
         </div>
       </div>
