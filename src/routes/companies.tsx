@@ -53,7 +53,7 @@ function CompaniesPage() {
           >
             <AdaptiveVideo
               src={groupVideo.url}
-              preload="none"
+              preload="metadata"
               focal={{ mobile: '50% 45%', tablet: 'center', desktop: 'center' }}
             />
           </div>
