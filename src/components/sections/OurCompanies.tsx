@@ -63,6 +63,7 @@ export function OurCompanies() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [logoFailed, setLogoFailed] = useState<Record<string, boolean>>({});
+  const vp = useViewport();
 
   useEffect(() => { setCurrentIndex(0); }, [companies.length]);
 
