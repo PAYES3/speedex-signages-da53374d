@@ -48,8 +48,8 @@ function CompaniesPage() {
       <section className="w-full bg-black">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div
-            className="relative w-full overflow-hidden sm:rounded-3xl bg-black"
-            style={{ height: 'clamp(220px, min(56vw, 68svh), 720px)' }}
+            className="relative w-full overflow-hidden sm:rounded-3xl bg-primary"
+            style={{ height: 'clamp(180px, min(45vw, 55svh), 600px)' }}
           >
             <AdaptiveVideo
               src={groupVideo.url}
