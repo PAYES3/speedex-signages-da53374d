@@ -4,6 +4,8 @@ import { useServerFn } from '@tanstack/react-start';
 import { Reveal } from '@/components/Reveal';
 import { publicListCompanies } from '@/lib/admin/content.functions';
 import { ArrowRight, Building2 } from 'lucide-react';
+import { AdaptiveVideo } from '@/components/AdaptiveMedia';
+import groupVideo from '@/assets/hero/ALL-COMPANIES.mp4.asset.json';
 
 export const Route = createFileRoute('/companies')({
   head: () => ({
@@ -39,6 +41,22 @@ function CompaniesPage() {
               A diversified UAE business group delivering specialist services across five sectors.
             </p>
           </Reveal>
+        </div>
+      </section>
+
+      {/* Group showreel — device-adaptive height and framing, no download UI */}
+      <section className="w-full bg-black">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div
+            className="relative w-full overflow-hidden sm:rounded-3xl bg-black"
+            style={{ height: 'clamp(220px, min(56vw, 68svh), 720px)' }}
+          >
+            <AdaptiveVideo
+              src={groupVideo.url}
+              preload="none"
+              focal={{ mobile: '50% 45%', tablet: 'center', desktop: 'center' }}
+            />
+          </div>
         </div>
       </section>
 
