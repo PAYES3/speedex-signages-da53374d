@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListCompanies } from '@/lib/admin/content.functions';
+import { AdaptiveImage } from '@/components/AdaptiveMedia';
+import { useViewport } from '@/lib/responsive';
 
 export interface Company {
   id: string;
@@ -108,19 +110,30 @@ export function OurCompanies() {
               transition={{ duration: 0.7 }}
               className="absolute inset-0"
             >
-              <img
+              <AdaptiveImage
                 src={background}
                 alt={currentCompany.name}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover object-center"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).src = FALLBACK_BG; }}
+                focal={{ mobile: '55% 35%', portrait: '55% 35%', tablet: 'center', desktop: 'center' }}
+                style={{ height: '100%' }}
               />
             </motion.div>
           </AnimatePresence>
 
-          <div className="relative z-10 flex items-center" style={{ minHeight: 'clamp(420px, 60svh, 560px)' }}>
-            <div className="w-full max-w-xl px-4 py-8 sm:px-12 sm:py-10">
+          {/* Soft scrim so the card never fights the background photo on small screens */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent sm:from-black/25 pointer-events-none" />
+
+          <div
+            className="relative z-10 flex items-center"
+            style={{
+              minHeight:
+                vp.orientation === 'portrait'
+                  ? 'clamp(440px, 72svh, 640px)'
+                  : vp.short
+                    ? 'clamp(380px, 70svh, 500px)'
+                    : 'clamp(420px, 60svh, 580px)',
+            }}
+          >
+            <div className="w-full max-w-[min(36rem,100%)] px-4 py-8 sm:px-12 sm:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
