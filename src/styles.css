@@ -253,3 +253,52 @@
     transform: translateY(-4px);
   }
 }
+
+/* ---------- Trusted clients marquee ---------- */
+@keyframes marquee-rtl {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@utility marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+
+  &:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@utility marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: marquee-rtl 38s linear infinite;
+  will-change: transform;
+}
+
+@utility marquee-item {
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Arabic typography + RTL niceties */
+html[lang='ar'] body {
+  font-family: 'Noto Kufi Arabic', 'IBM Plex Sans Arabic', var(--font-sans, system-ui), sans-serif;
+  line-height: 1.85;
+  letter-spacing: 0;
+}
+
+html[dir='rtl'] .marquee-track {
+  animation-direction: reverse;
+}
+
+html[dir='rtl'] .rtl-flip {
+  transform: scaleX(-1);
+}

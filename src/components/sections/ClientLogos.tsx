@@ -1,20 +1,33 @@
+import { useTranslation } from 'react-i18next';
 import { CLIENTS } from '@/lib/site-data';
 
-export function ClientLogos() {
+/** Seamless right-to-left client ticker. The track is duplicated so the loop never jumps. */
+export function ClientLogos({ data }: { data?: Record<string, string> }) {
+  const { t } = useTranslation();
+  const track = [...CLIENTS, ...CLIENTS];
+
   return (
-    <section className="py-14 border-y border-border bg-white">
+    <section className="border-y border-border bg-white overflow-hidden" style={{ paddingBlock: 'clamp(2.25rem, 4vw, 3.5rem)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs sm:text-sm uppercase tracking-[0.3em] text-muted-foreground mb-8 font-semibold">
-          Trusted by leading brands across the UAE
+        <p
+          className="text-center uppercase tracking-[0.3em] text-muted-foreground font-semibold"
+          style={{ fontSize: 'clamp(0.65rem, 1.4vw, 0.875rem)', marginBottom: 'clamp(1.25rem, 2.5vw, 2rem)' }}
+        >
+          {data?.title?.trim() || t('clients.title')}
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-x-8 gap-y-6 items-center justify-items-center">
-          {CLIENTS.map((c) => (
-            <div
-              key={c}
-              className="text-lg sm:text-xl font-bold text-muted-foreground/60 grayscale hover:grayscale-0 hover:text-primary transition-all duration-300"
+      </div>
+
+      <div className="marquee">
+        <div className="marquee-track">
+          {track.map((c, i) => (
+            <span
+              key={`${c}-${i}`}
+              aria-hidden={i >= CLIENTS.length}
+              className="marquee-item font-bold text-muted-foreground/60 whitespace-nowrap hover:text-primary transition-colors duration-300"
+              style={{ fontSize: 'clamp(1rem, 2.2vw, 1.35rem)' }}
             >
               {c}
-            </div>
+            </span>
           ))}
         </div>
       </div>
