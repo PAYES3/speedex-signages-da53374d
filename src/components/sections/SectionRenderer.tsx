@@ -38,8 +38,8 @@ export function SectionRenderer({ section }: { section: SectionRow }) {
 
   switch (section.section_type) {
     case 'hero': return <HeroSlider />;
-    case 'client_logos': return <ClientLogos />;
-    case 'signage_showcase': return <SignageShowcase />;
+    case 'client_logos': return <ClientLogos data={data} />;
+    case 'signage_showcase': return <SignageShowcase data={data} />;
     case 'about': return <AboutSection data={data} />;
     case 'services': return <ServicesSection data={data} />;
     case 'our_groups': return <OurGroupsBlock data={data} />;

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Reveal } from '@/components/Reveal';
+import { useLang } from '@/hooks/useLang';
 
 const DEFAULT_BEFORE = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80';
 const DEFAULT_AFTER = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80';
@@ -7,6 +8,7 @@ const DEFAULT_AFTER = 'https://images.unsplash.com/photo-1497366216548-375260702
 export function BeforeAfter({ data }: { data?: Record<string, string> }) {
   const [pos, setPos] = useState(50);
   const ref = useRef<HTMLDivElement>(null);
+  const { T } = useLang();
   const pair = {
     before: data?.before_image?.trim() || DEFAULT_BEFORE,
     after: data?.after_image?.trim() || DEFAULT_AFTER,
@@ -26,9 +28,9 @@ export function BeforeAfter({ data }: { data?: Record<string, string> }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="text-center max-w-3xl mx-auto" style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
-            <p className="text-primary font-semibold tracking-[0.3em] uppercase" style={{ fontSize: 'clamp(0.65rem, 1.4vw, 0.875rem)' }}>{data?.eyebrow?.trim() || 'Before / After'}</p>
-            <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.75rem)', lineHeight: 1.1 }}>{data?.title?.trim() || 'See the transformation'}</h2>
-            <p className="mt-4 text-muted-foreground" style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.125rem)' }}>{data?.subtitle?.trim() || 'Drag the slider to reveal how Speedex reshapes a facade.'}</p>
+            <p className="text-primary font-semibold tracking-[0.3em] uppercase" style={{ fontSize: 'clamp(0.65rem, 1.4vw, 0.875rem)' }}>{data?.eyebrow?.trim() || T('beforeAfter.eyebrow', 'Before / After')}</p>
+            <h2 className="mt-3 font-extrabold tracking-tight" style={{ fontSize: 'clamp(1.75rem, 5vw, 3.75rem)', lineHeight: 1.1 }}>{data?.title?.trim() || T('beforeAfter.title', 'See the transformation')}</h2>
+            <p className="mt-4 text-muted-foreground" style={{ fontSize: 'clamp(0.95rem, 1.6vw, 1.125rem)' }}>{data?.subtitle?.trim() || T('beforeAfter.subtitle', 'Drag the slider to reveal how Speedex reshapes a facade.')}</p>
           </div>
         </Reveal>
         <Reveal>
@@ -56,8 +58,8 @@ export function BeforeAfter({ data }: { data?: Record<string, string> }) {
                 ⇔
               </div>
             </div>
-            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-widest bg-black/60 text-white">Before</div>
-            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-widest bg-primary text-primary-foreground">After</div>
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-widest bg-black/60 text-white">{T('beforeAfter.before', 'Before')}</div>
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-widest bg-primary text-primary-foreground">{T('beforeAfter.after', 'After')}</div>
           </div>
         </Reveal>
       </div>

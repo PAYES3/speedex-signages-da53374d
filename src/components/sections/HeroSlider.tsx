@@ -7,6 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListHeroSlides } from '@/lib/admin/cms.functions';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { AdaptiveImage, AdaptiveVideo } from '@/components/AdaptiveMedia';
+import { useViewport } from '@/lib/responsive';
+import { useLang } from '@/hooks/useLang';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
 import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
@@ -33,6 +36,7 @@ export function HeroSlider() {
   const fetcher = useServerFn(publicListHeroSlides);
   const { data } = useQuery({ queryKey: ['hero-slides'], queryFn: () => fetcher(), staleTime: 30_000 });
   const settings = useSiteSettings();
+  const { T } = useLang();
 
   const randomClip = useMemo(() => BUNDLED[Math.floor(Math.random() * BUNDLED.length)], []);
 
@@ -45,19 +49,19 @@ export function HeroSlider() {
       media_url: cmsVideo || randomClip,
       media_type: 'video',
       poster_url: settings.hero_poster_url?.trim() || null,
-      title: 'Transforming ideas into powerful visual identities',
-      subtitle: 'Premium signage · United Arab Emirates',
-      description: 'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.',
-      cta_primary_label: 'Get a free quote',
+      title: T('hero.title', 'Transforming ideas into powerful visual identities'),
+      subtitle: T('hero.badge', 'Premium signage · United Arab Emirates'),
+      description: T('hero.subtitle', 'Signage, branding, transport, contracting and trading solutions delivered across the UAE — designed, manufactured and installed in-house.'),
+      cta_primary_label: T('hero.quote', 'Get a free quote'),
       cta_primary_href: '/contact',
-      cta_secondary_label: 'Explore our companies',
+      cta_secondary_label: T('hero.companies', 'Explore our companies'),
       cta_secondary_href: '/companies',
     }];
-  }, [data, randomClip, settings.hero_video_url, settings.hero_poster_url]);
+  }, [data, randomClip, settings.hero_video_url, settings.hero_poster_url, T]);
 
   const [index, setIndex] = useState(0);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const current = slides[Math.min(index, slides.length - 1)];
+  const vp = useViewport();
 
   useEffect(() => { setIndex(0); }, [slides.length]);
 
@@ -67,37 +71,40 @@ export function HeroSlider() {
     return () => clearInterval(t);
   }, [slides.length]);
 
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.muted = true;
-    el.play().catch(() => {});
-  }, [current?.media_url]);
-
   if (!current) return null;
 
   return (
     <section
       className="relative isolate w-full overflow-hidden bg-black flex items-center"
-      style={{ minHeight: 'clamp(520px, 88svh, 900px)' }}
+      style={{
+        minHeight:
+          vp.orientation === 'portrait'
+            ? 'clamp(560px, 92svh, 900px)'
+            : vp.short
+              ? 'clamp(460px, 94svh, 640px)'
+              : 'clamp(520px, 88svh, 940px)',
+      }}
     >
       <div className="absolute inset-0 -z-10">
         {current.media_type === 'image' ? (
-          <img src={current.media_url} alt={current.title} className="w-full h-full object-cover" />
+          <AdaptiveImage
+            src={current.media_url}
+            alt={current.title}
+            eager
+            focal={{ mobile: '58% 38%', portrait: '58% 38%', tablet: 'center', desktop: 'center' }}
+          />
         ) : (
-          <video
-            ref={videoRef}
-            key={current.media_url}
+          <AdaptiveVideo
             src={current.media_url}
             poster={current.poster_url || undefined}
-            autoPlay loop muted playsInline preload="metadata"
-            className="w-full h-full object-cover object-center"
+            preload="auto"
+            focal={{ mobile: '58% 42%', portrait: '58% 42%', tablet: 'center', desktop: 'center' }}
           />
         )}
       </div>
 
       {/* Single soft scrim for text legibility only — the video stays fully visible */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/65 via-black/35 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/35 to-black/10 sm:bg-gradient-to-r sm:from-black/65 sm:via-black/35 sm:to-transparent pointer-events-none" />
 
       <div
         className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
@@ -134,7 +141,7 @@ export function HeroSlider() {
               {current.cta_primary_label && (
                 <Link to={current.cta_primary_href || '/contact'}>
                   <Button size="lg" className="h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-semibold shadow-[var(--shadow-glow)] hover:-translate-y-0.5 transition-transform">
-                    {current.cta_primary_label} <ArrowRight className="ml-2 w-5 h-5" />
+                    {current.cta_primary_label} <ArrowRight className="ms-2 w-5 h-5 rtl-flip" />
                   </Button>
                 </Link>
               )}
@@ -146,7 +153,7 @@ export function HeroSlider() {
                 </Link>
               )}
               <Link to="/portfolio" className="inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-white/85 hover:text-white transition-colors">
-                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> View our projects
+                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" /> {T('hero.projects', 'View our projects')}
               </Link>
             </div>
           </motion.div>
@@ -154,13 +161,13 @@ export function HeroSlider() {
 
         {slides.length > 1 && (
           <div className="mt-8 sm:mt-12 flex items-center gap-3">
-            <button aria-label="Previous slide" onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
+            <button aria-label={T('hero.prev', 'Previous slide')} onClick={() => setIndex((i) => (i - 1 + slides.length) % slides.length)}
               className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 rtl-flip" />
             </button>
-            <button aria-label="Next slide" onClick={() => setIndex((i) => (i + 1) % slides.length)}
+            <button aria-label={T('hero.next', 'Next slide')} onClick={() => setIndex((i) => (i + 1) % slides.length)}
               className="w-11 h-11 rounded-full bg-white/15 text-white border border-white/30 grid place-items-center hover:bg-white/25">
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5 rtl-flip" />
             </button>
             <div className="flex items-center gap-2 ml-2">
               {slides.map((s, i) => (

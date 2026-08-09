@@ -3,6 +3,8 @@ import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AdaptiveImage, AdaptiveVideo } from '@/components/AdaptiveMedia';
+import { useViewport } from '@/lib/responsive';
 
 const SLIDE_MS = 6000;
 
@@ -54,8 +56,9 @@ const SECONDARY_SLIDES = [
   },
 ];
 
-export function SecondarySlider() {
+export function SecondarySlider({ data }: { data?: Record<string, string> }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const vp = useViewport();
 
   const goTo = useCallback((i: number) => {
     setCurrentIndex(((i % SECONDARY_SLIDES.length) + SECONDARY_SLIDES.length) % SECONDARY_SLIDES.length);
@@ -70,32 +73,50 @@ export function SecondarySlider() {
   }, [currentIndex]);
 
   const currentSlide = SECONDARY_SLIDES[currentIndex];
+  // Optional per-slide background video managed from the Homepage Builder.
+  const slideVideo = data?.[`video_${currentSlide.id}`]?.trim();
 
   return (
     <section
       className="relative w-full overflow-hidden bg-black flex items-center my-6"
-      style={{ minHeight: 'clamp(360px, 62svh, 600px)' }}
+      style={{
+        minHeight:
+          vp.orientation === 'portrait'
+            ? 'clamp(420px, 74svh, 700px)'
+            : vp.short
+              ? 'clamp(340px, 78svh, 520px)'
+              : 'clamp(360px, 62svh, 640px)',
+      }}
     >
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentSlide.id}
+          key={`${currentSlide.id}-${slideVideo ? 'v' : 'i'}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
           className="absolute inset-0 z-0"
         >
-          <img
-            src={currentSlide.image}
-            alt={currentSlide.title}
-            loading={currentSlide.id === 1 ? 'eager' : 'lazy'}
-            decoding="async"
-            className="w-full h-full object-cover object-center"
-          />
+          {slideVideo ? (
+            <AdaptiveVideo src={slideVideo} focal={{ mobile: '50% 40%', portrait: '50% 40%' }} />
+          ) : (
+            <AdaptiveImage
+              src={currentSlide.image}
+              alt={currentSlide.title}
+              eager={currentSlide.id === 1}
+              focal={{ mobile: '55% 40%', portrait: '55% 40%', tablet: 'center', desktop: 'center' }}
+            />
+          )}
         </motion.div>
       </AnimatePresence>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      {/* Legibility scrim that keeps the photo visible */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent sm:bg-gradient-to-r sm:from-black/40 sm:via-black/10 sm:to-transparent pointer-events-none" />
+
+      <div
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        style={{ paddingBlock: 'clamp(2rem, 5vw, 3.5rem)' }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide.id}
