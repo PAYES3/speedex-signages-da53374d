@@ -44,7 +44,14 @@ export const SECTION_TYPES: SectionTypeDef[] = [
     type: 'signage_showcase',
     label: 'Gallery / Showcase',
     description: 'Signage gallery grid.',
-    fields: HEADING_FIELDS,
+    fields: [
+      ...HEADING_FIELDS,
+      { key: 'video_1', label: 'Slide 1 background video (optional)', kind: 'video' },
+      { key: 'video_2', label: 'Slide 2 background video (optional)', kind: 'video' },
+      { key: 'video_3', label: 'Slide 3 background video (optional)', kind: 'video' },
+      { key: 'video_4', label: 'Slide 4 background video (optional)', kind: 'video' },
+      { key: 'video_5', label: 'Slide 5 background video (optional)', kind: 'video' },
+    ],
   },
   {
     type: 'about',
