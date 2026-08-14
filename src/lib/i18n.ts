@@ -34,7 +34,7 @@ const en = {
     showcase: 'Corporate Showcase',
     group: 'Excellent Group of Companies',
     location: 'Location', contact: 'Contact', website: 'Website',
-    prev: 'Previous company', next: 'Next company',
+    prev: 'Previous slide', next: 'Next slide',
   },
   beforeAfter: {
     eyebrow: 'Before / After',

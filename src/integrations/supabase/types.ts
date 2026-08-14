@@ -71,6 +71,7 @@ export type Database = {
           address: string | null
           banner_url: string | null
           created_at: string
+          cta_label: string | null
           description: string | null
           email: string | null
           gallery: Json
@@ -96,6 +97,7 @@ export type Database = {
           address?: string | null
           banner_url?: string | null
           created_at?: string
+          cta_label?: string | null
           description?: string | null
           email?: string | null
           gallery?: Json
@@ -121,6 +123,7 @@ export type Database = {
           address?: string | null
           banner_url?: string | null
           created_at?: string
+          cta_label?: string | null
           description?: string | null
           email?: string | null
           gallery?: Json

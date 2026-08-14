@@ -19,6 +19,7 @@ export interface Company {
   bg_url?: string | null;
   mobile_bg_url?: string | null;
   website_url?: string | null;
+  cta_label?: string | null;
 }
 
 const SLIDE_MS = 6000;
@@ -61,6 +62,7 @@ export function OurCompanies() {
       bg_url: r.banner_url ?? r.hero_image ?? null,
       mobile_bg_url: r.mobile_banner_url ?? null,
       website_url: r.website_url ?? null,
+      cta_label: r.cta_label ?? null,
     }));
   }, [data]);
 
@@ -230,7 +232,7 @@ export function OurCompanies() {
                   {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
                   className="mt-5 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
                 >
-                  {T('companies.explore', 'Explore Company')}
+                  {currentCompany.cta_label?.trim() || T('companies.explore', 'Explore Company')}
                   <ArrowRight className="h-4 w-4 rtl-flip" />
                 </a>
               </motion.div>

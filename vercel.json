@@ -2,5 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "bun install",
-  "buildCommand": "DEPLOY_TARGET=vercel bun run build"
+  "buildCommand": "DEPLOY_TARGET=vercel bun run build && node scripts/vercel-node-adapter.mjs"
 }

@@ -37,6 +37,7 @@ type Company = {
   mobile_banner_url: string | null;
   accent_color: string;
   website_url: string | null;
+  cta_label: string | null;
   sort_order: number;
   active: boolean;
 };
@@ -53,9 +54,48 @@ const blank: Company = {
   mobile_banner_url: null,
   accent_color: '#F58220',
   website_url: null,
+  cta_label: null,
   sort_order: 0,
   active: true,
 };
+
+function SlidePreview({ c, mobile }: { c: Company; mobile: boolean }) {
+  const bg = (mobile ? c.mobile_banner_url : null) || c.banner_url || c.hero_image;
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-border bg-muted ${mobile ? 'max-w-[320px]' : ''}`}
+      style={{ aspectRatio: mobile ? '9 / 14' : '16 / 9' }}
+    >
+      {bg ? (
+        <img src={bg} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      ) : (
+        <div className="absolute inset-0 grid place-items-center text-xs text-muted-foreground">No background image</div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+      <div className={`relative h-full flex items-center ${mobile ? 'px-3' : 'px-6'}`}>
+        <div className="w-full max-w-[22rem] rounded-xl border border-black/5 bg-card/95 backdrop-blur-xl p-3 shadow-lg">
+          <div className="mb-2 flex h-12 items-center justify-center rounded-lg border border-border bg-background p-1.5">
+            {c.logo_url ? (
+              <img src={c.logo_url} alt="" className="max-h-full max-w-full object-contain" />
+            ) : (
+              <span className="text-xs text-muted-foreground">No logo</span>
+            )}
+          </div>
+          {c.tagline && (
+            <div className="mb-1.5 inline-block rounded bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+              {c.tagline}
+            </div>
+          )}
+          <p className="font-extrabold leading-tight text-sm">{c.name || 'Company name'}</p>
+          <p className="mt-1 line-clamp-3 text-[11px] leading-snug text-muted-foreground">{c.description}</p>
+          <span className="mt-2 inline-flex rounded-lg bg-primary px-3 py-1.5 text-[11px] font-semibold text-white">
+            {c.cta_label?.trim() || 'Explore Company'}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AdminCompaniesPage() {
   const list = useServerFn(listAllCompanies);
@@ -68,6 +108,7 @@ function AdminCompaniesPage() {
   const [editing, setEditing] = useState<Company | null>(null);
   const [order, setOrder] = useState<any[] | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [previewMobile, setPreviewMobile] = useState(false);
   const rows: any[] = order ?? (data ?? []);
 
   const refresh = () => {
@@ -139,6 +180,20 @@ function AdminCompaniesPage() {
       {editing && (
         <Card className="p-5 space-y-4 border-primary/40">
           <h2 className="font-semibold">{editing.id ? 'Edit' : 'New'} company</h2>
+
+          <div className="rounded-2xl border border-border bg-muted/30 p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Slide preview</p>
+              <div className="flex gap-1">
+                <Button type="button" size="sm" variant={previewMobile ? 'outline' : 'default'} onClick={() => setPreviewMobile(false)}>Desktop</Button>
+                <Button type="button" size="sm" variant={previewMobile ? 'default' : 'outline'} onClick={() => setPreviewMobile(true)}>Mobile</Button>
+              </div>
+            </div>
+            <SlidePreview c={editing} mobile={previewMobile} />
+            <p className="text-xs text-muted-foreground">This is how the slide appears in the homepage “Our Companies” slider.</p>
+          </div>
+
+          <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">Company basic information</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
               <Label>Name</Label>
@@ -150,8 +205,9 @@ function AdminCompaniesPage() {
             </div>
           </div>
           <div>
-            <Label>Tagline</Label>
+            <Label>Category / badge</Label>
             <Input value={editing.tagline} onChange={(e) => setEditing({ ...editing, tagline: e.target.value })} maxLength={400} />
+            <p className="text-xs text-muted-foreground mt-1">Shown as the small badge above the company title.</p>
           </div>
           <div>
             <Label>Description</Label>
@@ -192,6 +248,16 @@ function AdminCompaniesPage() {
             </p>
           </div>
           <div>
+            <Label>Explore button text</Label>
+            <Input
+              value={editing.cta_label ?? ''}
+              placeholder="Explore Company"
+              onChange={(e) => setEditing({ ...editing, cta_label: e.target.value || null })}
+              maxLength={120}
+            />
+          </div>
+          <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground pt-2">Company logo</h3>
+          <div>
             <Label>Logo</Label>
             <div className="flex items-center gap-3 mt-1">
               {editing.logo_url && (
@@ -212,7 +278,8 @@ function AdminCompaniesPage() {
             </div>
           </div>
           <div>
-            <Label>Background image</Label>
+            <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground pt-2 pb-2">Slider background</h3>
+            <Label>Desktop background image</Label>
             <div className="flex items-center gap-3 mt-1">
               {editing.banner_url && (
                 <img src={editing.banner_url} alt="" className="h-16 w-24 object-cover rounded-md border border-border" />
