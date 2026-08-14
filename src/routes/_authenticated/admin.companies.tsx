@@ -278,7 +278,8 @@ function AdminCompaniesPage() {
             </div>
           </div>
           <div>
-            <Label>Background image</Label>
+            <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground pt-2 pb-2">Slider background</h3>
+            <Label>Desktop background image</Label>
             <div className="flex items-center gap-3 mt-1">
               {editing.banner_url && (
                 <img src={editing.banner_url} alt="" className="h-16 w-24 object-cover rounded-md border border-border" />
