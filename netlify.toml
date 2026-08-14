@@ -1,7 +1,9 @@
+# Full-stack (SSR + server functions) deploy via the Nitro netlify preset.
+# Nitro emits the SSR function to .netlify/functions-internal and the static
+# assets + generated _redirects to dist/ — no hand-written SPA fallback.
 [build]
-  command = "npm run build"
-  publish = "dist/client"
+  command = "DEPLOY_TARGET=netlify npm run build"
+  publish = "dist"
 
 [build.environment]
-  NITRO_PRESET = "netlify"
   NODE_VERSION = "22"
