@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { useState } from 'react';
-import { listAllCompanies, upsertCompany, deleteCompany } from '@/lib/admin/content.functions';
+import { listAllCompanies, upsertCompany, deleteCompany, reorderCompanies, duplicateCompany } from '@/lib/admin/content.functions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,7 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Card } from '@/components/ui/card';
 import { FileUpload } from '@/components/admin/FileUpload';
 import { toast } from 'sonner';
-import { Plus, Trash2, Save, Edit3, Tags } from 'lucide-react';
+import { Plus, Trash2, Save, Edit3, Tags, Copy, GripVertical } from 'lucide-react';
 import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
 
 export const Route = createFileRoute('/_authenticated/admin/companies')({
@@ -34,6 +34,7 @@ type Company = {
   hero_image: string | null;
   logo_url: string | null;
   banner_url: string | null;
+  mobile_banner_url: string | null;
   accent_color: string;
   website_url: string | null;
   sort_order: number;
@@ -49,6 +50,7 @@ const blank: Company = {
   hero_image: null,
   logo_url: null,
   banner_url: null,
+  mobile_banner_url: null,
   accent_color: '#F58220',
   website_url: null,
   sort_order: 0,
@@ -59,13 +61,47 @@ function AdminCompaniesPage() {
   const list = useServerFn(listAllCompanies);
   const upsert = useServerFn(upsertCompany);
   const del = useServerFn(deleteCompany);
+  const reorder = useServerFn(reorderCompanies);
+  const duplicate = useServerFn(duplicateCompany);
   const qc = useQueryClient();
   const { data, isLoading } = useQuery({ queryKey: ['admin-companies'], queryFn: () => list() });
   const [editing, setEditing] = useState<Company | null>(null);
+  const [order, setOrder] = useState<any[] | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const rows: any[] = order ?? (data ?? []);
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ['admin-companies'] });
     qc.invalidateQueries({ queryKey: ['public-companies'] });
+    setOrder(null);
+  };
+
+  const onDrop = async (to: number) => {
+    const from = dragIndex;
+    setDragIndex(null);
+    if (from === null || from === to) return;
+    const next = [...rows];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setOrder(next);
+    try {
+      await reorder({ data: { ids: next.map((r) => r.id) } });
+      toast.success('Order saved');
+      refresh();
+    } catch (e: any) {
+      toast.error(e.message || 'Reorder failed');
+      setOrder(null);
+    }
+  };
+
+  const onDuplicate = async (id: string) => {
+    try {
+      await duplicate({ data: { id } });
+      toast.success('Company duplicated (saved as inactive)');
+      refresh();
+    } catch (e: any) {
+      toast.error(e.message || 'Duplicate failed');
+    }
   };
 
   const onSave = async () => {
@@ -196,6 +232,27 @@ function AdminCompaniesPage() {
             </div>
           </div>
           <div>
+            <Label>Mobile background image (optional)</Label>
+            <div className="flex items-center gap-3 mt-1">
+              {editing.mobile_banner_url && (
+                <img src={editing.mobile_banner_url} alt="" className="h-16 w-12 object-cover rounded-md border border-border" />
+              )}
+              <FileUpload
+                bucket="portfolio-media"
+                accept="image/*"
+                label={editing.mobile_banner_url ? 'Replace mobile image' : 'Upload mobile image'}
+                onUploaded={(files) => {
+                  const first = files[0];
+                  if (first) setEditing({ ...editing, mobile_banner_url: first.url });
+                }}
+              />
+              {editing.mobile_banner_url && (
+                <Button variant="ghost" size="sm" onClick={() => setEditing({ ...editing, mobile_banner_url: null })}>Remove</Button>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">Used on phones/portrait screens. Falls back to the background image when empty.</p>
+          </div>
+          <div>
             <Label>Hero image</Label>
             <div className="flex items-center gap-3 mt-1">
               {editing.hero_image && (
@@ -223,9 +280,18 @@ function AdminCompaniesPage() {
       )}
 
       {isLoading && <p>Loading…</p>}
+      <p className="text-xs text-muted-foreground">Drag a card by the handle to change the order shown in the homepage slider.</p>
       <div className="space-y-2">
-        {(data ?? []).map((c: any) => (
-          <Card key={c.id} className="p-4 flex items-center gap-4">
+        {rows.map((c: any, i: number) => (
+          <Card
+            key={c.id}
+            draggable
+            onDragStart={() => setDragIndex(i)}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={() => onDrop(i)}
+            className={`p-4 flex items-center gap-4 ${dragIndex === i ? 'opacity-50' : ''}`}
+          >
+            <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab shrink-0" />
             <div
               className="w-12 h-12 rounded-lg text-white grid place-items-center font-bold shrink-0"
               style={{ background: c.accent_color }}
@@ -237,6 +303,7 @@ function AdminCompaniesPage() {
               <p className="text-xs text-muted-foreground truncate">{c.tagline}</p>
             </div>
             <Button variant="ghost" size="sm" onClick={() => setEditing(c)}><Edit3 className="w-4 h-4" /></Button>
+            <Button variant="ghost" size="sm" title="Duplicate" onClick={() => onDuplicate(c.id)}><Copy className="w-4 h-4" /></Button>
             <Button variant="ghost" size="sm" onClick={() => onDelete(c.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
           </Card>
         ))}

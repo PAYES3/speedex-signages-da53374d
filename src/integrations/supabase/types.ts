@@ -78,6 +78,7 @@ export type Database = {
           id: string
           industry: string | null
           logo_url: string | null
+          mobile_banner_url: string | null
           name: string
           phone: string | null
           seo_description: string | null
@@ -102,6 +103,7 @@ export type Database = {
           id?: string
           industry?: string | null
           logo_url?: string | null
+          mobile_banner_url?: string | null
           name: string
           phone?: string | null
           seo_description?: string | null
@@ -126,6 +128,7 @@ export type Database = {
           id?: string
           industry?: string | null
           logo_url?: string | null
+          mobile_banner_url?: string | null
           name?: string
           phone?: string | null
           seo_description?: string | null

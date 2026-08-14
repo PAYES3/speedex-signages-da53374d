@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ export interface Company {
   logo_url?: string | null;
   image?: string | null;
   bg_url?: string | null;
+  mobile_bg_url?: string | null;
   website_url?: string | null;
 }
 
@@ -58,12 +59,14 @@ export function OurCompanies() {
       logo_url: r.logo_url ?? null,
       image: r.hero_image ?? null,
       bg_url: r.banner_url ?? r.hero_image ?? null,
+      mobile_bg_url: r.mobile_banner_url ?? null,
       website_url: r.website_url ?? null,
     }));
   }, [data]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [logoFailed, setLogoFailed] = useState<Record<string, boolean>>({});
+  const [paused, setPaused] = useState(false);
   const vp = useViewport();
   const { T } = useLang();
 
@@ -73,21 +76,57 @@ export function OurCompanies() {
   const nextSlide = useCallback(() => goTo(currentIndex + 1), [goTo, currentIndex]);
   const prevSlide = useCallback(() => goTo(currentIndex - 1), [goTo, currentIndex]);
 
-  // Single timer, restarted on every index change (manual or automatic)
+  // Single timer, restarted on every index change (manual or automatic).
   useEffect(() => {
-    if (companies.length < 2) return;
+    if (companies.length < 2 || paused) return;
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % companies.length);
     }, SLIDE_MS);
     return () => clearTimeout(timer);
-  }, [currentIndex, companies.length]);
+  }, [currentIndex, companies.length, paused]);
+
+  // Pause autoplay while the tab is hidden.
+  useEffect(() => {
+    const onVis = () => setPaused(document.visibilityState === 'hidden');
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
+  // Touch swipe (horizontal only, so vertical scrolling is untouched).
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touch.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touch.current;
+    touch.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) nextSlide(); else prevSlide();
+  };
 
   const currentCompany = companies[Math.min(currentIndex, companies.length - 1)];
   if (!currentCompany) return null;
 
-  const background = currentCompany.bg_url || currentCompany.image || FALLBACK_BG;
+  const smallScreen = vp.orientation === 'portrait' || vp.short;
+  const background =
+    (smallScreen ? currentCompany.mobile_bg_url : null) ||
+    currentCompany.bg_url || currentCompany.image || FALLBACK_BG;
   const external = isExternal(currentCompany.website_url);
   const exploreHref = external ? currentCompany.website_url! : `/companies/${currentCompany.slug}`;
+
+  const arrowClass =
+    'grid place-items-center rounded-full border-2 border-black/10 bg-white text-neutral-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] ' +
+    'transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary hover:scale-105 active:scale-95 ' +
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40';
+
+  const prevLabel = T('companies.prev', 'Previous slide');
+  const nextLabel = T('companies.next', 'Next slide');
 
   return (
     <section id="our-groups" className="relative overflow-hidden bg-background" style={{ paddingBlock: 'clamp(3rem, 7vw, 6rem)' }}>
@@ -103,7 +142,18 @@ export function OurCompanies() {
           </p>
         </div>
 
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]">
+        <div
+          className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={T('companies.title', 'Our Companies')}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentCompany.id}
@@ -136,7 +186,7 @@ export function OurCompanies() {
                     : 'clamp(420px, 60svh, 580px)',
             }}
           >
-            <div className="w-full max-w-[min(36rem,100%)] px-4 py-8 sm:px-12 sm:py-10">
+            <div className="w-full max-w-[min(34rem,100%)] px-4 py-8 sm:ps-24 sm:pe-12 sm:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
@@ -187,32 +237,56 @@ export function OurCompanies() {
             </div>
           </div>
 
+          {/* Desktop / tablet arrows — always visible, centred on the sides */}
           <button
+            type="button"
             onClick={prevSlide}
-            className="absolute left-2 sm:left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
-            aria-label={T('companies.prev', 'Previous Company')}
+            title={prevLabel}
+            className={`hidden sm:grid absolute left-4 top-1/2 z-30 -translate-y-1/2 h-14 w-14 ${arrowClass}`}
+            aria-label={prevLabel}
           >
-            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 rtl-flip" />
+            <ChevronLeft className="h-7 w-7 rtl-flip" strokeWidth={2.75} />
           </button>
 
           <button
+            type="button"
             onClick={nextSlide}
-            className="absolute right-2 sm:right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-black/10 bg-white/90 p-2 sm:p-3 text-foreground backdrop-blur hover:bg-primary transition-all"
-            aria-label={T('companies.next', 'Next Company')}
+            title={nextLabel}
+            className={`hidden sm:grid absolute right-4 top-1/2 z-30 -translate-y-1/2 h-14 w-14 ${arrowClass}`}
+            aria-label={nextLabel}
           >
-            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 rtl-flip" />
+            <ChevronRight className="h-7 w-7 rtl-flip" strokeWidth={2.75} />
           </button>
 
           <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
             {companies.map((c, index) => (
               <button
                 key={c.id}
+                type="button"
                 onClick={() => goTo(index)}
                 aria-label={`Show ${c.name}`}
-                className={`transition-all duration-300 rounded-full ${index === currentIndex ? 'h-2.5 w-8 bg-primary' : 'h-2.5 w-2.5 bg-foreground/20 hover:bg-foreground/40'}`}
-              />
+                aria-current={index === currentIndex}
+                className="grid h-8 place-items-center px-1"
+              >
+                <span
+                  className={`block rounded-full transition-all duration-300 ${index === currentIndex ? 'h-2.5 w-9 bg-primary shadow-[0_0_0_3px_rgba(255,255,255,0.7)]' : 'h-2.5 w-2.5 bg-white/85 ring-1 ring-black/15 hover:bg-white'}`}
+                />
+              </button>
             ))}
           </div>
+        </div>
+
+        {/* Mobile control row — the card is full width there, so arrows sit below the slide */}
+        <div className="mt-4 flex items-center justify-center gap-4 sm:hidden">
+          <button type="button" onClick={prevSlide} aria-label={prevLabel} className={`h-12 w-12 ${arrowClass}`}>
+            <ChevronLeft className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
+          </button>
+          <span className="text-sm font-semibold text-muted-foreground tabular-nums">
+            {currentIndex + 1} / {companies.length}
+          </span>
+          <button type="button" onClick={nextSlide} aria-label={nextLabel} className={`h-12 w-12 ${arrowClass}`}>
+            <ChevronRight className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
+          </button>
         </div>
 
         <div className="mt-16 border-t border-border/60 pt-12">

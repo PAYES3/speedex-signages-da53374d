@@ -273,6 +273,7 @@ const companySchema = z.object({
   hero_image: z.string().trim().max(1200).nullable().optional(),
   logo_url: z.string().trim().max(1200).nullable().optional(),
   banner_url: z.string().trim().max(1200).nullable().optional(),
+  mobile_banner_url: z.string().trim().max(1200).nullable().optional(),
   accent_color: z.string().trim().max(20).default('#F58220'),
   website_url: z.string().trim().max(800).nullable().optional(),
   sort_order: z.number().int().default(0),
@@ -325,6 +326,41 @@ export const deleteCompany = createServerFn({ method: 'POST' })
     await assertAdmin(context.supabase, context.userId);
     const { error } = await context.supabase.from('companies').delete().eq('id', data.id);
     if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const reorderCompanies = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ ids: z.array(z.string().uuid()).max(200) }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    for (let i = 0; i < data.ids.length; i++) {
+      const { error } = await context.supabase
+        .from('companies').update({ sort_order: i }).eq('id', data.ids[i]);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
+  });
+
+export const duplicateCompany = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: row, error } = await context.supabase
+      .from('companies').select('*').eq('id', data.id).maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row) throw new Error('Company not found');
+    const suffix = Math.random().toString(36).slice(2, 6);
+    const { id: _id, created_at: _c, updated_at: _u, ...rest } = row as Record<string, unknown>;
+    const { error: insErr } = await context.supabase.from('companies').insert({
+      ...(rest as any),
+      name: `${row.name} (copy)`,
+      slug: `${row.slug}-copy-${suffix}`.slice(0, 160),
+      active: false,
+      sort_order: (row.sort_order ?? 0) + 1,
+    });
+    if (insErr) throw new Error(insErr.message);
     return { ok: true };
   });
 
