@@ -37,6 +37,7 @@ type Company = {
   mobile_banner_url: string | null;
   accent_color: string;
   website_url: string | null;
+  cta_label: string | null;
   sort_order: number;
   active: boolean;
 };
@@ -53,9 +54,48 @@ const blank: Company = {
   mobile_banner_url: null,
   accent_color: '#F58220',
   website_url: null,
+  cta_label: null,
   sort_order: 0,
   active: true,
 };
+
+function SlidePreview({ c, mobile }: { c: Company; mobile: boolean }) {
+  const bg = (mobile ? c.mobile_banner_url : null) || c.banner_url || c.hero_image;
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border border-border bg-muted ${mobile ? 'max-w-[320px]' : ''}`}
+      style={{ aspectRatio: mobile ? '9 / 14' : '16 / 9' }}
+    >
+      {bg ? (
+        <img src={bg} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      ) : (
+        <div className="absolute inset-0 grid place-items-center text-xs text-muted-foreground">No background image</div>
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+      <div className={`relative h-full flex items-center ${mobile ? 'px-3' : 'px-6'}`}>
+        <div className="w-full max-w-[22rem] rounded-xl border border-black/5 bg-card/95 backdrop-blur-xl p-3 shadow-lg">
+          <div className="mb-2 flex h-12 items-center justify-center rounded-lg border border-border bg-background p-1.5">
+            {c.logo_url ? (
+              <img src={c.logo_url} alt="" className="max-h-full max-w-full object-contain" />
+            ) : (
+              <span className="text-xs text-muted-foreground">No logo</span>
+            )}
+          </div>
+          {c.tagline && (
+            <div className="mb-1.5 inline-block rounded bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+              {c.tagline}
+            </div>
+          )}
+          <p className="font-extrabold leading-tight text-sm">{c.name || 'Company name'}</p>
+          <p className="mt-1 line-clamp-3 text-[11px] leading-snug text-muted-foreground">{c.description}</p>
+          <span className="mt-2 inline-flex rounded-lg bg-primary px-3 py-1.5 text-[11px] font-semibold text-white">
+            {c.cta_label?.trim() || 'Explore Company'}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AdminCompaniesPage() {
   const list = useServerFn(listAllCompanies);
