@@ -1,7 +1,8 @@
+# Full-stack (SSR + server functions) deploy via the Nitro netlify preset.
+# The preset writes .netlify/functions-internal + dist/client itself, so no
+# public/_redirects SPA fallback is used.
 [build]
-  command = "npm run build"
-  publish = "dist/client"
+  command = "DEPLOY_TARGET=netlify npm run build"
 
 [build.environment]
-  NITRO_PRESET = "netlify"
   NODE_VERSION = "22"
