@@ -45,8 +45,8 @@ function ManualPage() {
     <div className="space-y-6">
       <AdminPageHeader
         title="Admin User Manual"
-        description="A plain-English guide to every screen in this admin panel."
-        action={
+        subtitle="A plain-English guide to every screen in this admin panel."
+        extra={
           <Button variant="outline" onClick={() => window.print()}>
             <Printer className="mr-2 h-4 w-4" /> Print / Save as PDF
           </Button>
