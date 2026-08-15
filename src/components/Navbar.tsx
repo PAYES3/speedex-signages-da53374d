@@ -31,7 +31,7 @@ export function Navbar() {
   useFaviconSync();
 
   const listCompanies = useServerFn(publicListCompanies);
-  const { data: companies } = useQuery({
+  const { data: companies, isLoading: companiesLoading } = useQuery({
     queryKey: ['public-companies'],
     queryFn: () => listCompanies(),
     staleTime: 60_000,
