@@ -31,7 +31,7 @@ export function Navbar() {
   useFaviconSync();
 
   const listCompanies = useServerFn(publicListCompanies);
-  const { data: companies } = useQuery({
+  const { data: companies, isLoading: companiesLoading } = useQuery({
     queryKey: ['public-companies'],
     queryFn: () => listCompanies(),
     staleTime: 60_000,
@@ -137,7 +137,9 @@ export function Navbar() {
             <div className="flex items-end justify-between mb-5">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">Our Groups</p>
-                <p className="text-sm text-muted-foreground mt-1">Five specialised companies, one trusted UAE group.</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {companies?.length ? `${companies.length} specialised companies, one trusted UAE group.` : 'One trusted UAE group.'}
+                </p>
               </div>
               <Link to="/companies" className="text-sm font-semibold text-primary inline-flex items-center gap-1 hover:gap-2 transition-all">
                 All companies <ArrowUpRight className="w-4 h-4" />
@@ -169,7 +171,9 @@ export function Navbar() {
                 </Link>
               ))}
               {!companies?.length && (
-                <p className="text-sm text-muted-foreground col-span-full">Companies will appear here once added in the admin panel.</p>
+                <p className="text-sm text-muted-foreground col-span-full">
+                  {companiesLoading ? 'Loading companies…' : 'Companies will appear here once added in the admin panel.'}
+                </p>
               )}
             </div>
           </div>

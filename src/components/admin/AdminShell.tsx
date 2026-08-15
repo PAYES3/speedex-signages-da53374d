@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { supabase } from '@/integrations/supabase/client';
-import { LayoutDashboard, Briefcase, ImageIcon, MessagesSquare, Star, LogOut, Globe, Building2, Settings as SettingsIcon, FolderOpen, FileText, LayoutTemplate } from 'lucide-react';
+import { LayoutDashboard, Briefcase, ImageIcon, MessagesSquare, Star, LogOut, Globe, Building2, Settings as SettingsIcon, FolderOpen, FileText, LayoutTemplate, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -16,6 +16,7 @@ const NAV = [
   { to: '/admin/reviews', label: 'Reviews', icon: Star, exact: false },
   { to: '/admin/messages', label: 'Messages', icon: MessagesSquare, exact: false },
   { to: '/admin/settings', label: 'Settings', icon: SettingsIcon, exact: false },
+  { to: '/admin/manual', label: 'User Manual', icon: BookOpen, exact: false },
 ] as const;
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -36,7 +37,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-secondary/20">
-      <aside className="fixed inset-y-0 left-0 w-60 bg-card border-r border-border flex flex-col z-20">
+      <aside className="fixed inset-y-0 left-0 w-60 bg-card border-r border-border hidden lg:flex flex-col z-20">
         <div className="p-5 border-b border-border">
           <p className="text-xs uppercase tracking-wider text-muted-foreground">Speedex</p>
           <p className="font-bold text-lg">Admin Panel</p>
@@ -66,9 +67,38 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Main Content Area - Top Padding & Spacing Fix */}
-      <main className="ml-60 p-6 sm:p-10 pt-10 sm:pt-12 min-h-screen overflow-y-auto">
-        <div className="max-w-7xl mx-auto">
+      {/* Mobile / tablet top navigation */}
+      <div className="lg:hidden sticky top-0 z-30 bg-card border-b border-border">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <p className="font-bold">Speedex Admin</p>
+          <div className="flex items-center gap-1">
+            <Link to="/" aria-label="View site" className="p-2 rounded-lg hover:bg-accent/50">
+              <Globe className="w-4 h-4" />
+            </Link>
+            <Button variant="ghost" size="sm" onClick={signOut} className="text-destructive hover:text-destructive">
+              <LogOut className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+        <nav className="flex gap-1 overflow-x-auto px-3 pb-3">
+          {NAV.map((n) => {
+            const active = n.exact ? path === n.to : path.startsWith(n.to);
+            return (
+              <Link
+                key={n.to}
+                to={n.to}
+                className={`shrink-0 whitespace-nowrap px-3 py-2 rounded-lg text-xs font-semibold transition ${active ? 'bg-primary text-primary-foreground' : 'bg-muted/60 hover:bg-accent/50'}`}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Main Content Area */}
+      <main className="lg:ml-60 p-4 sm:p-8 lg:p-10 pt-6 lg:pt-12 min-h-screen overflow-x-hidden">
+        <div className="max-w-7xl mx-auto min-w-0">
           {children}
         </div>
       </main>

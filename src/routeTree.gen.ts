@@ -29,6 +29,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminCompaniesRouteImport } from './routes/_authenticated/admin.companies'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
 import { Route as AuthenticatedAdminHomepageRouteImport } from './routes/_authenticated/admin.homepage'
+import { Route as AuthenticatedAdminManualRouteImport } from './routes/_authenticated/admin.manual'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin.messages'
 import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authenticated/admin.portfolio'
@@ -140,6 +141,12 @@ const AuthenticatedAdminHomepageRoute =
     path: '/homepage',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminManualRoute =
+  AuthenticatedAdminManualRouteImport.update({
+    id: '/manual',
+    path: '/manual',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminMediaRoute = AuthenticatedAdminMediaRouteImport.update({
   id: '/media',
   path: '/media',
@@ -200,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/admin/manual': typeof AuthenticatedAdminManualRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -227,6 +235,7 @@ export interface FileRoutesByTo {
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/admin/manual': typeof AuthenticatedAdminManualRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -257,6 +266,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
   '/_authenticated/admin/homepage': typeof AuthenticatedAdminHomepageRoute
+  '/_authenticated/admin/manual': typeof AuthenticatedAdminManualRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/companies'
     | '/admin/content'
     | '/admin/homepage'
+    | '/admin/manual'
     | '/admin/media'
     | '/admin/messages'
     | '/admin/portfolio'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/companies'
     | '/admin/content'
     | '/admin/homepage'
+    | '/admin/manual'
     | '/admin/media'
     | '/admin/messages'
     | '/admin/portfolio'
@@ -343,6 +355,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/companies'
     | '/_authenticated/admin/content'
     | '/_authenticated/admin/homepage'
+    | '/_authenticated/admin/manual'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/portfolio'
@@ -513,6 +526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminHomepageRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/manual': {
+      id: '/_authenticated/admin/manual'
+      path: '/manual'
+      fullPath: '/admin/manual'
+      preLoaderRoute: typeof AuthenticatedAdminManualRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/media': {
       id: '/_authenticated/admin/media'
       path: '/media'
@@ -569,6 +589,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCompaniesRoute: typeof AuthenticatedAdminCompaniesRoute
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
   AuthenticatedAdminHomepageRoute: typeof AuthenticatedAdminHomepageRoute
+  AuthenticatedAdminManualRoute: typeof AuthenticatedAdminManualRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminPortfolioRoute: typeof AuthenticatedAdminPortfolioRoute
@@ -582,6 +603,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCompaniesRoute: AuthenticatedAdminCompaniesRoute,
   AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
   AuthenticatedAdminHomepageRoute: AuthenticatedAdminHomepageRoute,
+  AuthenticatedAdminManualRoute: AuthenticatedAdminManualRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
   AuthenticatedAdminPortfolioRoute: AuthenticatedAdminPortfolioRoute,

@@ -6,6 +6,7 @@ import { publicListCompanies } from '@/lib/admin/content.functions';
 import { ArrowRight, Building2 } from 'lucide-react';
 import { AdaptiveVideo } from '@/components/AdaptiveMedia';
 import groupVideo from '@/assets/hero/ALL-COMPANIES.mp4.asset.json';
+import { normalizeExternalUrl } from '@/lib/url';
 
 export const Route = createFileRoute('/companies')({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/companies')({
       {
         name: 'description',
         content:
-          'Speedex Group — five UAE companies covering signage, automotive workshop, transport, contracting and general trading across the Emirates.',
+          'Speedex Group — specialised UAE companies covering signage, automotive workshop, transport, contracting, facility management and general trading across the Emirates.',
       },
       {
         property: 'og:title',
@@ -23,7 +24,7 @@ export const Route = createFileRoute('/companies')({
       {
         property: 'og:description',
         content:
-          'Signage, automotive, transport, contracting and trading services across the United Arab Emirates.',
+          'Signage, automotive, transport, contracting, facility management and trading services across the United Arab Emirates.',
       },
       {
         property: 'og:url',
@@ -47,6 +48,15 @@ function initialsOf(name: string) {
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase() ?? '')
     .join('');
+}
+
+const COUNT_WORDS: Record<number, string> = {
+  1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five',
+  6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten',
+};
+
+export function countWord(n: number) {
+  return COUNT_WORDS[n] ?? String(n);
 }
 
 function CompaniesPage() {
@@ -75,7 +85,7 @@ function CompaniesPage() {
 
             <p className="mt-5 max-w-3xl mx-auto text-base sm:text-lg text-muted-foreground">
               A diversified UAE business group delivering specialist services
-              across five sectors.
+              {companies.length ? ` across ${countWord(companies.length)} specialised companies.` : '.'}
             </p>
           </div>
         </div>
@@ -114,17 +124,15 @@ function CompaniesPage() {
           )}
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {companies.map((c: any, i: number) => (
+            {companies.map((c: any, i: number) => {
+              const website = normalizeExternalUrl(c.website_url);
+              return (
               <Reveal
                 key={c.id}
                 direction="up"
                 delay={i * 0.06}
               >
-                <Link
-                  to="/companies/$slug"
-                  params={{ slug: c.slug }}
-                  className="group block bg-card border border-border rounded-2xl overflow-hidden hover:shadow-[var(--shadow-elegant)] hover:-translate-y-1 hover:border-primary transition-all h-full"
-                >
+                <div className="group flex h-full flex-col bg-card border border-border rounded-2xl overflow-hidden hover:shadow-[var(--shadow-elegant)] hover:-translate-y-1 hover:border-primary transition-all">
                   {/* Company Image */}
                   <div
                     className="aspect-[16/9] relative overflow-hidden"
@@ -152,7 +160,7 @@ function CompaniesPage() {
                   </div>
 
                   {/* Company Content */}
-                  <div className="p-6">
+                  <div className="p-6 flex flex-1 flex-col">
                     <h3 className="font-bold text-xl flex items-center gap-2">
                       <Building2 className="w-4 h-4 text-muted-foreground" />
                       {c.name}
@@ -182,14 +190,33 @@ function CompaniesPage() {
                         ))}
                     </ul>
 
-                    <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
-                      Learn more
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
+                    <div className="mt-auto pt-5">
+                      {website ? (
+                        <a
+                          href={website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all"
+                        >
+                          Learn more
+                          <ArrowRight className="w-4 h-4" />
+                        </a>
+                      ) : (
+                        <Link
+                          to="/companies/$slug"
+                          params={{ slug: c.slug }}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:gap-2 transition-all"
+                        >
+                          Learn more
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                </Link>
+                </div>
               </Reveal>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

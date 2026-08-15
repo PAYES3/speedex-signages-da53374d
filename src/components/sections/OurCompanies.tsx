@@ -178,7 +178,7 @@ export function OurCompanies() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent sm:from-black/25 pointer-events-none" />
 
           <div
-            className="relative z-10 flex items-center"
+            className="relative z-10 flex items-end sm:items-center"
             style={{
               minHeight:
                 vp.orientation === 'portrait'
@@ -188,16 +188,16 @@ export function OurCompanies() {
                     : 'clamp(420px, 60svh, 580px)',
             }}
           >
-            <div className="w-full max-w-[min(34rem,100%)] px-4 py-8 sm:ps-24 sm:pe-12 sm:py-10">
+            <div className="w-full max-w-full px-3 py-5 sm:max-w-[62%] sm:ps-16 sm:pe-8 sm:py-8 lg:max-w-[34rem] lg:ps-24 lg:pe-12 lg:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="rounded-2xl border border-black/5 bg-card/95 backdrop-blur-xl shadow-[0_30px_60px_-40px_rgba(0,0,0,0.45)]"
-                style={{ padding: 'clamp(1.15rem, 3vw, 2rem)' }}
+                style={{ padding: 'clamp(0.85rem, 3.5vw, 2rem)' }}
               >
-                <div className="mb-4 sm:mb-6 flex items-center justify-center rounded-xl bg-background p-3 border border-border" style={{ height: 'clamp(4rem, 10vw, 6rem)' }}>
+                <div className="mb-3 sm:mb-5 lg:mb-6 flex items-center justify-center rounded-xl bg-background p-2 sm:p-3 border border-border" style={{ height: 'clamp(2.75rem, 9vw, 6rem)' }}>
                   {currentCompany.logo_url && !logoFailed[currentCompany.id] ? (
                     <img
                       src={currentCompany.logo_url}
@@ -208,29 +208,29 @@ export function OurCompanies() {
                       onError={() => setLogoFailed((s) => ({ ...s, [currentCompany.id]: true }))}
                     />
                   ) : (
-                    <span className="grid h-12 w-12 sm:h-16 sm:w-16 place-items-center rounded-xl bg-primary text-lg sm:text-xl font-extrabold text-primary-foreground">
+                    <span className="grid h-9 w-9 sm:h-12 sm:w-12 lg:h-16 lg:w-16 place-items-center rounded-xl bg-primary text-sm sm:text-lg lg:text-xl font-extrabold text-primary-foreground">
                       {initials(currentCompany.name)}
                     </span>
                   )}
                 </div>
 
                 {currentCompany.tagline && (
-                  <div className="mb-3 inline-block rounded-lg bg-primary/10 px-2.5 py-1 sm:px-3 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-primary">
+                  <div className="mb-2 sm:mb-3 inline-block max-w-full truncate rounded-lg bg-primary/10 px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold uppercase tracking-wider text-primary">
                     {currentCompany.tagline}
                   </div>
                 )}
 
-                <h3 className="flex items-center gap-2 sm:gap-3 font-extrabold text-foreground" style={{ fontSize: 'clamp(1.25rem, 3.2vw, 1.875rem)' }}>
-                  <Building2 className="h-5 w-5 sm:h-7 sm:w-7 shrink-0 text-primary" />
-                  <span className="min-w-0">{currentCompany.name}</span>
+                <h3 className="flex items-center gap-2 sm:gap-3 font-extrabold text-foreground" style={{ fontSize: 'clamp(1rem, 4vw, 1.875rem)' }}>
+                  <Building2 className="h-4 w-4 sm:h-6 sm:w-6 lg:h-7 lg:w-7 shrink-0 text-primary" />
+                  <span className="min-w-0 break-words">{currentCompany.name}</span>
                 </h3>
 
-                <p className="mt-3 text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1rem)' }}>{currentCompany.description}</p>
+                <p className="mt-2 sm:mt-3 line-clamp-3 sm:line-clamp-none text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.78rem, 2.6vw, 1rem)' }}>{currentCompany.description}</p>
 
                 <a
                   href={exploreHref}
                   {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-                  className="mt-5 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
+                  className="mt-4 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-3.5 py-2 sm:px-5 sm:py-3 text-[11px] sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
                 >
                   {currentCompany.cta_label?.trim() || T('companies.explore', 'Explore Company')}
                   <ArrowRight className="h-4 w-4 rtl-flip" />
@@ -260,7 +260,7 @@ export function OurCompanies() {
             <ChevronRight className="h-7 w-7 rtl-flip" strokeWidth={2.75} />
           </button>
 
-          <div className="absolute bottom-4 sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
+          <div className="absolute top-3 bottom-auto sm:top-auto sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
             {companies.map((c, index) => (
               <button
                 key={c.id}
