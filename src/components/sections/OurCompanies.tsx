@@ -178,7 +178,7 @@ export function OurCompanies() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent sm:from-black/25 pointer-events-none" />
 
           <div
-            className="relative z-10 flex items-center"
+            className="relative z-10 flex items-end sm:items-center"
             style={{
               minHeight:
                 vp.orientation === 'portrait'
