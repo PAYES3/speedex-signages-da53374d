@@ -180,7 +180,7 @@ export function SlideManager({ context, folder }: { context: SliderContext; fold
                   folder={folder}
                   accept="image/*"
                   label={editing.image_url ? 'Replace image' : 'Upload image'}
-                  onUploaded={(f: any) => setEditing((s) => (s ? { ...s, image_url: f.url } : s))}
+                  onUploaded={(files) => setEditing((s) => (s && files[0] ? { ...s, image_url: files[0].url } : s))}
                 />
                 {editing.image_url && (
                   <Button variant="outline" onClick={() => setEditing({ ...editing, image_url: null })}>
@@ -204,7 +204,7 @@ export function SlideManager({ context, folder }: { context: SliderContext; fold
                   folder={folder}
                   accept="image/*"
                   label={editing.mobile_image_url ? 'Replace image' : 'Upload image'}
-                  onUploaded={(f: any) => setEditing((s) => (s ? { ...s, mobile_image_url: f.url } : s))}
+                  onUploaded={(files) => setEditing((s) => (s && files[0] ? { ...s, mobile_image_url: files[0].url } : s))}
                 />
                 {editing.mobile_image_url && (
                   <Button variant="outline" onClick={() => setEditing({ ...editing, mobile_image_url: null })}>
