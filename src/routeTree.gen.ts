@@ -28,6 +28,7 @@ import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCompaniesRouteImport } from './routes/_authenticated/admin.companies'
 import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminHomeCompaniesRouteImport } from './routes/_authenticated/admin.home-companies'
 import { Route as AuthenticatedAdminHomepageRouteImport } from './routes/_authenticated/admin.homepage'
 import { Route as AuthenticatedAdminManualRouteImport } from './routes/_authenticated/admin.manual'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
@@ -135,6 +136,12 @@ const AuthenticatedAdminContentRoute =
     path: '/content',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminHomeCompaniesRoute =
+  AuthenticatedAdminHomeCompaniesRouteImport.update({
+    id: '/home-companies',
+    path: '/home-companies',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminHomepageRoute =
   AuthenticatedAdminHomepageRouteImport.update({
     id: '/homepage',
@@ -206,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/home-companies': typeof AuthenticatedAdminHomeCompaniesRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/admin/manual': typeof AuthenticatedAdminManualRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
@@ -234,6 +242,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/home-companies': typeof AuthenticatedAdminHomeCompaniesRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/admin/manual': typeof AuthenticatedAdminManualRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
@@ -265,6 +274,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
+  '/_authenticated/admin/home-companies': typeof AuthenticatedAdminHomeCompaniesRoute
   '/_authenticated/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/_authenticated/admin/manual': typeof AuthenticatedAdminManualRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/admin/companies'
     | '/admin/content'
+    | '/admin/home-companies'
     | '/admin/homepage'
     | '/admin/manual'
     | '/admin/media'
@@ -324,6 +335,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/admin/companies'
     | '/admin/content'
+    | '/admin/home-companies'
     | '/admin/homepage'
     | '/admin/manual'
     | '/admin/media'
@@ -354,6 +366,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/_authenticated/admin/companies'
     | '/_authenticated/admin/content'
+    | '/_authenticated/admin/home-companies'
     | '/_authenticated/admin/homepage'
     | '/_authenticated/admin/manual'
     | '/_authenticated/admin/media'
@@ -519,6 +532,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/home-companies': {
+      id: '/_authenticated/admin/home-companies'
+      path: '/home-companies'
+      fullPath: '/admin/home-companies'
+      preLoaderRoute: typeof AuthenticatedAdminHomeCompaniesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/homepage': {
       id: '/_authenticated/admin/homepage'
       path: '/homepage'
@@ -588,6 +608,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCompaniesRoute: typeof AuthenticatedAdminCompaniesRoute
   AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
+  AuthenticatedAdminHomeCompaniesRoute: typeof AuthenticatedAdminHomeCompaniesRoute
   AuthenticatedAdminHomepageRoute: typeof AuthenticatedAdminHomepageRoute
   AuthenticatedAdminManualRoute: typeof AuthenticatedAdminManualRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
@@ -602,6 +623,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCompaniesRoute: AuthenticatedAdminCompaniesRoute,
   AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
+  AuthenticatedAdminHomeCompaniesRoute: AuthenticatedAdminHomeCompaniesRoute,
   AuthenticatedAdminHomepageRoute: AuthenticatedAdminHomepageRoute,
   AuthenticatedAdminManualRoute: AuthenticatedAdminManualRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
