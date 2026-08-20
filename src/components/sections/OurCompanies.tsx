@@ -36,7 +36,15 @@ function isExternal(url?: string | null) {
 
 export type SliderContext = 'home_our_companies' | 'our_groups';
 
-export function OurCompanies({ context = 'home_our_companies' }: { context?: SliderContext }) {
+export function OurCompanies({
+  context = 'home_our_companies',
+  showHeader = true,
+  showFooter = true,
+}: {
+  context?: SliderContext;
+  showHeader?: boolean;
+  showFooter?: boolean;
+}) {
   const fetcher = useServerFn(publicListSlides);
   const { data } = useQuery({
     queryKey: ['slides', context],
@@ -129,8 +137,9 @@ export function OurCompanies({ context = 'home_our_companies' }: { context?: Sli
   const nextLabel = T('companies.next', 'Next slide');
 
   return (
-    <section id="our-groups" className="relative overflow-hidden bg-background" style={{ paddingBlock: 'clamp(3rem, 7vw, 6rem)' }}>
+    <section id={context === 'our_groups' ? 'our-groups-slider' : 'our-groups'} className="relative overflow-hidden bg-background" style={{ paddingBlock: 'clamp(3rem, 7vw, 6rem)' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {showHeader && (
         <div className="mx-auto max-w-3xl text-center" style={{ marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-primary">
             <Sparkles className="h-4 w-4" />
@@ -141,6 +150,7 @@ export function OurCompanies({ context = 'home_our_companies' }: { context?: Sli
             {companies.length} industry-leading entities delivering excellence across signage, automotive, facilities, contracting, trading, and transportation in the UAE.
           </p>
         </div>
+        )}
 
         <div
           className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]"
@@ -289,6 +299,7 @@ export function OurCompanies({ context = 'home_our_companies' }: { context?: Sli
           </button>
         </div>
 
+        {showFooter && (
         <div className="mt-16 border-t border-border/60 pt-12">
           <div className="mx-auto mb-8 max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary">
@@ -326,6 +337,7 @@ export function OurCompanies({ context = 'home_our_companies' }: { context?: Sli
             </div>
           </div>
         </div>
+        )}
       </div>
     </section>
   );
