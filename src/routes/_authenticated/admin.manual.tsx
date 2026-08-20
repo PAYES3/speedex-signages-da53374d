@@ -108,11 +108,7 @@ function ManualPage() {
       </Section>
 
       <Section id="companies" title="Our Groups (company slider + cards)">
-        <p>Sidebar: <strong>Our Groups</strong>. One list of companies powers two different things:</p>
-        <ul>
-          <li>The <strong>Our Companies slider</strong> on the <strong>Home page</strong> and the <strong>About page</strong>. Both pages read the same records — edit once, both update.</li>
-          <li>The <strong>Our Groups page</strong> card grid. This is a separate layout: it shows a card per company, not the slider.</li>
-        </ul>
+        <p>Sidebar: <strong>Our Groups</strong>. This is the company list: names, logos, descriptions, websites and the cards on the Our Groups page. The two sliders now have their own screens — see <strong>Our Companies — Home &amp; Our Groups sliders</strong> above.</p>
         <p>Fields for each company:</p>
         <ul>
           <li><strong>Company name</strong> — the title shown on the slide and card.</li>
