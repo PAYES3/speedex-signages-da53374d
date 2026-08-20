@@ -390,3 +390,88 @@ export const updateSettings = createServerFn({ method: 'POST' })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/* ============================================================
+ * SLIDER SLIDES (independent per context)
+ * ============================================================ */
+const SLIDE_SELECT =
+  'id, context, company_id, image_url, mobile_image_url, title, description, sort_order, visible, companies(name, slug, tagline, description, logo_url, website_url, cta_label, hero_image)';
+
+const sliderContext = z.enum(['home_our_companies', 'our_groups']);
+
+const slideSchema = z.object({
+  id: z.string().uuid().optional(),
+  context: sliderContext,
+  company_id: z.string().uuid().nullable().optional(),
+  image_url: z.string().trim().max(1200).nullable().optional(),
+  mobile_image_url: z.string().trim().max(1200).nullable().optional(),
+  title: z.string().trim().max(200).default(''),
+  description: z.string().trim().max(4000).default(''),
+  sort_order: z.number().int().default(0),
+  visible: z.boolean().default(true),
+});
+
+export const publicListSlides = createServerFn({ method: 'GET' })
+  .inputValidator((input) => z.object({ context: sliderContext }).parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const { data: rows, error } = await supabaseAdmin
+      .from('slider_slides')
+      .select(SLIDE_SELECT)
+      .eq('context', data.context)
+      .eq('visible', true)
+      .order('sort_order');
+    if (error) return [];
+    return rows ?? [];
+  });
+
+export const listSlides = createServerFn({ method: 'GET' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ context: sliderContext }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: rows, error } = await context.supabase
+      .from('slider_slides')
+      .select(SLIDE_SELECT)
+      .eq('context', data.context)
+      .order('sort_order');
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+export const upsertSlide = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => slideSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase.from('slider_slides').upsert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteSlide = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase.from('slider_slides').delete().eq('id', data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const reorderSlides = createServerFn({ method: 'POST' })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ ids: z.array(z.string().uuid()).max(200) }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    for (let i = 0; i < data.ids.length; i++) {
+      const { error } = await context.supabase
+        .from('slider_slides')
+        .update({ sort_order: i })
+        .eq('id', data.ids[i]);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
+  });
