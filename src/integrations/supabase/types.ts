@@ -610,6 +610,56 @@ export type Database = {
         }
         Relationships: []
       }
+      slider_slides: {
+        Row: {
+          company_id: string | null
+          context: string
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          mobile_image_url: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          company_id?: string | null
+          context: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          mobile_image_url?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          company_id?: string | null
+          context?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          mobile_image_url?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "slider_slides_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       testimonials: {
         Row: {
           approved: boolean
