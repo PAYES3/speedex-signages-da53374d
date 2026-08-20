@@ -3,7 +3,7 @@ import { ArrowRight, Building2, Sparkles, Play, MapPin, Phone, Globe, ChevronLef
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { publicListCompanies } from '@/lib/admin/content.functions';
+import { publicListSlides } from '@/lib/admin/content.functions';
 import { AdaptiveImage } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
 import { useLang } from '@/hooks/useLang';
@@ -26,16 +26,6 @@ const SLIDE_MS = 6000;
 
 const FALLBACK_BG = '/images/showcase/signage-1.jpg';
 
-const ALL_COMPANIES: Company[] = [
-  { id: '1', name: 'Speedex Signages', slug: 'speedex-signages', tagline: 'LED, Acrylic & 3D Signage', description: 'Premier signage manufacturing, LED display solutions, acrylic fabrication, 3D signboards and vehicle branding across UAE.', logo_url: '/images/logos/speedex-signages.jpg', bg_url: '/images/showcase/signage-2.jpg' },
-  { id: '2', name: 'Speedex Rent A Car', slug: 'speedex-rent-a-car', tagline: 'Luxury & Commercial Rental', description: 'Luxury, SUV and commercial vehicle rentals with airport transfers and corporate leasing services.', logo_url: '/images/logos/speedex-rent-a-car.jpg', bg_url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=90' },
-  { id: '3', name: 'Speedex Facility Management', slug: 'speedex-facility-management', tagline: 'Building Maintenance', description: 'Professional building maintenance, cleaning, MEP and complete facility management services.', logo_url: '/images/logos/speedex-facility-management.jpg', bg_url: '/images/showcase/facility.jpg' },
-  { id: '4', name: 'Speedex Auto Workshop', slug: 'speedex-workshop', tagline: 'Auto Repair Experts', description: 'Mechanical repairs, diagnostics, engine rebuilding, painting and complete automotive care.', logo_url: '/images/logos/speedex-workshop.jpg', bg_url: '/images/showcase/workshop.png' },
-  { id: '5', name: 'Excellent Field Contracting', slug: 'excellent-field-contracting', tagline: 'Civil & Interior', description: 'Civil contracting, fit-out works, renovation and commercial construction solutions.', logo_url: '/images/logos/excellent-field-contracting.jpg', bg_url: '/images/showcase/contracting.jpg' },
-  { id: '6', name: 'Excellent General Trading', slug: 'excellent-general-trading', tagline: 'General Trading', description: 'Import, export, uniforms, safety products, building materials and industrial supplies.', logo_url: '/images/logos/excellent-general-trading.jpg', bg_url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=2000&q=90' },
-  { id: '7', name: 'Arabsat Transport', slug: 'arabsat', tagline: 'Passenger Transport', description: 'Luxury buses, staff transportation, labour transport and airport transfer solutions.', logo_url: '/images/logos/arabsat.jpg', bg_url: '/images/showcase/transport.jpg' },
-];
-
 function initials(name: string) {
   return name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 }
@@ -44,26 +34,34 @@ function isExternal(url?: string | null) {
   return !!url && /^https?:\/\//i.test(url.trim());
 }
 
-export function OurCompanies() {
-  const fetcher = useServerFn(publicListCompanies);
-  const { data } = useQuery({ queryKey: ['public-companies'], queryFn: () => fetcher(), staleTime: 60_000 });
+export type SliderContext = 'home_our_companies' | 'our_groups';
+
+export function OurCompanies({ context = 'home_our_companies' }: { context?: SliderContext }) {
+  const fetcher = useServerFn(publicListSlides);
+  const { data } = useQuery({
+    queryKey: ['slides', context],
+    queryFn: () => fetcher({ data: { context } }),
+    staleTime: 60_000,
+  });
 
   const companies: Company[] = useMemo(() => {
     const rows = (data ?? []) as any[];
-    if (!rows.length) return ALL_COMPANIES;
-    return rows.map((r, i) => ({
-      id: r.id ?? String(i),
-      name: r.name,
-      slug: r.slug,
-      tagline: r.tagline ?? '',
-      description: r.description ?? '',
-      logo_url: r.logo_url ?? null,
-      image: r.hero_image ?? null,
-      bg_url: r.banner_url ?? r.hero_image ?? null,
-      mobile_bg_url: r.mobile_banner_url ?? null,
-      website_url: r.website_url ?? null,
-      cta_label: r.cta_label ?? null,
-    }));
+    return rows.map((r, i) => {
+      const c = r.companies ?? {};
+      return {
+        id: r.id ?? String(i),
+        name: r.title?.trim() || c.name || '',
+        slug: c.slug ?? '',
+        tagline: c.tagline ?? '',
+        description: r.description?.trim() || c.description || '',
+        logo_url: c.logo_url ?? null,
+        image: c.hero_image ?? null,
+        bg_url: r.image_url ?? c.hero_image ?? null,
+        mobile_bg_url: r.mobile_image_url ?? null,
+        website_url: c.website_url ?? null,
+        cta_label: c.cta_label ?? null,
+      };
+    });
   }, [data]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
