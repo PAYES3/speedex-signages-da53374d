@@ -93,9 +93,7 @@ function CompaniesPage() {
       </section>
 
       {/* Group Showreel */}
-      <section className="pb-4">
-        <OurCompanies context="our_groups" />
-      </section>
+      <OurCompanies context="our_groups" showHeader={false} showFooter={false} />
 
       <section className="w-full bg-primary">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
