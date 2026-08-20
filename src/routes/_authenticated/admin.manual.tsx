@@ -30,6 +30,7 @@ const TOC = [
   ['homepage', 'Homepage Builder'],
   ['content', 'Website Content'],
   ['media', 'Media Library'],
+  ['sliders', 'Our Companies — Home & Our Groups sliders'],
   ['companies', 'Our Groups (company slider + cards)'],
   ['services', 'Services'],
   ['portfolio', 'Portfolio'],
