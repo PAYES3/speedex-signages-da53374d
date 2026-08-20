@@ -7,6 +7,7 @@ import { ArrowRight, Building2 } from 'lucide-react';
 import { AdaptiveVideo } from '@/components/AdaptiveMedia';
 import groupVideo from '@/assets/hero/ALL-COMPANIES.mp4.asset.json';
 import { normalizeExternalUrl } from '@/lib/url';
+import { OurCompanies } from '@/components/sections/OurCompanies';
 
 export const Route = createFileRoute('/companies')({
   head: () => ({
@@ -92,6 +93,8 @@ function CompaniesPage() {
       </section>
 
       {/* Group Showreel */}
+      <OurCompanies context="our_groups" showHeader={false} showFooter={false} />
+
       <section className="w-full bg-primary">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div

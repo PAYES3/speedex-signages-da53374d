@@ -30,6 +30,7 @@ const TOC = [
   ['homepage', 'Homepage Builder'],
   ['content', 'Website Content'],
   ['media', 'Media Library'],
+  ['sliders', 'Our Companies — Home & Our Groups sliders'],
   ['companies', 'Our Groups (company slider + cards)'],
   ['services', 'Services'],
   ['portfolio', 'Portfolio'],
@@ -106,12 +107,26 @@ function ManualPage() {
         </ul>
       </Section>
 
-      <Section id="companies" title="Our Groups (company slider + cards)">
-        <p>Sidebar: <strong>Our Groups</strong>. One list of companies powers two different things:</p>
+      <Section id="sliders" title="Our Companies — Home & Our Groups sliders">
+        <p>There are two separate sliders, each with its own screen in the sidebar. They never affect each other, and neither one changes a company logo or company record.</p>
         <ul>
-          <li>The <strong>Our Companies slider</strong> on the <strong>Home page</strong> and the <strong>About page</strong>. Both pages read the same records — edit once, both update.</li>
-          <li>The <strong>Our Groups page</strong> card grid. This is a separate layout: it shows a card per company, not the slider.</li>
+          <li><strong>Our Companies — Home</strong> — the slider shown on the <strong>Home page</strong> and the <strong>About page</strong>. Editing here updates both pages.</li>
+          <li><strong>Our Groups — Slider</strong> — the slider at the top of the <strong>Our Groups page</strong> only. The card grid below it still comes from the company list.</li>
         </ul>
+        <p>For each slide you can:</p>
+        <ul>
+          <li><strong>Company</strong> — pick which company the slide shows. The logo, name and description come from that company record and are never overwritten here.</li>
+          <li><strong>Background image (desktop)</strong> — upload or replace the wide photo behind the white card.</li>
+          <li><strong>Background image (mobile)</strong> — optional taller photo for phones. If empty, the desktop image is used.</li>
+          <li><strong>Title / description override</strong> — optional. Leave blank to use the company's own text.</li>
+          <li><strong>Visible</strong> — hide a slide without deleting it.</li>
+          <li><strong>Up / down arrows</strong> — change the slide order. <strong>Eye</strong> opens the image full size. <strong>Delete</strong> removes only the slide.</li>
+        </ul>
+        <p>Changes appear on the website straight away after saving — no code change is needed.</p>
+      </Section>
+
+      <Section id="companies" title="Our Groups (company slider + cards)">
+        <p>Sidebar: <strong>Our Groups</strong>. This is the company list: names, logos, descriptions, websites and the cards on the Our Groups page. The two sliders now have their own screens — see <strong>Our Companies — Home &amp; Our Groups sliders</strong> above.</p>
         <p>Fields for each company:</p>
         <ul>
           <li><strong>Company name</strong> — the title shown on the slide and card.</li>

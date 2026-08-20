@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { supabase } from '@/integrations/supabase/client';
-import { LayoutDashboard, Briefcase, ImageIcon, MessagesSquare, Star, LogOut, Globe, Building2, Settings as SettingsIcon, FolderOpen, FileText, LayoutTemplate, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Briefcase, ImageIcon, MessagesSquare, Star, LogOut, Globe, Building2, Settings as SettingsIcon, FolderOpen, FileText, LayoutTemplate, BookOpen, GalleryHorizontal, Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,8 @@ const NAV = [
   { to: '/admin/homepage', label: 'Homepage Builder', icon: LayoutTemplate, exact: false },
   { to: '/admin/content', label: 'Website Content', icon: FileText, exact: false },
   { to: '/admin/media', label: 'Media Library', icon: FolderOpen, exact: false },
+  { to: '/admin/home-companies', label: 'Our Companies — Home', icon: GalleryHorizontal, exact: false },
+  { to: '/admin/group-slides', label: 'Our Groups — Slider', icon: Layers, exact: false },
   { to: '/admin/companies', label: 'Our Groups', icon: Building2, exact: false },
   { to: '/admin/services', label: 'Services', icon: Briefcase, exact: false },
   { to: '/admin/portfolio', label: 'Portfolio', icon: ImageIcon, exact: false },
