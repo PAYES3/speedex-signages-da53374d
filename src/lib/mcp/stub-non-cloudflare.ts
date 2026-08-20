@@ -14,5 +14,15 @@ export const auth = {
 };
 export class ToolError extends Error {}
 export type ToolContext = never;
+
+/** Metadata/MCP route handlers: respond 404 off the Cloudflare deployment. */
+export const createTanStackOAuthProtectedResourceMetadataHandler = () => () =>
+  new Response('Not Found', { status: 404 });
+export const createTanStackMcpHandler = createTanStackOAuthProtectedResourceMetadataHandler;
+export const createTanStackOAuthAuthorizationServerMetadataHandler =
+  createTanStackOAuthProtectedResourceMetadataHandler;
+export const createTanStackOAuthConsentHandler =
+  createTanStackOAuthProtectedResourceMetadataHandler;
+
 export default { defineMcp, defineTool, auth };
 export { unavailable };
