@@ -32,7 +32,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
   },
   loader: async ({ location }) => {
     const authorizationId = new URLSearchParams(location.search).get("authorization_id")!;
-    const { data, error } = await getOAuthApi().getAuthorizationDetails(authorizationId);
+    const { data, error } = await (supabase.auth as unknown as { oauth: OAuthApi }).oauth.getAuthorizationDetails(authorizationId);
     if (error) throw error;
     const immediate = data?.redirect_url ?? data?.redirect_to;
     if (immediate && !data?.client) throw redirect({ href: immediate });
@@ -59,7 +59,7 @@ function Consent() {
   async function decide(approve: boolean) {
     setBusy(true);
     setError(null);
-    const oauthApi = getOAuthApi();
+    const oauthApi = (supabase.auth as unknown as { oauth: OAuthApi }).oauth;
     const { data, error } = approve
       ? await oauthApi.approveAuthorization(authorization_id)
       : await oauthApi.denyAuthorization(authorization_id);
