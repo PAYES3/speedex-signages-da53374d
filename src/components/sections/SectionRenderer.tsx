@@ -32,6 +32,7 @@ function OurGroupsBlock({ data }: { data: Record<string, string> }) {
   );
 }
 
+
 export function SectionRenderer({ section }: { section: SectionRow }) {
   const s = useSiteSettings();
   const data = (section.data ?? {}) as Record<string, string>;
