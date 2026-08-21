@@ -49,7 +49,7 @@ export function SectionRenderer({ section }: { section: SectionRow }) {
     case 'factory_showcase': return <FactoryShowcase />;
     case 'why_choose': return <WhyChoose />;
     case 'statistics': return <Stats />;
-    case 'process_video': return <ProcessVideo />;
+    case 'process_video': return <ProcessVideo data={data} />;
     case 'projects': return <ProjectsSection data={data} />;
     case 'testimonials': return <Testimonials />;
     case 'feedback_form': return <CustomerFeedback />;
