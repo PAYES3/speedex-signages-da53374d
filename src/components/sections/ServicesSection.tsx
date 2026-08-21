@@ -16,7 +16,7 @@ export function ServicesSection({ data = {} }: { data?: Record<string, string> }
     ? (rows as any[]).slice(0, 6).map((s) => ({
         title: s.title as string,
         desc: (s.description as string) ?? '',
-        icon: ((Icons as any)[s.icon] ?? Icons.Sparkles) as any,
+        icon: resolveServiceIcon(s.icon as string | null | undefined),
         image: s.image_url as string | null,
       }))
     : SERVICES.slice(0, 6).map((s) => ({ title: s.title, desc: s.desc, icon: s.icon, image: null }));
