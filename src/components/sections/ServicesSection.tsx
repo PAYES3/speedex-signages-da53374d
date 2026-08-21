@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { ArrowRight } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { resolveServiceIcon } from '@/lib/service-icons';
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/Reveal';
 import { publicListServices } from '@/lib/admin/content.functions';
