@@ -36,9 +36,11 @@ const sectionSchema = z.object({
 export const publicListSections = createServerFn({ method: 'GET' })
   .inputValidator((input: { page?: string } | undefined) => ({ page: input?.page ?? 'home' }))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
     const nowIso = new Date().toISOString();
-    const { data: rows, error } = await supabaseAdmin
+    const { data: rows, error } = await supabase
       .from('page_sections')
       .select('id,section_type,sort_order,data')
       .eq('page', data.page)
@@ -46,7 +48,7 @@ export const publicListSections = createServerFn({ method: 'GET' })
       .eq('status', 'published')
       .or(`publish_at.is.null,publish_at.lte.${nowIso}`)
       .order('sort_order');
-    if (error) return [];
+    if (error) { console.error('[publicListSections]', error.message); return []; }
     return rows ?? [];
   });
 
@@ -134,10 +136,12 @@ const slideSchema = z.object({
 });
 
 export const publicListHeroSlides = createServerFn({ method: 'GET' }).handler(async () => {
-  const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-  const { data, error } = await supabaseAdmin
+  const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+  const { data, error } = await supabase
     .from('hero_slides').select('*').eq('active', true).order('sort_order');
-  if (error) return [];
+  if (error) { console.error('[publicListHeroSlides]', error.message); return []; }
   return data ?? [];
 });
 
