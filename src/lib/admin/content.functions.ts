@@ -107,10 +107,12 @@ export const deleteProject = createServerFn({ method: 'POST' })
 /* Categories */
 export const listCategories = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('portfolio_categories').select('*').order('sort_order').order('name');
-    if (error) throw new Error(error.message);
+    if (error) { console.error('[CMS] listCategories:', error.message); return []; }
     return data ?? [];
   });
 
