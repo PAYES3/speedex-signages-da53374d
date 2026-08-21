@@ -12,12 +12,10 @@ type OAuthApi = {
   denyAuthorization: (id: string) => Promise<OAuthResult>;
 };
 
-// Keep the lazy browser client lazy. Reading `supabase.auth` at module scope
-// initializes it while the server imports the route tree, which makes every
-// SSR route fail when browser-facing backend variables are not present.
-function getOAuthApi(): OAuthApi {
-  return (supabase.auth as unknown as { oauth: OAuthApi }).oauth;
-}
+// Keep the lazy browser client lazy: `supabase.auth` must only be read inside
+// route callbacks (never at module scope), otherwise importing the route tree
+// on the server initializes the browser client during SSR.
+
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
@@ -34,7 +32,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
   },
   loader: async ({ location }) => {
     const authorizationId = new URLSearchParams(location.search).get("authorization_id")!;
-    const { data, error } = await getOAuthApi().getAuthorizationDetails(authorizationId);
+    const { data, error } = await (supabase.auth as unknown as { oauth: OAuthApi }).oauth.getAuthorizationDetails(authorizationId);
     if (error) throw error;
     const immediate = data?.redirect_url ?? data?.redirect_to;
     if (immediate && !data?.client) throw redirect({ href: immediate });
@@ -61,7 +59,7 @@ function Consent() {
   async function decide(approve: boolean) {
     setBusy(true);
     setError(null);
-    const oauthApi = getOAuthApi();
+    const oauthApi = (supabase.auth as unknown as { oauth: OAuthApi }).oauth;
     const { data, error } = approve
       ? await oauthApi.approveAuthorization(authorization_id)
       : await oauthApi.denyAuthorization(authorization_id);

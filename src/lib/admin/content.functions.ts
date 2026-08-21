@@ -107,10 +107,12 @@ export const deleteProject = createServerFn({ method: 'POST' })
 /* Categories */
 export const listCategories = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('portfolio_categories').select('*').order('sort_order').order('name');
-    if (error) throw new Error(error.message);
+    if (error) { console.error('[CMS] listCategories:', error.message); return []; }
     return data ?? [];
   });
 
@@ -234,29 +236,35 @@ export const deleteMessage = createServerFn({ method: 'POST' })
  * ============================================================ */
 export const publicListServices = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('services').select('*').eq('published', true).order('sort_order').order('title');
-    if (error) return [];
+    if (error) { console.error('[publicListServices]', error.message); return []; }
     return data ?? [];
   });
 
 export const publicListProjects = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('portfolio_projects').select('*').eq('published', true).order('sort_order').order('created_at', { ascending: false });
-    if (error) return [];
+    if (error) { console.error('[publicListProjects]', error.message); return []; }
     return data ?? [];
   });
 
 export const publicListTestimonials = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('testimonials').select('id,name,company,rating,content,avatar_url,created_at')
       .eq('approved', true).order('created_at', { ascending: false }).limit(24);
-    if (error) return [];
+    if (error) { console.error('[publicListTestimonials]', error.message); return []; }
     return data ?? [];
   });
 
@@ -283,20 +291,24 @@ const companySchema = z.object({
 
 export const publicListCompanies = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data, error } = await supabase
       .from('companies').select('*').eq('active', true).order('sort_order').order('name');
-    if (error) return [];
+    if (error) { console.error('[publicListCompanies]', error.message); return []; }
     return data ?? [];
   });
 
 export const publicGetCompany = createServerFn({ method: 'GET' })
   .inputValidator((input) => z.object({ slug: z.string().min(1).max(160) }).parse(input))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data: row, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return null;
+    const { data: row, error } = await supabase
       .from('companies').select('*').eq('slug', data.slug).eq('active', true).maybeSingle();
-    if (error) return null;
+    if (error) { console.error('[publicGetCompany]', error.message); return null; }
     return row;
   });
 
@@ -370,9 +382,11 @@ export const duplicateCompany = createServerFn({ method: 'POST' })
  * ============================================================ */
 export const publicGetSettings = createServerFn({ method: 'GET' })
   .handler(async () => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data, error } = await supabaseAdmin.from('site_settings').select('key,value');
-    if (error) return {} as Record<string, string>;
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return {} as Record<string, string>;
+    const { data, error } = await supabase.from('site_settings').select('key,value');
+    if (error) { console.error('[publicGetSettings]', error.message); return {} as Record<string, string>; }
     const out: Record<string, string> = {};
     for (const r of data ?? []) out[r.key as string] = (r.value as string) ?? '';
     return out;
@@ -414,14 +428,16 @@ const slideSchema = z.object({
 export const publicListSlides = createServerFn({ method: 'GET' })
   .inputValidator((input) => z.object({ context: sliderContext }).parse(input))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-    const { data: rows, error } = await supabaseAdmin
+    const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+    const supabase = getPublicSupabase();
+    if (!supabase) return [];
+    const { data: rows, error } = await supabase
       .from('slider_slides')
       .select(SLIDE_SELECT)
       .eq('context', data.context)
       .eq('visible', true)
       .order('sort_order');
-    if (error) return [];
+    if (error) { console.error('[publicListSlides]', error.message); return []; }
     return rows ?? [];
   });
 

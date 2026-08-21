@@ -78,9 +78,11 @@ export const deleteMedia = createServerFn({ method: 'POST' })
  * PAGE CONTENT (every heading / paragraph / button / image)
  * ============================================================ */
 export const publicGetPageContent = createServerFn({ method: 'GET' }).handler(async () => {
-  const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
-  const { data, error } = await supabaseAdmin.from('page_content').select('page,key,value');
-  if (error) return {} as Record<string, string>;
+  const { getPublicSupabase } = await import('@/lib/supabase-public.server');
+  const supabase = getPublicSupabase();
+  if (!supabase) return {} as Record<string, string>;
+  const { data, error } = await supabase.from('page_content').select('page,key,value');
+  if (error) { console.error('[publicGetPageContent]', error.message); return {} as Record<string, string>; }
   const out: Record<string, string> = {};
   for (const r of data ?? []) out[`${r.page}.${r.key}`] = (r.value as string) ?? '';
   return out;
