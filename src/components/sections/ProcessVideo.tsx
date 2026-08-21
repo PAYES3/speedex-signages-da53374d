@@ -1,6 +1,7 @@
 import React from 'react';
 import { Reveal } from '@/components/Reveal';
 import { Palette, Hammer, Sparkles, Wrench } from 'lucide-react';
+import { AdaptiveVideo } from '@/components/AdaptiveMedia';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 
 const STEPS = [
@@ -10,15 +11,22 @@ const STEPS = [
   { icon: Wrench, title: 'Installation', desc: 'Certified crews mount signage at any elevation, with permits handled end-to-end.' },
 ];
 
-export function ProcessVideo() {
+export function ProcessVideo({ data }: { data?: Record<string, string> }) {
+  // The Homepage Builder exposes a `video_url` field for this section — use it
+  // as the source of truth and only fall back to the bundled clip.
+  const src = data?.video_url?.trim() || hero1.url;
+  const eyebrow = data?.eyebrow?.trim() || 'Our Process';
+  const title =
+    data?.title?.trim() || 'From design to installation — we build signage that represents your brand.';
+
   return (
     <section className="py-24 lg:py-32 bg-[color:var(--surface-beige)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="max-w-3xl mb-14">
-            <p className="text-primary text-sm font-semibold tracking-[0.25em] uppercase">Our Process</p>
+            <p className="text-primary text-sm font-semibold tracking-[0.25em] uppercase">{eyebrow}</p>
             <h2 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
-              From design to installation — we build signage that represents your brand.
+              {title}
             </h2>
           </div>
         </Reveal>
@@ -27,20 +35,13 @@ export function ProcessVideo() {
           {/* Left Column: Video Showcase */}
           <Reveal direction="left" className="lg:col-span-3">
             <div className="relative rounded-3xl overflow-hidden shadow-[0_40px_80px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5 bg-muted">
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className="w-full aspect-video object-cover"
-              >
-                <source src={hero1.url} type="video/mp4" />
-                Your browser does not support video playback.
-              </video>
+              <div className="w-full aspect-video">
+                <AdaptiveVideo src={src} preload="metadata" />
+              </div>
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent" />
             </div>
           </Reveal>
+
 
           {/* Right Column: Step-by-Step List */}
           <Reveal direction="right" className="lg:col-span-2">
