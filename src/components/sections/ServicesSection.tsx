@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { ArrowRight } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { resolveServiceIcon } from '@/lib/service-icons';
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/Reveal';
 import { publicListServices } from '@/lib/admin/content.functions';
@@ -16,7 +16,7 @@ export function ServicesSection({ data = {} }: { data?: Record<string, string> }
     ? (rows as any[]).slice(0, 6).map((s) => ({
         title: s.title as string,
         desc: (s.description as string) ?? '',
-        icon: ((Icons as any)[s.icon] ?? Icons.Sparkles) as any,
+        icon: resolveServiceIcon(s.icon as string | null | undefined),
         image: s.image_url as string | null,
       }))
     : SERVICES.slice(0, 6).map((s) => ({ title: s.title, desc: s.desc, icon: s.icon, image: null }));
