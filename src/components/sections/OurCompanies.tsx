@@ -161,7 +161,7 @@ export function OurCompanies({
         )}
 
         <div
-          className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]"
+          className="relative isolate overflow-hidden rounded-[clamp(1rem,3vw,2rem)] border border-white/25 bg-black shadow-[0_50px_120px_-60px_rgba(0,0,0,0.65)]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
