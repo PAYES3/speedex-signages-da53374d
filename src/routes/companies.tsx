@@ -7,7 +7,7 @@ import { ArrowRight, Building2 } from 'lucide-react';
 import { AdaptiveVideo } from '@/components/AdaptiveMedia';
 import groupVideo from '@/assets/hero/ALL-COMPANIES.mp4.asset.json';
 import { normalizeExternalUrl } from '@/lib/url';
-import { OurCompanies } from '@/components/sections/OurCompanies';
+
 
 export const Route = createFileRoute('/companies')({
   head: () => ({
