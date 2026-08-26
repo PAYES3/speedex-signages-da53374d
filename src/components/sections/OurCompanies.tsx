@@ -128,10 +128,18 @@ export function OurCompanies({
   const external = isExternal(currentCompany.website_url);
   const exploreHref = external ? currentCompany.website_url! : `/companies/${currentCompany.slug}`;
 
+  // Apple-style glass controls
   const arrowClass =
-    'grid place-items-center rounded-full border-2 border-black/10 bg-white text-neutral-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] ' +
-    'transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary hover:scale-105 active:scale-95 ' +
-    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40';
+    'grid place-items-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur-xl backdrop-saturate-150 ' +
+    'shadow-[0_10px_40px_-12px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.35)] ' +
+    'transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-95 ' +
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40';
+
+  const arrowClassLight =
+    'grid place-items-center rounded-full border border-black/10 bg-white/60 text-foreground backdrop-blur-xl backdrop-saturate-150 ' +
+    'shadow-[0_10px_30px_-14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.6)] ' +
+    'transition-all duration-300 hover:bg-white/85 active:scale-95 ' +
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30';
 
   const prevLabel = T('companies.prev', 'Previous slide');
   const nextLabel = T('companies.next', 'Next slide');
