@@ -128,10 +128,18 @@ export function OurCompanies({
   const external = isExternal(currentCompany.website_url);
   const exploreHref = external ? currentCompany.website_url! : `/companies/${currentCompany.slug}`;
 
+  // Apple-style glass controls
   const arrowClass =
-    'grid place-items-center rounded-full border-2 border-black/10 bg-white text-neutral-900 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.55)] ' +
-    'transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary hover:scale-105 active:scale-95 ' +
-    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40';
+    'grid place-items-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur-xl backdrop-saturate-150 ' +
+    'shadow-[0_10px_40px_-12px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.35)] ' +
+    'transition-all duration-300 hover:bg-white/30 hover:scale-105 active:scale-95 ' +
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40';
+
+  const arrowClassLight =
+    'grid place-items-center rounded-full border border-black/10 bg-white/60 text-foreground backdrop-blur-xl backdrop-saturate-150 ' +
+    'shadow-[0_10px_30px_-14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.6)] ' +
+    'transition-all duration-300 hover:bg-white/85 active:scale-95 ' +
+    'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30';
 
   const prevLabel = T('companies.prev', 'Previous slide');
   const nextLabel = T('companies.next', 'Next slide');
@@ -153,7 +161,7 @@ export function OurCompanies({
         )}
 
         <div
-          className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)]"
+          className="relative isolate overflow-hidden rounded-[clamp(1rem,3vw,2rem)] border border-white/25 bg-black shadow-[0_50px_120px_-60px_rgba(0,0,0,0.65)]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
@@ -182,30 +190,32 @@ export function OurCompanies({
             </motion.div>
           </AnimatePresence>
 
-          {/* Soft scrim so the card never fights the background photo on small screens */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent sm:from-black/25 pointer-events-none" />
+          {/* Soft scrim so the glass panel never fights the background photo */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent sm:bg-gradient-to-r sm:from-black/55 sm:via-black/20 sm:to-transparent pointer-events-none" />
 
           <div
             className="relative z-10 flex items-end sm:items-center"
             style={{
               minHeight:
                 vp.orientation === 'portrait'
-                  ? 'clamp(440px, 72svh, 640px)'
-                  : vp.short
-                    ? 'clamp(380px, 70svh, 500px)'
-                    : 'clamp(420px, 60svh, 580px)',
+                  ? 'clamp(420px, 70svh, 620px)'
+                  : vp.device === 'tablet'
+                    ? 'clamp(400px, 58svh, 560px)'
+                    : vp.short
+                      ? 'clamp(380px, 68svh, 500px)'
+                      : 'clamp(440px, 60svh, 600px)',
             }}
           >
-            <div className="w-full max-w-full px-3 py-5 sm:max-w-[62%] sm:ps-16 sm:pe-8 sm:py-8 lg:max-w-[34rem] lg:ps-24 lg:pe-12 lg:py-10">
+            <div className="w-full max-w-full px-3 py-5 sm:max-w-[66%] sm:ps-10 sm:pe-8 sm:py-8 lg:max-w-[36rem] lg:ps-20 lg:pe-12 lg:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-2xl border border-black/5 bg-card/95 backdrop-blur-xl shadow-[0_30px_60px_-40px_rgba(0,0,0,0.45)]"
-                style={{ padding: 'clamp(0.85rem, 3.5vw, 2rem)' }}
+                className="rounded-[clamp(0.9rem,2.5vw,1.5rem)] border border-white/25 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.28)]"
+                style={{ padding: 'clamp(0.9rem, 3.2vw, 2rem)' }}
               >
-                <div className="mb-3 sm:mb-5 lg:mb-6 flex items-center justify-center rounded-xl bg-background p-2 sm:p-3 border border-border" style={{ height: 'clamp(2.75rem, 9vw, 6rem)' }}>
+                <div className="mb-3 sm:mb-5 lg:mb-6 flex items-center justify-center rounded-xl border border-white/30 bg-white/80 backdrop-blur-md p-2 sm:p-3" style={{ height: 'clamp(2.75rem, 9vw, 5.5rem)' }}>
                   {currentCompany.logo_url && !logoFailed[currentCompany.id] ? (
                     <img
                       src={currentCompany.logo_url}
@@ -223,22 +233,22 @@ export function OurCompanies({
                 </div>
 
                 {currentCompany.tagline && (
-                  <div className="mb-2 sm:mb-3 inline-block max-w-full truncate rounded-lg bg-primary/10 px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold uppercase tracking-wider text-primary">
+                  <div className="mb-2 sm:mb-3 inline-block max-w-full truncate rounded-lg border border-white/25 bg-white/15 px-2 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md">
                     {currentCompany.tagline}
                   </div>
                 )}
 
-                <h3 className="flex items-center gap-2 sm:gap-3 font-extrabold text-foreground" style={{ fontSize: 'clamp(1rem, 4vw, 1.875rem)' }}>
-                  <Building2 className="h-4 w-4 sm:h-6 sm:w-6 lg:h-7 lg:w-7 shrink-0 text-primary" />
+                <h3 className="flex items-center gap-2 sm:gap-3 font-extrabold !text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.5)]" style={{ fontSize: 'clamp(1.05rem, 3.6vw, 1.875rem)' }}>
+                  <Building2 className="h-4 w-4 sm:h-6 sm:w-6 lg:h-7 lg:w-7 shrink-0 text-white/85" />
                   <span className="min-w-0 break-words">{currentCompany.name}</span>
                 </h3>
 
-                <p className="mt-2 sm:mt-3 line-clamp-3 sm:line-clamp-none text-muted-foreground leading-relaxed" style={{ fontSize: 'clamp(0.78rem, 2.6vw, 1rem)' }}>{currentCompany.description}</p>
+                <p className="mt-2 sm:mt-3 line-clamp-3 sm:line-clamp-4 text-white/80 leading-relaxed" style={{ fontSize: 'clamp(0.8rem, 2.2vw, 1rem)' }}>{currentCompany.description}</p>
 
                 <a
                   href={exploreHref}
                   {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-                  className="mt-4 sm:mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-3.5 py-2 sm:px-5 sm:py-3 text-[11px] sm:text-sm font-semibold !text-white hover:bg-primary/90 transition-all hover:scale-105"
+                  className="mt-4 sm:mt-6 inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/20 px-4 py-2 sm:px-6 sm:py-3 text-[11px] sm:text-sm font-semibold !text-white backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition-all duration-300 hover:bg-white/35 hover:scale-[1.03]"
                 >
                   {currentCompany.cta_label?.trim() || T('companies.explore', 'Explore Company')}
                   <ArrowRight className="h-4 w-4 rtl-flip" />
@@ -246,6 +256,7 @@ export function OurCompanies({
               </motion.div>
             </div>
           </div>
+
 
           {/* Desktop / tablet arrows — always visible, centred on the sides */}
           <button
@@ -268,7 +279,7 @@ export function OurCompanies({
             <ChevronRight className="h-7 w-7 rtl-flip" strokeWidth={2.75} />
           </button>
 
-          <div className="absolute top-3 bottom-auto sm:top-auto sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
+          <div className="absolute top-3 bottom-auto sm:top-auto sm:bottom-5 left-1/2 z-30 flex max-w-[92%] flex-wrap justify-center -translate-x-1/2 items-center gap-1 rounded-full border border-white/25 bg-white/12 px-2 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]">
             {companies.map((c, index) => (
               <button
                 key={c.id}
@@ -276,10 +287,10 @@ export function OurCompanies({
                 onClick={() => goTo(index)}
                 aria-label={`Show ${c.name}`}
                 aria-current={index === currentIndex}
-                className="grid h-8 place-items-center px-1"
+                className="grid h-7 place-items-center px-1"
               >
                 <span
-                  className={`block rounded-full transition-all duration-300 ${index === currentIndex ? 'h-2.5 w-9 bg-primary shadow-[0_0_0_3px_rgba(255,255,255,0.7)]' : 'h-2.5 w-2.5 bg-white/85 ring-1 ring-black/15 hover:bg-white'}`}
+                  className={`block rounded-full transition-all duration-300 ${index === currentIndex ? 'h-2 w-8 bg-white' : 'h-2 w-2 bg-white/50 hover:bg-white/80'}`}
                 />
               </button>
             ))}
@@ -288,16 +299,17 @@ export function OurCompanies({
 
         {/* Mobile control row — the card is full width there, so arrows sit below the slide */}
         <div className="mt-4 flex items-center justify-center gap-4 sm:hidden">
-          <button type="button" onClick={prevSlide} aria-label={prevLabel} className={`h-12 w-12 ${arrowClass}`}>
+          <button type="button" onClick={prevSlide} aria-label={prevLabel} className={`h-12 w-12 ${arrowClassLight}`}>
             <ChevronLeft className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
           </button>
           <span className="text-sm font-semibold text-muted-foreground tabular-nums">
             {currentIndex + 1} / {companies.length}
           </span>
-          <button type="button" onClick={nextSlide} aria-label={nextLabel} className={`h-12 w-12 ${arrowClass}`}>
+          <button type="button" onClick={nextSlide} aria-label={nextLabel} className={`h-12 w-12 ${arrowClassLight}`}>
             <ChevronRight className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
           </button>
         </div>
+
 
         {showFooter && (
         <div className="mt-16 border-t border-border/60 pt-12">
