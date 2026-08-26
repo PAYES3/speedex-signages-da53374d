@@ -279,7 +279,7 @@ export function OurCompanies({
             <ChevronRight className="h-7 w-7 rtl-flip" strokeWidth={2.75} />
           </button>
 
-          <div className="absolute top-3 bottom-auto sm:top-auto sm:bottom-6 left-1/2 z-30 flex max-w-[90%] flex-wrap justify-center -translate-x-1/2 gap-2">
+          <div className="absolute top-3 bottom-auto sm:top-auto sm:bottom-5 left-1/2 z-30 flex max-w-[92%] flex-wrap justify-center -translate-x-1/2 items-center gap-1 rounded-full border border-white/25 bg-white/12 px-2 backdrop-blur-xl shadow-[0_8px_30px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.3)]">
             {companies.map((c, index) => (
               <button
                 key={c.id}
@@ -287,10 +287,10 @@ export function OurCompanies({
                 onClick={() => goTo(index)}
                 aria-label={`Show ${c.name}`}
                 aria-current={index === currentIndex}
-                className="grid h-8 place-items-center px-1"
+                className="grid h-7 place-items-center px-1"
               >
                 <span
-                  className={`block rounded-full transition-all duration-300 ${index === currentIndex ? 'h-2.5 w-9 bg-primary shadow-[0_0_0_3px_rgba(255,255,255,0.7)]' : 'h-2.5 w-2.5 bg-white/85 ring-1 ring-black/15 hover:bg-white'}`}
+                  className={`block rounded-full transition-all duration-300 ${index === currentIndex ? 'h-2 w-8 bg-white' : 'h-2 w-2 bg-white/50 hover:bg-white/80'}`}
                 />
               </button>
             ))}
@@ -299,16 +299,17 @@ export function OurCompanies({
 
         {/* Mobile control row — the card is full width there, so arrows sit below the slide */}
         <div className="mt-4 flex items-center justify-center gap-4 sm:hidden">
-          <button type="button" onClick={prevSlide} aria-label={prevLabel} className={`h-12 w-12 ${arrowClass}`}>
+          <button type="button" onClick={prevSlide} aria-label={prevLabel} className={`h-12 w-12 ${arrowClassLight}`}>
             <ChevronLeft className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
           </button>
           <span className="text-sm font-semibold text-muted-foreground tabular-nums">
             {currentIndex + 1} / {companies.length}
           </span>
-          <button type="button" onClick={nextSlide} aria-label={nextLabel} className={`h-12 w-12 ${arrowClass}`}>
+          <button type="button" onClick={nextSlide} aria-label={nextLabel} className={`h-12 w-12 ${arrowClassLight}`}>
             <ChevronRight className="h-6 w-6 rtl-flip" strokeWidth={2.75} />
           </button>
         </div>
+
 
         {showFooter && (
         <div className="mt-16 border-t border-border/60 pt-12">
