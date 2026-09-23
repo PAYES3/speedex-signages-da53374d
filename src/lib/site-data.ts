@@ -112,7 +112,7 @@ export const TESTIMONIALS = [
 ];
 
 export const CLIENTS = [
-  'Emirates', 'Etisalat', 'Emaar', 'Aldar', 'DAMAC', 'Majid Al Futtaim', 'Chalhoub', 'Lulu',
+  'Emirates', 'NMC', 'BASCOM', 'EDC', 'ASEER TIME', '\n', 'Chalhoub', 'Lulu',
 ];
 
 export const FAQ = [
