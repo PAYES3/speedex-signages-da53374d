@@ -214,9 +214,12 @@ export type Database = {
           cta_secondary_href: string
           cta_secondary_label: string
           description: string
+          focal_desktop: string
+          focal_mobile: string
           id: string
           media_type: string
           media_url: string
+          mobile_media_url: string | null
           poster_url: string | null
           sort_order: number
           subtitle: string
@@ -231,9 +234,12 @@ export type Database = {
           cta_secondary_href?: string
           cta_secondary_label?: string
           description?: string
+          focal_desktop?: string
+          focal_mobile?: string
           id?: string
           media_type?: string
           media_url?: string
+          mobile_media_url?: string | null
           poster_url?: string | null
           sort_order?: number
           subtitle?: string
@@ -248,9 +254,12 @@ export type Database = {
           cta_secondary_href?: string
           cta_secondary_label?: string
           description?: string
+          focal_desktop?: string
+          focal_mobile?: string
           id?: string
           media_type?: string
           media_url?: string
+          mobile_media_url?: string | null
           poster_url?: string | null
           sort_order?: number
           subtitle?: string
