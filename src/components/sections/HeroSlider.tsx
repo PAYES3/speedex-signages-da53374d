@@ -183,11 +183,11 @@ export function HeroSlider() {
             style={{ padding: 'clamp(1.1rem, 3.2vw, 2.5rem)' }}
           >
             {/* Gold hairline accent */}
-            <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold,43_74%_49%))] to-transparent opacity-80" />
+            <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent opacity-80" />
 
             {current.subtitle && (
               <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-white">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[hsl(var(--gold,43_74%_49%))]" />
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--gold)]" />
                 <span className="truncate">{current.subtitle}</span>
               </span>
             )}
