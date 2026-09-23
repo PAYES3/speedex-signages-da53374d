@@ -311,6 +311,7 @@ function SectionEditor({ section, onClose, onSaved }: { section: Section; onClos
 /* ------------------------------------------------------------------ */
 type Slide = {
   id: string; media_url: string; media_type: string; poster_url: string | null;
+  mobile_media_url: string | null; focal_desktop: string; focal_mobile: string;
   title: string; subtitle: string; description: string;
   cta_primary_label: string; cta_primary_href: string;
   cta_secondary_label: string; cta_secondary_href: string;
@@ -318,11 +319,31 @@ type Slide = {
 };
 
 const BLANK: Omit<Slide, 'id'> = {
-  media_url: '', media_type: 'video', poster_url: '', title: '', subtitle: '', description: '',
+  media_url: '', media_type: 'video', poster_url: '', mobile_media_url: '',
+  focal_desktop: 'center', focal_mobile: 'center',
+  title: '', subtitle: '', description: '',
   cta_primary_label: 'Get a free quote', cta_primary_href: '/contact',
   cta_secondary_label: 'Explore our companies', cta_secondary_href: '/companies',
   sort_order: 0, active: true,
 };
+
+const FOCAL_OPTIONS: { v: string; l: string }[] = [
+  { v: 'center', l: 'Centre' }, { v: 'center top', l: 'Top' }, { v: 'center bottom', l: 'Bottom' },
+  { v: 'left center', l: 'Left' }, { v: 'right center', l: 'Right' },
+  { v: '30% 40%', l: 'Left-centre' }, { v: '70% 40%', l: 'Right-centre' },
+];
+
+function FocalSelect({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div>
+      <Label>{label}</Label>
+      <select className="mt-1 h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+        value={value} onChange={(e) => onChange(e.target.value)}>
+        {FOCAL_OPTIONS.map((o) => <option key={o.v} value={o.v}>{o.l}</option>)}
+      </select>
+    </div>
+  );
+}
 
 function HeroTab() {
   const list = useServerFn(listHeroSlides);
@@ -430,6 +451,22 @@ function SlideEditor({ slide, onClose, onSaved }: { slide: Partial<Slide>; onClo
               <FileUpload folder="hero" accept="image/*,video/*" label="Upload video or image"
                 onUploaded={(files) => { set('media_url', files[0].url); set('media_type', files[0].type); }} />
             </div>
+          </div>
+          <div>
+            <Label>Phone version (optional — a portrait image or video for phones)</Label>
+            <div className="mt-2 flex items-center gap-3 flex-wrap">
+              {f.mobile_media_url && (
+                <div className="w-32">
+                  <MediaPreview url={f.mobile_media_url} type={/\.(mp4|webm|mov)(\?|$)/i.test(f.mobile_media_url) ? 'video' : 'image'} onRemove={() => set('mobile_media_url', '')} />
+                </div>
+              )}
+              <FileUpload folder="hero" accept="image/*,video/*" label="Upload phone version"
+                onUploaded={(files) => set('mobile_media_url', files[0].url)} />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <FocalSelect label="Keep visible on desktop" value={f.focal_desktop ?? 'center'} onChange={(v) => set('focal_desktop', v)} />
+            <FocalSelect label="Keep visible on phones" value={f.focal_mobile ?? 'center'} onChange={(v) => set('focal_mobile', v)} />
           </div>
           <div>
             <Label>Poster image (shown while a video loads)</Label>
