@@ -124,6 +124,7 @@ export function OurCompanies({
   const currentCompany = companies[Math.min(currentIndex, companies.length - 1)];
   if (!currentCompany) return null;
 
+  const isPhone = vp.device === 'mobile';
   const smallScreen = vp.orientation === 'portrait' || vp.short;
   const background =
     (smallScreen ? currentCompany.mobile_bg_url : null) ||
@@ -164,7 +165,7 @@ export function OurCompanies({
         )}
 
         <div
-          className="relative isolate overflow-hidden rounded-[clamp(1rem,3vw,2rem)] border border-white/25 bg-black shadow-[0_50px_120px_-60px_rgba(0,0,0,0.65)]"
+          className="relative isolate flex flex-col sm:block overflow-hidden rounded-[clamp(1rem,3vw,2rem)] border border-white/25 bg-black shadow-[0_50px_120px_-60px_rgba(0,0,0,0.65)]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
