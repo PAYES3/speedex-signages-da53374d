@@ -51,6 +51,11 @@ export const SECTION_TYPES: SectionTypeDef[] = [
       { key: 'video_3', label: 'Slide 3 background video (optional)', kind: 'video' },
       { key: 'video_4', label: 'Slide 4 background video (optional)', kind: 'video' },
       { key: 'video_5', label: 'Slide 5 background video (optional)', kind: 'video' },
+      { key: 'focal_1', label: 'Slide 1 image position (center, top, bottom, left, right or e.g. 50% 30%)', kind: 'text' },
+      { key: 'focal_2', label: 'Slide 2 image position (center, top, bottom, left, right or e.g. 50% 30%)', kind: 'text' },
+      { key: 'focal_3', label: 'Slide 3 image position (center, top, bottom, left, right or e.g. 50% 30%)', kind: 'text' },
+      { key: 'focal_4', label: 'Slide 4 image position (center, top, bottom, left, right or e.g. 50% 30%)', kind: 'text' },
+      { key: 'focal_5', label: 'Slide 5 image position (center, top, bottom, left, right or e.g. 50% 30%)', kind: 'text' },
     ],
   },
   {

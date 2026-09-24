@@ -6,11 +6,37 @@ type Common = {
   focal?: FocalMap;
   /** extra style applied to the media element */
   style?: React.CSSProperties;
+  /**
+   * contain (default) = full original composition, never zoomed or cropped.
+   * cover = fill the box (crops). Only use for decorative backdrops.
+   */
+  fit?: 'contain' | 'cover';
 };
 
 /**
- * Image that keeps its natural aspect ratio (cover, never stretched) while the
- * focal point moves per device so the subject stays visible on phones.
+ * Soft, blurred copy of an image used to fill any space around a
+ * `contain`-fitted image so there are no empty bars. Purely decorative.
+ */
+export function MediaBackdrop({ src, className = '' }: { src?: string | null; className?: string }) {
+  if (!src) return <div aria-hidden className={`absolute inset-0 bg-neutral-900 ${className}`} />;
+  return (
+    <div aria-hidden className={`absolute inset-0 overflow-hidden bg-neutral-900 ${className}`}>
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full scale-110 object-cover opacity-70 blur-2xl"
+      />
+      <div className="absolute inset-0 bg-black/25" />
+    </div>
+  );
+}
+
+/**
+ * Image that keeps its original aspect ratio and composition. By default it is
+ * fitted with `contain` (scaled down proportionally, never zoomed); the focal
+ * point only matters when `fit="cover"`.
  */
 export function AdaptiveImage({
   src,
@@ -19,6 +45,7 @@ export function AdaptiveImage({
   className = '',
   focal,
   style,
+  fit = 'contain',
 }: Common & { src: string; alt: string; eager?: boolean }) {
   const vp = useViewport();
   return (
@@ -26,8 +53,11 @@ export function AdaptiveImage({
       src={src}
       alt={alt}
       loading={eager ? 'eager' : 'lazy'}
+      // @ts-expect-error fetchpriority is valid HTML, not yet in React types
+      fetchpriority={eager ? 'high' : 'auto'}
       decoding="async"
-      className={`w-full h-full object-cover ${className}`}
+      sizes="100vw"
+      className={`w-full h-full ${fit === 'cover' ? 'object-cover' : 'object-contain'} ${className}`}
       style={{ objectPosition: focalFor(vp, focal), ...style }}
     />
   );
@@ -41,14 +71,14 @@ export function AdaptiveVideo({
   focal,
   style,
   preload = 'metadata',
+  fit = 'cover',
 }: Common & { src: string; poster?: string | null; preload?: 'none' | 'metadata' | 'auto' }) {
   const vp = useViewport();
   const ref = useRef<HTMLVideoElement | null>(null);
 
   // Autoplay is best-effort: browsers reject play() when the element is not yet
   // ready, when the tab is hidden, or before any user gesture. Retry on every
-  // signal instead of giving up after the first attempt (which left background
-  // videos frozen on the first frame).
+  // signal instead of giving up after the first attempt.
   useEffect(() => {
     const el = ref.current;
     if (!el || !src) return;
@@ -108,9 +138,8 @@ export function AdaptiveVideo({
       disablePictureInPicture
       controlsList="nodownload noplaybackrate noremoteplayback"
       onContextMenu={(e) => e.preventDefault()}
-      className={`w-full h-full object-cover ${className}`}
+      className={`w-full h-full ${fit === 'cover' ? 'object-cover' : 'object-contain'} ${className}`}
       style={{ objectPosition: focalFor(vp, focal), ...style }}
     />
   );
 }
-
