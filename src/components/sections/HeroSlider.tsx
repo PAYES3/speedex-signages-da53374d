@@ -113,15 +113,19 @@ export function HeroSlider() {
   };
   const mediaFailed = failed[current.id];
 
+  // Blurred fill behind the contained media (never a zoomed crop of it)
+  const backdropSrc = current.poster_url || (!asVideo ? src : null);
+
   return (
     <section
-      className="relative isolate w-full overflow-hidden bg-neutral-900 flex items-end sm:items-center"
-      style={{
-        minHeight: isPhone
-          ? 'clamp(540px, 88svh, 860px)'
+      className="relative isolate w-full overflow-hidden bg-neutral-950 flex flex-col pt-[4.5rem] sm:pt-0 sm:flex-row sm:items-center"
+      style={isPhone ? undefined : {
+        // Height follows a ~16:8 landscape ratio so images keep their composition.
+        minHeight: vp.device === 'tablet'
+          ? 'clamp(440px, 62vw, 640px)'
           : vp.short
-            ? 'clamp(460px, 94svh, 640px)'
-            : 'clamp(520px, 86svh, 920px)',
+            ? 'clamp(460px, 92svh, 640px)'
+            : 'clamp(520px, 50vw, min(92svh, 960px))',
       }}
       onMouseEnter={() => setHoverPaused(true)}
       onMouseLeave={() => setHoverPaused(false)}
@@ -137,39 +141,41 @@ export function HeroSlider() {
       aria-roledescription={multi ? 'carousel' : undefined}
       aria-label={T('hero.label', 'Featured')}
     >
-      <AnimatePresence initial={false}>
-        <motion.div
-          key={current.id + src}
-          className="absolute inset-0 -z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.8, ease: 'easeOut' }}
-        >
-          {mediaFailed ? (
-            current.poster_url
-              ? <AdaptiveImage src={current.poster_url} alt="" eager focal={focal} />
-              : <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950" />
-          ) : asVideo ? (
-            <div className="h-full w-full" onErrorCapture={() => setFailed((s) => ({ ...s, [current.id]: true }))}>
-              <AdaptiveVideo src={src} poster={current.poster_url || undefined} preload={index === 0 ? 'auto' : 'metadata'} focal={focal} />
-            </div>
-          ) : (
-            <div className="h-full w-full" onErrorCapture={() => setFailed((s) => ({ ...s, [current.id]: true }))}>
-              <AdaptiveImage src={src} alt={current.title} eager={index === 0} focal={focal} />
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
+      <MediaBackdrop src={backdropSrc} className="-z-20" />
 
-      {/* Very light edge scrim only — the glass panel carries the contrast, the image stays bright */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/45 via-transparent to-black/15 sm:bg-gradient-to-r sm:from-black/30 sm:via-transparent sm:to-transparent" />
+      {/* Media: full width 16:9 block on phones, full-bleed behind the text on larger screens */}
+      <div className="relative -z-10 w-full aspect-video sm:absolute sm:inset-0 sm:aspect-auto">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={current.id + src}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.8, ease: 'easeOut' }}
+          >
+            {mediaFailed ? (
+              current.poster_url
+                ? <AdaptiveImage src={current.poster_url} alt="" eager focal={focal} />
+                : <div className="h-full w-full bg-gradient-to-br from-neutral-800 to-neutral-950" />
+            ) : asVideo ? (
+              <div className="h-full w-full" onErrorCapture={() => setFailed((s) => ({ ...s, [current.id]: true }))}>
+                <AdaptiveVideo src={src} poster={current.poster_url || undefined} preload={index === 0 ? 'auto' : 'metadata'} focal={focal} fit={isPhone ? 'contain' : 'cover'} />
+              </div>
+            ) : (
+              <div className="h-full w-full" onErrorCapture={() => setFailed((s) => ({ ...s, [current.id]: true }))}>
+                <AdaptiveImage src={src} alt={current.title} eager={index === 0} focal={focal} />
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       <div
         className="relative w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"
         style={{
-          paddingTop: isPhone ? 'clamp(5.5rem, 12vh, 7rem)' : 'clamp(6rem, 13vh, 8.5rem)',
-          paddingBottom: multi ? 'clamp(5rem, 11vh, 7rem)' : 'clamp(1.25rem, 6vh, 4rem)',
+          paddingTop: isPhone ? '0.75rem' : 'clamp(6rem, 13vh, 8.5rem)',
+          paddingBottom: multi ? (isPhone ? '4.5rem' : 'clamp(5rem, 11vh, 7rem)') : 'clamp(1rem, 5vh, 4rem)',
         }}
       >
         <AnimatePresence mode="wait">
@@ -179,8 +185,9 @@ export function HeroSlider() {
             animate={{ opacity: 1, y: 0 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="hero-glass relative w-full sm:max-w-[min(40rem,68%)] lg:max-w-[40rem] overflow-hidden rounded-[clamp(1.1rem,2.4vw,1.75rem)]"
-            style={{ padding: 'clamp(1.1rem, 3.2vw, 2.5rem)' }}
+            // Main hero: solid, non-glass panel (no blur, no frost)
+            className="relative w-full sm:max-w-[min(38rem,62%)] lg:max-w-[38rem] overflow-hidden rounded-[clamp(0.9rem,2vw,1.5rem)] bg-neutral-950/95 border border-white/10 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)]"
+            style={{ padding: isPhone ? '1rem 1.1rem 1.25rem' : 'clamp(1.25rem, 3vw, 2.5rem)' }}
           >
             {/* Gold hairline accent */}
             <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent opacity-80" />
