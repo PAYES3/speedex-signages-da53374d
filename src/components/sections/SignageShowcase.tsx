@@ -158,7 +158,7 @@ export function SecondarySlider({ data }: { data?: Record<string, string> }) {
       <button
         onClick={() => goTo(currentIndex - 1)}
         aria-label="Previous slide"
-        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        className="absolute left-2 sm:left-4 top-[28vw] sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
@@ -166,7 +166,7 @@ export function SecondarySlider({ data }: { data?: Record<string, string> }) {
       <button
         onClick={() => goTo(currentIndex + 1)}
         aria-label="Next slide"
-        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
+        className="absolute right-2 sm:right-4 top-[28vw] sm:top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center text-slate-700 active:scale-95"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
