@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListSlides } from '@/lib/admin/content.functions';
-import { AdaptiveImage } from '@/components/AdaptiveMedia';
+import { AdaptiveImage, MediaBackdrop } from '@/components/AdaptiveMedia';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { readGlass, glassStyle } from '@/lib/glass';
 import { useViewport } from '@/lib/responsive';
 import { useLang } from '@/hooks/useLang';
 
@@ -74,6 +76,7 @@ export function OurCompanies({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [logoFailed, setLogoFailed] = useState<Record<string, boolean>>({});
+  const glass = readGlass(useSiteSettings());
   const [paused, setPaused] = useState(false);
   const vp = useViewport();
   const { T } = useLang();
@@ -172,48 +175,43 @@ export function OurCompanies({
           aria-roledescription="carousel"
           aria-label={T('companies.title', 'Our Companies')}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentCompany.id}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.7 }}
-              className="absolute inset-0"
-            >
-              <AdaptiveImage
-                src={background}
-                alt={currentCompany.name}
-                focal={{ mobile: '55% 35%', portrait: '55% 35%', tablet: 'center', desktop: 'center' }}
-                style={{ height: '100%' }}
-              />
-            </motion.div>
-          </AnimatePresence>
+          <MediaBackdrop src={background} className="-z-20" />
 
-          {/* Soft scrim so the glass panel never fights the background photo */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent sm:bg-gradient-to-r sm:from-black/55 sm:via-black/20 sm:to-transparent pointer-events-none" />
+          {/* Full original composition: 16:9 block on phones, contained full-bleed on larger screens */}
+          <div className="relative -z-10 w-full aspect-video sm:absolute sm:inset-0 sm:aspect-auto">
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={currentCompany.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6 }}
+                className="absolute inset-0"
+              >
+                <AdaptiveImage src={background} alt={currentCompany.name} eager={currentIndex === 0} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           <div
             className="relative z-10 flex items-end sm:items-center"
             style={{
-              minHeight:
-                vp.orientation === 'portrait'
-                  ? 'clamp(420px, 70svh, 620px)'
-                  : vp.device === 'tablet'
-                    ? 'clamp(400px, 58svh, 560px)'
-                    : vp.short
-                      ? 'clamp(380px, 68svh, 500px)'
-                      : 'clamp(440px, 60svh, 600px)',
+              minHeight: isPhone
+                ? undefined
+                : vp.device === 'tablet'
+                  ? 'clamp(400px, 56vw, 560px)'
+                  : vp.short
+                    ? 'clamp(380px, 68svh, 500px)'
+                    : 'clamp(440px, 42vw, 620px)',
             }}
           >
-            <div className="w-full max-w-full px-3 py-5 sm:max-w-[66%] sm:ps-10 sm:pe-8 sm:py-8 lg:max-w-[36rem] lg:ps-20 lg:pe-12 lg:py-10">
+            <div className="w-full max-w-full px-3 pt-3 pb-5 sm:max-w-[66%] sm:ps-20 sm:pe-8 sm:py-8 lg:max-w-[36rem] lg:ps-24 lg:pe-12 lg:py-10">
               <motion.div
                 key={currentCompany.name}
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-[clamp(0.9rem,2.5vw,1.5rem)] border border-white/25 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.28)]"
-                style={{ padding: 'clamp(0.9rem, 3.2vw, 2rem)' }}
+                style={{ ...glassStyle(glass, isPhone), padding: isPhone ? '0.9rem 1rem' : 'clamp(1rem, 3vw, 2rem)' }}
               >
                 <div className="mb-3 sm:mb-5 lg:mb-6 flex items-center justify-center rounded-xl border border-white/30 bg-white/80 backdrop-blur-md p-2 sm:p-3" style={{ height: 'clamp(2.75rem, 9vw, 5.5rem)' }}>
                   {currentCompany.logo_url && !logoFailed[currentCompany.id] ? (
