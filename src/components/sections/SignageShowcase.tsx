@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AdaptiveImage, AdaptiveVideo } from '@/components/AdaptiveMedia';
+import { AdaptiveImage, AdaptiveVideo, MediaBackdrop } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
 
 const SLIDE_MS = 6000;

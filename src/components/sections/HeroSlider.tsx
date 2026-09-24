@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { publicListHeroSlides } from '@/lib/admin/cms.functions';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
-import { AdaptiveImage, AdaptiveVideo } from '@/components/AdaptiveMedia';
+import { AdaptiveImage, AdaptiveVideo, MediaBackdrop } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
 import { useLang } from '@/hooks/useLang';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
@@ -235,7 +235,7 @@ export function HeroSlider() {
 
       {multi && (
         <div className="absolute inset-x-0 bottom-[clamp(1rem,3vh,1.75rem)] z-20 flex justify-center px-3">
-          <div className="hero-glass flex max-w-full items-center gap-1 sm:gap-2 rounded-full p-1.5">
+          <div className="flex max-w-full items-center bg-black/70 border border-white/15 shadow-lg gap-1 sm:gap-2 rounded-full p-1.5">
             <button type="button" aria-label={T('hero.prev', 'Previous slide')} onClick={() => go(-1)} className="hero-ctrl h-10 w-10 sm:h-11 sm:w-11">
               <ChevronLeft className="h-5 w-5 rtl-flip" />
             </button>
