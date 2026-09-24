@@ -185,47 +185,46 @@ export function HeroSlider() {
             animate={{ opacity: 1, y: 0 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            // Main hero: solid, non-glass panel (no blur, no frost)
-            className="relative w-full sm:max-w-[min(38rem,62%)] lg:max-w-[38rem] overflow-hidden rounded-[clamp(0.9rem,2vw,1.5rem)] bg-neutral-950/95 border border-white/10 shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)]"
-            style={{ padding: isPhone ? '1rem 1.1rem 1.25rem' : 'clamp(1.25rem, 3vw, 2.5rem)' }}
+            // Main hero: premium white/light glass panel
+            className="hero-card-light relative w-full sm:max-w-[min(34rem,58%)] lg:max-w-[36rem] overflow-hidden rounded-[clamp(0.9rem,2vw,1.5rem)]"
+            style={{ padding: isPhone ? '0.9rem 1rem 1.1rem' : 'clamp(1.1rem, 2.6vw, 2.25rem)' }}
           >
-            {/* Gold hairline accent */}
             <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent opacity-80" />
 
             {current.subtitle && (
-              <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-white">
+              <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-[var(--hero-card-border)] bg-[var(--hero-card-chip)] px-3 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-[var(--hero-card-ink)]">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--gold)]" />
                 <span className="truncate">{current.subtitle}</span>
               </span>
             )}
 
             <h1
-              className="mt-4 sm:mt-5 font-extrabold text-white leading-[1.06] tracking-tight [text-wrap:balance] drop-shadow-[0_1px_12px_rgba(0,0,0,0.35)]"
-              style={{ fontSize: isPhone ? 'clamp(1.6rem, 7.2vw, 2.4rem)' : 'clamp(2.1rem, 4.4vw, 3.9rem)' }}
+              className="mt-3 sm:mt-5 font-extrabold text-[var(--hero-card-ink)] leading-[1.06] tracking-tight [text-wrap:balance]"
+              style={{ fontSize: isPhone ? 'clamp(1.4rem, 6.4vw, 2.1rem)' : 'clamp(1.9rem, 4vw, 3.6rem)' }}
             >
               {current.title}
             </h1>
 
             {current.description && (
-              <p className="mt-3 sm:mt-5 text-white/90 leading-relaxed line-clamp-4 sm:line-clamp-none" style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1.15rem)' }}>
+              <p className="mt-2.5 sm:mt-5 text-[var(--hero-card-muted)] leading-relaxed line-clamp-3 sm:line-clamp-none" style={{ fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)' }}>
                 {current.description}
               </p>
             )}
 
-            <div className="mt-5 sm:mt-8 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
+            <div className="mt-4 sm:mt-7 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center">
               {current.cta_primary_label && (
-                <Button asChild size="lg" className="h-12 sm:h-13 px-6 sm:px-7 rounded-full text-sm sm:text-base font-semibold shadow-[var(--shadow-glow)] transition-transform hover:-translate-y-0.5">
+                <Button asChild size="lg" className="h-11 sm:h-13 px-6 sm:px-7 rounded-full text-sm sm:text-base font-semibold shadow-[var(--shadow-glow)] transition-transform hover:-translate-y-0.5">
                   <Link to={current.cta_primary_href || '/contact'}>
                     {current.cta_primary_label} <ArrowRight className="ms-2 h-5 w-5 rtl-flip" />
                   </Link>
                 </Button>
               )}
               {current.cta_secondary_label && (
-                <Button asChild size="lg" variant="outline" className="h-12 sm:h-13 px-6 sm:px-7 rounded-full text-sm sm:text-base font-semibold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:text-white">
+                <Button asChild size="lg" variant="outline" className="h-11 sm:h-13 px-6 sm:px-7 rounded-full text-sm sm:text-base font-semibold border border-[var(--hero-card-border)] bg-[var(--hero-card-chip)] text-[var(--hero-card-ink)] hover:bg-[var(--hero-card-border)] hover:text-[var(--hero-card-ink)]">
                   <Link to={current.cta_secondary_href || '/companies'}>{current.cta_secondary_label}</Link>
                 </Button>
               )}
-              <Link to="/portfolio" className="inline-flex items-center gap-2 rounded-full px-1 py-2 text-sm sm:text-base font-semibold text-white/90 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70">
+              <Link to="/portfolio" className="inline-flex items-center gap-2 rounded-full px-1 py-2 text-sm sm:text-base font-semibold text-[var(--hero-card-ink)] hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <PlayCircle className="h-5 w-5" /> {T('hero.projects', 'View our projects')}
               </Link>
             </div>
