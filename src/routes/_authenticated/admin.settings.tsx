@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Save } from 'lucide-react';
+import { GlassSettingsPanel } from '@/components/admin/GlassSettingsPanel';
 
 export const Route = createFileRoute('/_authenticated/admin/settings')({
   head: () => ({
@@ -53,7 +54,7 @@ function AdminSettingsPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 max-w-5xl">
       <div>
         <h1 className="text-2xl font-bold">Site Settings</h1>
         <p className="text-sm text-muted-foreground">Hero video, contact details and map embed used across the public site.</p>
@@ -73,6 +74,7 @@ function AdminSettingsPage() {
         ))}
         <Button onClick={onSave}><Save className="w-4 h-4" /> Save settings</Button>
       </Card>
+      <GlassSettingsPanel settings={data as Record<string, string> | undefined} />
     </div>
   );
 }
