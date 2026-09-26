@@ -10,6 +10,7 @@ import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { AdaptiveImage, AdaptiveVideo, MediaBackdrop } from '@/components/AdaptiveMedia';
 import { useViewport } from '@/lib/responsive';
 import { useLang } from '@/hooks/useLang';
+import { HERO_GLASS_DEFAULTS, glassStyle, readGlass } from '@/lib/glass';
 import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 import hero2 from '@/assets/hero/hero-2.mp4.asset.json';
 import hero3 from '@/assets/hero/hero-3.mp4.asset.json';
@@ -39,7 +40,7 @@ export type Slide = {
 
 export function HeroSlider() {
   const fetcher = useServerFn(publicListHeroSlides);
-  const { data } = useQuery({ queryKey: ['hero-slides'], queryFn: () => fetcher(), staleTime: 30_000 });
+  const { data } = useQuery({ queryKey: ['hero-slides'], queryFn: () => fetcher(), staleTime: 0, refetchOnWindowFocus: true });
   const settings = useSiteSettings();
   const { T } = useLang();
   const reduceMotion = useReducedMotion();
@@ -100,6 +101,7 @@ export function HeroSlider() {
     }
   };
 
+  const heroGlass = readGlass(settings, 'hero_glass', HERO_GLASS_DEFAULTS);
   if (!current) return null;
 
   const phoneSrc = current.mobile_media_url?.trim();
@@ -171,6 +173,11 @@ export function HeroSlider() {
         </AnimatePresence>
       </div>
 
+      {/* Subtle readability gradient (admin-controlled), only on the text side */}
+      {!isPhone && heroGlass.overlay > 0 && (
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-[5] rtl:scale-x-[-1]" style={{ background: `linear-gradient(90deg, rgb(255 255 255 / ${heroGlass.overlay / 100}) 0%, rgb(255 255 255 / ${heroGlass.overlay / 250}) 45%, transparent 75%)` }} />
+      )}
+
       <div
         className="relative w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"
         style={{
@@ -186,8 +193,12 @@ export function HeroSlider() {
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             // Main hero: premium white/light glass panel
-            className="hero-card-light relative w-full sm:max-w-[min(34rem,58%)] lg:max-w-[36rem] overflow-hidden rounded-[clamp(0.9rem,2vw,1.5rem)]"
-            style={{ padding: isPhone ? '0.9rem 1rem 1.1rem' : 'clamp(1.1rem, 2.6vw, 2.25rem)' }}
+            className="relative w-full overflow-hidden sm:max-w-[min(var(--hero-card-w),60%)] lg:max-w-[var(--hero-card-w)]"
+            style={{
+              ...glassStyle(heroGlass, isPhone),
+              ['--hero-card-w' as string]: `${heroGlass.width}rem`,
+              padding: isPhone ? '0.9rem 1rem 1.1rem' : `clamp(1rem, 2.4vw, ${heroGlass.padding}px)`,
+            }}
           >
             <span aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent opacity-80" />
 

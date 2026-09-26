@@ -10,7 +10,7 @@ import { SERVICES } from '@/lib/site-data';
 
 export function ServicesSection({ data = {} }: { data?: Record<string, string> }) {
   const fetcher = useServerFn(publicListServices);
-  const { data: rows } = useQuery({ queryKey: ['public-services'], queryFn: () => fetcher(), staleTime: 30_000 });
+  const { data: rows } = useQuery({ queryKey: ['public-services'], queryFn: () => fetcher(), staleTime: 0, refetchOnWindowFocus: true });
 
   const items = (rows ?? []).length
     ? (rows as any[]).slice(0, 6).map((s) => ({

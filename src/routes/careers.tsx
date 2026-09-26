@@ -19,9 +19,9 @@ export const Route = createFileRoute('/careers')({
       { name: 'description', content: "We're hiring designers, fabricators, installers and project managers across the UAE. Explore signage industry careers at Speedex Signages." },
       { property: 'og:title', content: 'Careers at Speedex Signages — UAE' },
       { property: 'og:description', content: 'Build your career with the UAE’s trusted signage company.' },
-      { property: 'og:url', content: '/careers' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/careers' },
     ],
-    links: [{ rel: 'canonical', href: '/careers' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/careers' }],
   }),
   component: CareersPage,
 });

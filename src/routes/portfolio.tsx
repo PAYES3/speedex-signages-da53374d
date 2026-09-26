@@ -15,9 +15,9 @@ export const Route = createFileRoute('/portfolio')({
       { name: 'description', content: 'Browse signage projects delivered by Speedex Signages across the UAE — LED, acrylic, 3D letters, vehicle branding, retail and corporate signage in Dubai, Abu Dhabi and Sharjah.' },
       { property: 'og:title', content: 'Our Work — Speedex Signages Portfolio' },
       { property: 'og:description', content: 'Real signage projects we delivered for brands across the UAE.' },
-      { property: 'og:url', content: 'https://speedex-signages.lovable.app/portfolio' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/portfolio' },
     ],
-    links: [{ rel: 'canonical', href: 'https://speedex-signages.lovable.app/portfolio' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/portfolio' }],
   }),
   component: PortfolioPage,
 });

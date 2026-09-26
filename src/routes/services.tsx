@@ -11,9 +11,9 @@ export const Route = createFileRoute('/services')({
       { name: 'description', content: 'Indoor, outdoor & LED signage services in the UAE: acrylic, 3D letters, vehicle branding, wayfinding, digital signage, CNC & laser cutting by Speedex Signages.' },
       { property: 'og:title', content: 'Speedex Signages — Signage Services in the UAE' },
       { property: 'og:description', content: 'Design, fabrication, installation and maintenance of premium signage across Dubai and the UAE.' },
-      { property: 'og:url', content: '/services' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/services' },
     ],
-    links: [{ rel: 'canonical', href: '/services' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/services' }],
     scripts: [
       {
         type: 'application/ld+json',

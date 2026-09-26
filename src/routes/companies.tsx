@@ -29,13 +29,13 @@ export const Route = createFileRoute('/companies')({
       },
       {
         property: 'og:url',
-        content: 'https://speedex-signages.lovable.app/companies',
+        content: 'https://www.speedexsignages.com/companies',
       },
     ],
     links: [
       {
         rel: 'canonical',
-        href: 'https://speedex-signages.lovable.app/companies',
+        href: 'https://www.speedexsignages.com/companies',
       },
     ],
   }),

@@ -74,6 +74,7 @@ function AdminSettingsPage() {
         ))}
         <Button onClick={onSave}><Save className="w-4 h-4" /> Save settings</Button>
       </Card>
+      <GlassSettingsPanel variant="hero" settings={data as Record<string, string> | undefined} />
       <GlassSettingsPanel settings={data as Record<string, string> | undefined} />
     </div>
   );

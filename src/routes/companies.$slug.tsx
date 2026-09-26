@@ -14,9 +14,9 @@ export const Route = createFileRoute('/companies/$slug')({
         { title: `${titleText} | Speedex Group UAE` },
         { name: 'description', content: `${titleText} — part of Speedex Group UAE.` },
         { property: 'og:title', content: `${titleText} | Speedex Group` },
-        { property: 'og:url', content: `https://speedex-signages.lovable.app/companies/${params.slug}` },
+        { property: 'og:url', content: `https://www.speedexsignages.com/companies/${params.slug}` },
       ],
-      links: [{ rel: 'canonical', href: `https://speedex-signages.lovable.app/companies/${params.slug}` }],
+      links: [{ rel: 'canonical', href: `https://www.speedexsignages.com/companies/${params.slug}` }],
     };
   },
   component: CompanyDetailPage,

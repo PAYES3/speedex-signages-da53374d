@@ -116,10 +116,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": "https://www.speedexsignages.com/#website",
+          name: "Speedex Signages",
+          url: "https://www.speedexsignages.com/",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "LocalBusiness",
-          "@id": "#speedex-signages",
+          "@id": "https://www.speedexsignages.com/#business",
           name: "Speedex Signages LLC",
-          image: "/favicon.ico",
+          url: "https://www.speedexsignages.com/",
+          logo: "https://www.speedexsignages.com/favicon.png",
+          image: "https://www.speedexsignages.com/favicon.png",
           description: "UAE signage manufacturer specializing in LED, acrylic, 3D letters, vehicle branding, digital signage, CNC and laser cutting.",
           address: {
             "@type": "PostalAddress",
@@ -131,12 +143,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           telephone: "+971 50 123 4567",
           email: "speedexsignages@excellentgroup.ae",
           priceRange: "$$",
-          sameAs: [
-            "https://instagram.com",
-            "https://facebook.com",
-            "https://linkedin.com",
-            "https://youtube.com",
-          ],
         }),
       },
     ],

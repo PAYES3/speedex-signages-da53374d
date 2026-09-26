@@ -9,7 +9,7 @@ import { PROJECTS } from '@/lib/site-data';
 
 export function ProjectsSection({ data = {} }: { data?: Record<string, string> }) {
   const fetcher = useServerFn(publicListProjects);
-  const { data: rows } = useQuery({ queryKey: ['public-projects'], queryFn: () => fetcher(), staleTime: 30_000 });
+  const { data: rows } = useQuery({ queryKey: ['public-projects'], queryFn: () => fetcher(), staleTime: 0, refetchOnWindowFocus: true });
 
   const items = (rows ?? []).length
     ? (rows as any[]).slice(0, 6).map((p) => ({

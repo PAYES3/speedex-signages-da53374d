@@ -11,7 +11,7 @@ export function usePageContent(page: string) {
   const { data } = useQuery({
     queryKey: ['page-content'],
     queryFn: () => fetcher(),
-    staleTime: 30_000,
+    staleTime: 0, refetchOnWindowFocus: true,
   });
   const map = (data ?? {}) as Record<string, string>;
   return (key: string, fallback = '') => {

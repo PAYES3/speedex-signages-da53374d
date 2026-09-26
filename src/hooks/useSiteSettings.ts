@@ -9,7 +9,7 @@ export function useSiteSettings() {
   const { data } = useQuery({
     queryKey: ['site-settings'],
     queryFn: () => fetcher(),
-    staleTime: 30_000,
+    staleTime: 0, refetchOnWindowFocus: true,
   });
   return (data ?? {}) as Record<string, string>;
 }
