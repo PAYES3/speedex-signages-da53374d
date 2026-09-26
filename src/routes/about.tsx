@@ -13,9 +13,9 @@ export const Route = createFileRoute('/about')({
       { name: 'description', content: 'Since 2007, Speedex Signages has manufactured premium LED, acrylic, 3D and digital signage across Dubai and the UAE. Discover our story, mission and values.' },
       { property: 'og:title', content: 'About Speedex Signages — UAE Signage Company' },
       { property: 'og:description', content: "UAE's trusted signage and branding partner since 2007 — serving Dubai, Abu Dhabi and all seven Emirates." },
-      { property: 'og:url', content: '/about' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/about' },
     ],
-    links: [{ rel: 'canonical', href: '/about' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/about' }],
   }),
   component: AboutPage,
 });

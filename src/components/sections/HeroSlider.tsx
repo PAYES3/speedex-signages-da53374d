@@ -175,7 +175,7 @@ export function HeroSlider() {
 
       {/* Subtle readability gradient (admin-controlled), only on the text side */}
       {!isPhone && heroGlass.overlay > 0 && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-[5] rtl:scale-x-[-1]" style={{ background: `linear-gradient(90deg, rgb(0 0 0 / ${heroGlass.overlay / 100}) 0%, rgb(0 0 0 / ${heroGlass.overlay / 250}) 45%, transparent 75%)` }} />
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-[5] rtl:scale-x-[-1]" style={{ background: `linear-gradient(90deg, rgb(255 255 255 / ${heroGlass.overlay / 100}) 0%, rgb(255 255 255 / ${heroGlass.overlay / 250}) 45%, transparent 75%)` }} />
       )}
 
       <div

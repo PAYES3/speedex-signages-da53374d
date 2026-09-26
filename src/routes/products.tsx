@@ -18,9 +18,9 @@ export const Route = createFileRoute('/products')({
       { name: 'description', content: 'Signage product catalog for the UAE — LED signs, acrylic 3D letters, LED neon, reception logos, illuminated pylons, exit signs and wayfinding plaques.' },
       { property: 'og:title', content: 'Speedex Signages — Signage Products UAE' },
       { property: 'og:description', content: 'A complete signage product catalog for businesses across the UAE.' },
-      { property: 'og:url', content: '/products' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/products' },
     ],
-    links: [{ rel: 'canonical', href: '/products' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/products' }],
   }),
   component: ProductsPage,
 });

@@ -17,9 +17,9 @@ export const Route = createFileRoute('/contact')({
       { name: 'description', content: 'Contact Speedex Signages for a free signage quote in the UAE. Based in Al Quoz, Dubai — serving Dubai, Abu Dhabi, Sharjah and all seven Emirates.' },
       { property: 'og:title', content: 'Contact Speedex Signages — UAE Signage Company' },
       { property: 'og:description', content: 'Get a signage quote from the UAE’s trusted manufacturer and installer.' },
-      { property: 'og:url', content: '/contact' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/contact' },
     ],
-    links: [{ rel: 'canonical', href: '/contact' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/contact' }],
   }),
   component: ContactPage,
 });

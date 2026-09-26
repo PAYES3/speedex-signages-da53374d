@@ -13,9 +13,9 @@ export const Route = createFileRoute('/')({
       { name: 'description', content: "Speedex Signages — leading UAE signage company. LED signage, acrylic signage, 3D letters, vehicle branding, digital & outdoor signage across Dubai." },
       { property: 'og:title', content: 'Speedex Signages — We Light Up Your Brand | UAE Signage Company' },
       { property: 'og:description', content: 'Premium signage manufacturing, fabrication and installation across the United Arab Emirates.' },
-      { property: 'og:url', content: '/' },
+      { property: 'og:url', content: 'https://www.speedexsignages.com/' },
     ],
-    links: [{ rel: 'canonical', href: '/' }],
+    links: [{ rel: 'canonical', href: 'https://www.speedexsignages.com/' }],
     scripts: [
       {
         type: 'application/ld+json',

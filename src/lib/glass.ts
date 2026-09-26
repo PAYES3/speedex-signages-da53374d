@@ -32,7 +32,7 @@ export const GLASS_DEFAULTS: GlassSettings = {
 /** Main hero card: light white glass that keeps the video visible. */
 export const HERO_GLASS_DEFAULTS: GlassSettings = {
   opacity: 42, blur: 14, border: 1, borderOpacity: 60, shadow: 40, radius: 24,
-  tint: '#ffffff', strength: 'medium', overlay: 25, width: 34, padding: 32,
+  tint: '#ffffff', strength: 'medium', overlay: 18, width: 34, padding: 32,
 };
 
 export const GLASS_KEYS: Record<keyof GlassSettings, string> = {

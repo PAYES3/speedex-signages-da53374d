@@ -91,7 +91,7 @@ export function GlassSettingsPanel({ settings, variant = 'inner' }: { settings?:
           <Label>Live preview</Label>
           <div className="relative mt-2 overflow-hidden rounded-xl border border-border aspect-[4/3] bg-neutral-900">
             <img src="/images/showcase/signage-3.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
-            {hero && <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, rgb(0 0 0 / ${g.overlay / 100}), transparent 75%)` }} />}
+            {hero && <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, rgb(255 255 255 / ${g.overlay / 100}), transparent 75%)` }} />}
             <div className="absolute inset-0 flex items-center p-5">
               <div className={`max-w-[80%] ${hero ? 'text-slate-900' : 'text-white'}`} style={{ ...glassStyle(g), padding: hero ? Math.round(g.padding * 0.6) : '1.25rem' }}>
                 <span className="inline-block rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">Commercial branding</span>
