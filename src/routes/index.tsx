@@ -39,7 +39,7 @@ function Home() {
   const { data } = useQuery({
     queryKey: ['page-sections', 'home'],
     queryFn: () => fetcher({ data: { page: 'home' } }),
-    staleTime: 15_000,
+    staleTime: 0, refetchOnWindowFocus: true,
   });
 
   const rows = (data ?? []) as SectionRow[];

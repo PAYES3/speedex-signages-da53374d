@@ -51,7 +51,7 @@ export function OurCompanies({
   const { data } = useQuery({
     queryKey: ['slides', context],
     queryFn: () => fetcher({ data: { context } }),
-    staleTime: 60_000,
+    staleTime: 0, refetchOnWindowFocus: true,
   });
 
   const companies: Company[] = useMemo(() => {

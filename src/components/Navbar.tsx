@@ -34,7 +34,7 @@ export function Navbar() {
   const { data: companies, isLoading: companiesLoading } = useQuery({
     queryKey: ['public-companies'],
     queryFn: () => listCompanies(),
-    staleTime: 60_000,
+    staleTime: 0, refetchOnWindowFocus: true,
   });
 
   useEffect(() => {

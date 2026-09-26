@@ -10,6 +10,9 @@ export type GlassSettings = {
   radius: number; // px 0-40
   tint: string; // hex
   strength: 'light' | 'medium' | 'strong';
+  overlay: number; // 0-100 readability gradient (hero only)
+  width: number; // rem card max width (hero only)
+  padding: number; // px card padding (hero only)
 };
 
 export const GLASS_DEFAULTS: GlassSettings = {
@@ -21,6 +24,15 @@ export const GLASS_DEFAULTS: GlassSettings = {
   radius: 24,
   tint: '#ffffff',
   strength: 'medium',
+  overlay: 0,
+  width: 36,
+  padding: 32,
+};
+
+/** Main hero card: light white glass that keeps the video visible. */
+export const HERO_GLASS_DEFAULTS: GlassSettings = {
+  opacity: 42, blur: 14, border: 1, borderOpacity: 60, shadow: 40, radius: 24,
+  tint: '#ffffff', strength: 'medium', overlay: 25, width: 34, padding: 32,
 };
 
 export const GLASS_KEYS: Record<keyof GlassSettings, string> = {
@@ -32,32 +44,41 @@ export const GLASS_KEYS: Record<keyof GlassSettings, string> = {
   radius: 'glass_radius',
   tint: 'glass_tint',
   strength: 'glass_strength',
+  overlay: 'glass_overlay',
+  width: 'glass_width',
+  padding: 'glass_padding',
 };
+
+const keyFor = (prefix: string, k: keyof GlassSettings) => GLASS_KEYS[k].replace(/^glass/, prefix);
 
 const num = (v: string | undefined, d: number, min: number, max: number) => {
   const n = Number(v);
   return Number.isFinite(n) && v !== '' && v != null ? Math.min(max, Math.max(min, n)) : d;
 };
 
-export function readGlass(s: Record<string, string> | undefined): GlassSettings {
+export function readGlass(s: Record<string, string> | undefined, prefix = 'glass', D: GlassSettings = GLASS_DEFAULTS): GlassSettings {
   const g = s ?? {};
-  const strength = g[GLASS_KEYS.strength];
-  const tint = g[GLASS_KEYS.tint];
+  const k = (x: keyof GlassSettings) => g[keyFor(prefix, x)];
+  const strength = k('strength');
+  const tint = k('tint');
   return {
-    opacity: num(g[GLASS_KEYS.opacity], GLASS_DEFAULTS.opacity, 0, 100),
-    blur: num(g[GLASS_KEYS.blur], GLASS_DEFAULTS.blur, 0, 40),
-    border: num(g[GLASS_KEYS.border], GLASS_DEFAULTS.border, 0, 5),
-    borderOpacity: num(g[GLASS_KEYS.borderOpacity], GLASS_DEFAULTS.borderOpacity, 0, 100),
-    shadow: num(g[GLASS_KEYS.shadow], GLASS_DEFAULTS.shadow, 0, 100),
-    radius: num(g[GLASS_KEYS.radius], GLASS_DEFAULTS.radius, 0, 40),
-    tint: tint && /^#[0-9a-f]{6}$/i.test(tint) ? tint : GLASS_DEFAULTS.tint,
-    strength: strength === 'light' || strength === 'strong' ? strength : 'medium',
+    opacity: num(k('opacity'), D.opacity, 0, 100),
+    blur: num(k('blur'), D.blur, 0, 40),
+    border: num(k('border'), D.border, 0, 5),
+    borderOpacity: num(k('borderOpacity'), D.borderOpacity, 0, 100),
+    shadow: num(k('shadow'), D.shadow, 0, 100),
+    radius: num(k('radius'), D.radius, 0, 40),
+    tint: tint && /^#[0-9a-f]{6}$/i.test(tint) ? tint : D.tint,
+    strength: strength === 'light' || strength === 'strong' || strength === 'medium' ? strength : D.strength,
+    overlay: num(k('overlay'), D.overlay, 0, 100),
+    width: num(k('width'), D.width, 20, 60),
+    padding: num(k('padding'), D.padding, 8, 64),
   };
 }
 
-export function glassToEntries(g: GlassSettings): Record<string, string> {
+export function glassToEntries(g: GlassSettings, prefix = 'glass'): Record<string, string> {
   const out: Record<string, string> = {};
-  (Object.keys(GLASS_KEYS) as (keyof GlassSettings)[]).forEach((k) => (out[GLASS_KEYS[k]] = String(g[k])));
+  (Object.keys(GLASS_KEYS) as (keyof GlassSettings)[]).forEach((k) => (out[keyFor(prefix, k)] = String(g[k])));
   return out;
 }
 
