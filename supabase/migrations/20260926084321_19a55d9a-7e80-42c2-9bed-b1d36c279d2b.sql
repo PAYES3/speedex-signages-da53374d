@@ -1,0 +1,4 @@
+DROP POLICY IF EXISTS "Public can read approved settings" ON public.site_settings;
+CREATE POLICY "Public can read approved settings" ON public.site_settings FOR SELECT TO anon, authenticated
+USING (key = ANY (ARRAY['contact_phone','contact_email','whatsapp_number','office_address','maps_embed_url','maps_directions_url','hero_video_url','hero_poster_url','logo_url','site_title','site_description','social_facebook','social_instagram','social_linkedin','social_youtube','social_twitter']) OR key LIKE 'public_%' OR key LIKE 'glass_%' OR key LIKE 'hero_glass_%');
+GRANT SELECT ON public.site_settings TO anon;
