@@ -28,7 +28,7 @@ import pFlex from '@/assets/products/flex-banner.jpg';
 export const COMPANY = {
   name: 'Speedex Signages LLC',
   tagline: 'We Light Up Your Brand',
-  phone: '+971 50 123 4567',
+  phone: '+971 50 776 1493',
   whatsapp: '971501234567',
   email: 'speedexsignages@excellentgroup.ae',
   address: 'Speedex Signages,\nMussaffah -38,\nAbu Dhabi,\nUnited Arab Emirates',
