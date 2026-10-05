@@ -9,7 +9,7 @@ const en = {
   nav: {
     home: 'Home', about: 'About', companies: 'Companies', groups: 'Our Groups', services: 'Services',
     portfolio: 'Portfolio', explore: 'Explore', products: 'Products', careers: 'Careers',
-    contact: 'Contact', quote: 'Get a Quote', menu: 'Menu', language: 'Language', speedexDigital: 'Speedex Design', digitalSubtitle: 'Creative & performance marketing',
+    contact: 'Contact', quote: 'Get a Quote', menu: 'Menu', language: 'Language', speedexDigital: 'Speedex Digital', digitalSubtitle: 'Creative & performance marketing',
   },
   hero: {
     badge: 'Premium signage · United Arab Emirates',
@@ -73,7 +73,7 @@ const ar = {
   nav: {
     home: 'الرئيسية', about: 'من نحن', companies: 'شركاتنا', groups: 'مجموعتنا', services: 'خدماتنا',
     portfolio: 'أعمالنا', explore: 'استكشف', products: 'المنتجات', careers: 'الوظائف',
-    contact: 'اتصل بنا', quote: 'اطلب عرض سعر', menu: 'القائمة', language: 'اللغة', speedexDigital: 'سبيدكس ديزاين', digitalSubtitle: 'تسويق إبداعي قائم على الأداء',
+    contact: 'اتصل بنا', quote: 'اطلب عرض سعر', menu: 'القائمة', language: 'اللغة', speedexDigital: 'سبيدكس ديجيتال', digitalSubtitle: 'تسويق إبداعي قائم على الأداء',
   },
   hero: {
     badge: 'لافتات فاخرة · الإمارات العربية المتحدة',

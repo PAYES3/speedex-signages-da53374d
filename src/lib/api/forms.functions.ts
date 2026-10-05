@@ -45,7 +45,7 @@ export const submitDigitalConsultation = createServerFn({ method: 'POST' })
     if ((count ?? 0) >= 3) throw new Error('Please wait before sending another request');
     const { error } = await supabaseAdmin.from('contact_messages').insert({
       name: data.name, email: data.email, phone: data.phone,
-      subject: `Speedex Design consultation — ${data.service}`,
+      subject: `Speedex Digital consultation — ${data.service}`,
       message: `Company: ${data.company || 'Not provided'}\nService: ${data.service}\nPackage: ${data.plan}\nMessage: ${data.message}`,
     });
     if (error) throw new Error('Could not save consultation request');
