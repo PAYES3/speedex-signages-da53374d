@@ -24,6 +24,34 @@ export const submitContact = createServerFn({ method: 'POST' })
     return { ok: true };
   });
 
+const digitalConsultationSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  company: z.string().trim().max(120),
+  phone: z.string().trim().min(5).max(40),
+  email: z.string().trim().email().max(255),
+  service: z.enum(['Social Media', 'Paid Ads', 'SEO', 'Website', 'Lead Generation', 'Branding', 'Video', 'Other']),
+  plan: z.enum(['Starter', 'Growth', 'Premium', 'Custom', 'Not sure']),
+  message: z.string().trim().min(5).max(2800),
+});
+
+export const submitDigitalConsultation = createServerFn({ method: 'POST' })
+  .inputValidator((input) => digitalConsultationSchema.parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
+    const since = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+    const { count, error: countError } = await supabaseAdmin.from('contact_messages')
+      .select('id', { count: 'exact', head: true }).eq('email', data.email).gte('created_at', since);
+    if (countError) throw new Error('Could not check submission limit');
+    if ((count ?? 0) >= 3) throw new Error('Please wait before sending another request');
+    const { error } = await supabaseAdmin.from('contact_messages').insert({
+      name: data.name, email: data.email, phone: data.phone,
+      subject: `Speedex Digital consultation — ${data.service}`,
+      message: `Company: ${data.company || 'Not provided'}\nService: ${data.service}\nPackage: ${data.plan}\nMessage: ${data.message}`,
+    });
+    if (error) throw new Error('Could not save consultation request');
+    return { ok: true };
+  });
+
 export const submitQuote = createServerFn({ method: 'POST' })
   .inputValidator((input) => contactSchema.parse(input))
   .handler(async ({ data }) => {

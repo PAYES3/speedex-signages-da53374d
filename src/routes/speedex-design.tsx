@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Reveal } from '@/components/Reveal';
 import { useLang } from '@/hooks/useLang';
-import { submitContact } from '@/lib/api/forms.functions';
+import { submitDigitalConsultation } from '@/lib/api/forms.functions';
 import { digitalServices, digitalSteps, digitalPackages, digitalAddons, digitalReasons, digitalIndustries, digitalFaq } from '@/lib/speedex-digital-content';
 import digitalLogo from '@/assets/speedex-digital-logo.png.asset.json';
 import workspace from '@/assets/speedex-digital-workspace.jpg';
@@ -37,7 +37,7 @@ function SpeedexDigitalPage() {
   const { lang } = useLang();
   const ar = lang === 'ar';
   const tr = (en: string, arabic: string) => ar ? arabic : en;
-  const submit = useServerFn(submitContact);
+  const submit = useServerFn(submitDigitalConsultation);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const section = 'mx-auto max-w-7xl px-5 sm:px-8 lg:px-10';
@@ -53,15 +53,13 @@ function SpeedexDigitalPage() {
     const plan = String(fields.get('plan') || '');
     const company = String(fields.get('company') || '').trim();
     const message = String(fields.get('message') || '').trim();
-    const details = [`Company: ${company || 'Not provided'}`, `Service: ${service}`, `Package: ${plan}`, `Message: ${message}`].join('\n');
     setSending(true);
     try {
       await submit({ data: {
         name: String(fields.get('name') || ''),
         phone: String(fields.get('phone') || ''),
         email: String(fields.get('email') || ''),
-        subject: `Speedex Digital consultation — ${service.slice(0, 80)}`,
-        message: details,
+        company, service: service as 'Social Media', plan: plan as 'Starter', message,
       } });
       form.reset();
       setSent(true);
