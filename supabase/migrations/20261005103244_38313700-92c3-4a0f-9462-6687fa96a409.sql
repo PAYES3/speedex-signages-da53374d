@@ -1,0 +1,1 @@
+UPDATE public.companies SET website_url='/speedex-digital' WHERE slug='speedex-digital';
