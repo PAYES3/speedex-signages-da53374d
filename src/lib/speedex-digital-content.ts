@@ -1,4 +1,4 @@
-/** Supplied Speedex Design copy. Prices are supplied placeholders pending owner confirmation. */
+/** Supplied Speedex Digital copy. Prices are supplied placeholders pending owner confirmation. */
 export const digitalServices = [
   ['Social Media Management', 'Content planning, posting, community management and growth on Instagram, Facebook, LinkedIn, TikTok and X.', 'إدارة وسائل التواصل الاجتماعي', 'تخطيط المحتوى ونشره وإدارة المجتمع وتنمية الحضور على إنستغرام وفيسبوك ولينكدإن وتيك توك وإكس.'],
   ['Content & Creative Design', 'Posts, reels, carousels, banners, brochures and branded templates designed to stop the scroll.', 'المحتوى والتصميم الإبداعي', 'منشورات ومقاطع قصيرة وتصاميم وبروشورات وقوالب تعكس هوية علامتك التجارية.'],
