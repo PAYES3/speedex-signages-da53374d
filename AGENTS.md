@@ -1,0 +1,2 @@
+- Keep new public division pages as TanStack leaf routes using the shared Layout for navigation, footer, and language controls; this preserves site-wide behavior.
+- Route division consultation requests through the existing contact message storage and admin inbox, with server-side validation; this keeps owner-facing enquiries in one place.

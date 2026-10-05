@@ -14,6 +14,7 @@ const NAV = [
   { to: '/', key: 'home' },
   { to: '/about', key: 'about' },
   { to: '/services', key: 'services' },
+  { to: '/speedex-design', key: 'speedexDigital' },
   { to: '/portfolio', key: 'portfolio' },
   { to: '/explore', key: 'explore' },
   { to: '/products', key: 'products' },
@@ -147,6 +148,10 @@ export function Navbar() {
             </div>
 
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3">
+              <Link to="/speedex-design" className="group flex gap-4 rounded-2xl border border-primary/20 hover:bg-muted/60 p-4 transition-all duration-300">
+                <div className="w-14 h-14 shrink-0 rounded-xl bg-primary/10 grid place-items-center text-primary font-bold">SD</div>
+                <div><p className="font-bold text-[15px]">{t('nav.speedexDigital')}</p><p className="text-sm text-muted-foreground mt-0.5">{t('nav.digitalSubtitle')}</p></div>
+              </Link>
               {(companies ?? []).map((c: any) => (
                 <Link
                   key={c.id}
@@ -186,6 +191,7 @@ export function Navbar() {
             <Link to="/" className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">{t('nav.home')}</Link>
             <Link to="/about" className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">{t('nav.about')}</Link>
             <Link to="/companies" className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">Our Groups</Link>
+            <Link to="/speedex-design" className="ml-3 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:bg-muted">{t('nav.speedexDigital')}</Link>
             {(companies ?? []).map((c: any) => (
               <Link
                 key={c.id}
@@ -196,7 +202,7 @@ export function Navbar() {
                 {c.name}
               </Link>
             ))}
-            {NAV.filter((n) => !['/', '/about'].includes(n.to)).map((n) => (
+            {NAV.filter((n) => !['/', '/about', '/speedex-design'].includes(n.to)).map((n) => (
               <Link key={n.to} to={n.to} className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">
                 {t(`nav.${n.key}`)}
               </Link>
