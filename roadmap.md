@@ -4,4 +4,4 @@
 - [ ] Phase 3: Services detail, before/after, portfolio lightbox
 - [ ] Phase 4: Arabic RTL, SEO, accessibility, performance
 
-- [ ] Speedex Digital page at /speedex-design with bilingual content, navigation, supplied logo and consultation form
+- [x] Speedex Digital page at /speedex-design with bilingual content, navigation, supplied logo and consultation form

@@ -202,7 +202,7 @@ export function Navbar() {
                 {c.name}
               </Link>
             ))}
-            {NAV.filter((n) => !['/', '/about'].includes(n.to)).map((n) => (
+            {NAV.filter((n) => !['/', '/about', '/speedex-design'].includes(n.to)).map((n) => (
               <Link key={n.to} to={n.to} className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">
                 {t(`nav.${n.key}`)}
               </Link>
