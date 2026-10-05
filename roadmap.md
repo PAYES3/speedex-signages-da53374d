@@ -3,3 +3,5 @@
 - [ ] Phase 2: Quote system with uploads + team email notification (needs email domain setup) + AI quote assistant
 - [ ] Phase 3: Services detail, before/after, portfolio lightbox
 - [ ] Phase 4: Arabic RTL, SEO, accessibility, performance
+
+- [ ] Speedex Digital page at /speedex-design with bilingual content, navigation, supplied logo and consultation form
