@@ -11,7 +11,7 @@ import { Reveal } from '@/components/Reveal';
 import { useLang } from '@/hooks/useLang';
 import { submitDigitalConsultation } from '@/lib/api/forms.functions';
 import { digitalServices, digitalSteps, digitalPackages, digitalAddons, digitalReasons, digitalIndustries, digitalFaq } from '@/lib/speedex-digital-content';
-import digitalLogo from '@/assets/speedex-digital-logo.png.asset.json';
+import digitalLogo from '@/assets/speedex-design-logo.png';
 import workspace from '@/assets/speedex-digital-workspace.jpg';
 
 const whatsapp = (message: string) => `https://wa.me/971507761493?text=${encodeURIComponent(message)}`;
