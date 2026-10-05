@@ -77,7 +77,7 @@ function SpeedexDigitalPage() {
       <div className="absolute inset-0 -z-10 bg-background/85 sm:bg-background/60" />
       <div className={`${section} w-full`}>
         <div className="max-w-3xl">
-          <img src={digitalLogo.url} width={800} height={800} alt="Speedex Design" className="mb-8 w-44 sm:w-56 h-auto mix-blend-multiply" />
+          <img src={digitalLogo} width={1497} height={431} alt="Speedex Design" className="mb-8 w-44 sm:w-56 h-auto" />
           <p className={`${eyebrow} mb-4`}>{tr('Digital marketing · Abu Dhabi, UAE', 'التسويق الرقمي · أبوظبي، الإمارات')}</p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] text-foreground">{tr('Digital Marketing That Moves Your Business Forward', 'تسويق رقمي يدفع أعمالك إلى الأمام')}</h1>
           <p className="mt-6 max-w-2xl text-base sm:text-xl leading-relaxed text-foreground/85">{tr('From brand identity to lead generation, Speedex Design helps UAE businesses get seen, get contacted and get results.', 'من الهوية التجارية إلى استقطاب العملاء، تساعد سبيدكس ديزاين الشركات الإماراتية على الظهور والتواصل وتحقيق النتائج.')}</p>
