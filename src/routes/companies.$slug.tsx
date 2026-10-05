@@ -34,7 +34,7 @@ export const Route = createFileRoute('/companies/$slug')({
     <div className="min-h-screen grid place-items-center px-4 text-center bg-background text-foreground">
       <div>
         <h1 className="text-3xl font-bold">Something went wrong</h1>
-        <p className="text-muted-foreground mt-2 font-medium">{error.message}</p>
+        <p className="text-muted-foreground mt-2 font-medium">{error instanceof Error ? error.message : 'Unexpected error'}</p>
       </div>
     </div>
   ),
