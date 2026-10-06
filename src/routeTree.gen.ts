@@ -46,6 +46,7 @@ import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedAdminSpeedexDigitalRouteImport } from './routes/_authenticated/admin.speedex-digital'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiPublicDigitalChatRouteImport } from './routes/api/public/digital-chat'
 import { Route as SpeedexDigitalServicesIndexRouteImport } from './routes/speedex-digital.services.index'
@@ -248,6 +249,12 @@ const AuthenticatedAdminSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSpeedexDigitalRoute =
+  AuthenticatedAdminSpeedexDigitalRouteImport.update({
+    id: '/speedex-digital',
+    path: '/speedex-digital',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   id: '/api/public/chat',
   path: '/api/public/chat',
@@ -307,6 +314,7 @@ export interface FileRoutesByFullPath {
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/speedex-digital': typeof AuthenticatedAdminSpeedexDigitalRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
@@ -347,6 +355,7 @@ export interface FileRoutesByTo {
   '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/speedex-digital': typeof AuthenticatedAdminSpeedexDigitalRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
@@ -391,6 +400,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/speedex-digital': typeof AuthenticatedAdminSpeedexDigitalRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
@@ -435,6 +445,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/speedex-digital'
     | '/api/public/chat'
     | '/api/public/digital-chat'
     | '/speedex-digital/services/$slug'
@@ -475,6 +486,7 @@ export interface FileRouteTypes {
     | '/admin/reviews'
     | '/admin/services'
     | '/admin/settings'
+    | '/admin/speedex-digital'
     | '/api/public/chat'
     | '/api/public/digital-chat'
     | '/speedex-digital/services/$slug'
@@ -518,6 +530,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/speedex-digital'
     | '/api/public/chat'
     | '/api/public/digital-chat'
     | '/speedex-digital/services/$slug'
@@ -807,6 +820,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/speedex-digital': {
+      id: '/_authenticated/admin/speedex-digital'
+      path: '/speedex-digital'
+      fullPath: '/admin/speedex-digital'
+      preLoaderRoute: typeof AuthenticatedAdminSpeedexDigitalRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/api/public/chat': {
       id: '/api/public/chat'
       path: '/api/public/chat'
@@ -851,6 +871,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminSpeedexDigitalRoute: typeof AuthenticatedAdminSpeedexDigitalRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -867,6 +888,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminSpeedexDigitalRoute: AuthenticatedAdminSpeedexDigitalRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 
