@@ -36,9 +36,12 @@ function MessageBody({ text }: { text: string }) {
   );
 }
 
-export function Chatbot() {
+type ChatbotProps = { endpoint?: string; title?: string; welcome?: string; logoUrl?: string; placeholder?: string };
+
+export function Chatbot({ endpoint = '/api/public/chat', title = 'Speedex Assistant', welcome, logoUrl, placeholder = 'Ask about services, products, careers…' }: ChatbotProps = {}) {
+  const starter = welcome ? { role: 'assistant' as const, content: welcome } : STARTER;
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([STARTER]);
+  const [messages, setMessages] = useState<Msg[]>([starter]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -56,10 +59,10 @@ export function Chatbot() {
     setInput('');
     setLoading(true);
     try {
-      const res = await fetch('/api/public/chat', {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next.filter((m) => m !== STARTER) }),
+        body: JSON.stringify({ messages: next.filter((m) => m !== messages[0]) }),
       });
       if (!res.ok || !res.body) {
         if (res.status === 429) throw new Error('Too many requests — please wait a moment.');
@@ -122,7 +125,7 @@ export function Chatbot() {
         <div className="fixed bottom-5 right-5 z-50 w-[92vw] max-w-sm h-[70vh] max-h-[600px] rounded-2xl glass shadow-2xl flex flex-col overflow-hidden border border-border">
           <div className="bg-gradient-to-r from-primary to-primary-glow text-primary-foreground p-4 flex items-center justify-between">
             <div>
-              <p className="font-semibold">Speedex Assistant</p>
+              <p className="font-semibold flex items-center gap-2">{logoUrl && <img src={logoUrl} alt="" className="h-6 w-auto rounded bg-background px-1" />}{title}</p>
               <p className="text-xs opacity-90">Typically replies in seconds</p>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close" className="p-1 hover:bg-white/10 rounded">
@@ -153,7 +156,7 @@ export function Chatbot() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about services, products, careers…"
+              placeholder={placeholder}
               className="flex-1 bg-background border border-border rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button type="submit" disabled={loading} className="w-10 h-10 rounded-full bg-primary text-primary-foreground grid place-items-center disabled:opacity-50">
