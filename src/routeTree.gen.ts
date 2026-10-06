@@ -41,6 +41,7 @@ import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
+import { Route as ApiPublicDigitalChatRouteImport } from './routes/api/public/digital-chat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -213,6 +214,11 @@ const ApiPublicChatRoute = ApiPublicChatRouteImport.update({
   path: '/api/public/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDigitalChatRoute = ApiPublicDigitalChatRouteImport.update({
+  id: '/api/public/digital-chat',
+  path: '/api/public/digital-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -277,6 +284,7 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -312,6 +320,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
+  '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -347,6 +356,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/api/public/chat'
+    | '/api/public/digital-chat'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/api/public/chat'
+    | '/api/public/digital-chat'
     | '/admin'
   id:
     | '__root__'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/settings'
     | '/api/public/chat'
+    | '/api/public/digital-chat'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -434,6 +446,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicChatRoute: typeof ApiPublicChatRoute
+  ApiPublicDigitalChatRoute: typeof ApiPublicDigitalChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -662,6 +675,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/digital-chat': {
+      id: '/api/public/digital-chat'
+      path: '/api/public/digital-chat'
+      fullPath: '/api/public/digital-chat'
+      preLoaderRoute: typeof ApiPublicDigitalChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -742,6 +762,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicChatRoute: ApiPublicChatRoute,
+  ApiPublicDigitalChatRoute: ApiPublicDigitalChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
