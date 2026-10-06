@@ -29,8 +29,7 @@ const digitalConsultationSchema = z.object({
   company: z.string().trim().max(120),
   phone: z.string().trim().min(5).max(40),
   email: z.string().trim().email().max(255),
-  service: z.enum(['Social Media', 'Paid Ads', 'SEO', 'Website', 'Lead Generation', 'Branding', 'Video', 'Other']),
-  plan: z.enum(['Starter', 'Growth', 'Premium', 'Custom', 'Not sure']),
+  service: z.string().trim().min(1).max(120),
   message: z.string().trim().min(5).max(2800),
 });
 
@@ -46,7 +45,7 @@ export const submitDigitalConsultation = createServerFn({ method: 'POST' })
     const { error } = await supabaseAdmin.from('contact_messages').insert({
       name: data.name, email: data.email, phone: data.phone,
       subject: `Speedex Digital consultation — ${data.service}`,
-      message: `Company: ${data.company || 'Not provided'}\nService: ${data.service}\nPackage: ${data.plan}\nMessage: ${data.message}`,
+      message: `Company: ${data.company || 'Not provided'}\nService: ${data.service}\nMessage: ${data.message}`,
     });
     if (error) throw new Error('Could not save consultation request');
     return { ok: true };

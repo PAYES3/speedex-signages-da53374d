@@ -16,6 +16,7 @@ const NAV = [
   { to: '/admin/services', label: 'Services', icon: Briefcase, exact: false },
   { to: '/admin/portfolio', label: 'Portfolio', icon: ImageIcon, exact: false },
   { to: '/admin/reviews', label: 'Reviews', icon: Star, exact: false },
+  { to: '/admin/speedex-digital', label: 'Speedex Digital', icon: Globe, exact: false },
   { to: '/admin/messages', label: 'Messages', icon: MessagesSquare, exact: false },
   { to: '/admin/settings', label: 'Settings', icon: SettingsIcon, exact: false },
   { to: '/admin/manual', label: 'User Manual', icon: BookOpen, exact: false },
