@@ -21,10 +21,17 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeedexDesignRouteImport } from './routes/speedex-design'
+import { Route as SpeedexDigitalRouteImport } from './routes/speedex-digital'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as CompaniesSlugRouteImport } from './routes/companies.$slug'
+import { Route as SpeedexDigitalIndexRouteImport } from './routes/speedex-digital.index'
+import { Route as SpeedexDigitalAboutRouteImport } from './routes/speedex-digital.about'
+import { Route as SpeedexDigitalContactRouteImport } from './routes/speedex-digital.contact'
+import { Route as SpeedexDigitalIndustriesRouteImport } from './routes/speedex-digital.industries'
+import { Route as SpeedexDigitalPortfolioRouteImport } from './routes/speedex-digital.portfolio'
+import { Route as SpeedexDigitalWebDesignRouteImport } from './routes/speedex-digital.web-design'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCompaniesRouteImport } from './routes/_authenticated/admin.companies'
@@ -41,6 +48,8 @@ import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as ApiPublicChatRouteImport } from './routes/api/public/chat'
 import { Route as ApiPublicDigitalChatRouteImport } from './routes/api/public/digital-chat'
+import { Route as SpeedexDigitalServicesIndexRouteImport } from './routes/speedex-digital.services.index'
+import { Route as SpeedexDigitalServicesSlugRouteImport } from './routes/speedex-digital.services.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -101,6 +110,11 @@ const SpeedexDesignRoute = SpeedexDesignRouteImport.update({
   path: '/speedex-design',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpeedexDigitalRoute = SpeedexDigitalRouteImport.update({
+  id: '/speedex-digital',
+  path: '/speedex-digital',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -121,6 +135,37 @@ const CompaniesSlugRoute = CompaniesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => CompaniesRoute,
+} as any)
+const SpeedexDigitalIndexRoute = SpeedexDigitalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SpeedexDigitalRoute,
+} as any)
+const SpeedexDigitalAboutRoute = SpeedexDigitalAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => SpeedexDigitalRoute,
+} as any)
+const SpeedexDigitalContactRoute = SpeedexDigitalContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => SpeedexDigitalRoute,
+} as any)
+const SpeedexDigitalIndustriesRoute =
+  SpeedexDigitalIndustriesRouteImport.update({
+    id: '/industries',
+    path: '/industries',
+    getParentRoute: () => SpeedexDigitalRoute,
+  } as any)
+const SpeedexDigitalPortfolioRoute = SpeedexDigitalPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => SpeedexDigitalRoute,
+} as any)
+const SpeedexDigitalWebDesignRoute = SpeedexDigitalWebDesignRouteImport.update({
+  id: '/web-design',
+  path: '/web-design',
+  getParentRoute: () => SpeedexDigitalRoute,
 } as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
@@ -213,6 +258,18 @@ const ApiPublicDigitalChatRoute = ApiPublicDigitalChatRouteImport.update({
   path: '/api/public/digital-chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SpeedexDigitalServicesIndexRoute =
+  SpeedexDigitalServicesIndexRouteImport.update({
+    id: '/services/',
+    path: '/services/',
+    getParentRoute: () => SpeedexDigitalRoute,
+  } as any)
+const SpeedexDigitalServicesSlugRoute =
+  SpeedexDigitalServicesSlugRouteImport.update({
+    id: '/services/$slug',
+    path: '/services/$slug',
+    getParentRoute: () => SpeedexDigitalRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -226,10 +283,17 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speedex-design': typeof SpeedexDesignRoute
+  '/speedex-digital': typeof SpeedexDigitalRouteWithChildren
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/companies/$slug': typeof CompaniesSlugRoute
+  '/speedex-digital/about': typeof SpeedexDigitalAboutRoute
+  '/speedex-digital/contact': typeof SpeedexDigitalContactRoute
+  '/speedex-digital/industries': typeof SpeedexDigitalIndustriesRoute
+  '/speedex-digital/portfolio': typeof SpeedexDigitalPortfolioRoute
+  '/speedex-digital/web-design': typeof SpeedexDigitalWebDesignRoute
+  '/speedex-digital/': typeof SpeedexDigitalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -245,7 +309,9 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
+  '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/speedex-digital/services/': typeof SpeedexDigitalServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -262,6 +328,12 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/login': typeof AdminLoginRoute
   '/companies/$slug': typeof CompaniesSlugRoute
+  '/speedex-digital/about': typeof SpeedexDigitalAboutRoute
+  '/speedex-digital/contact': typeof SpeedexDigitalContactRoute
+  '/speedex-digital/industries': typeof SpeedexDigitalIndustriesRoute
+  '/speedex-digital/portfolio': typeof SpeedexDigitalPortfolioRoute
+  '/speedex-digital/web-design': typeof SpeedexDigitalWebDesignRoute
+  '/speedex-digital': typeof SpeedexDigitalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -277,7 +349,9 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
+  '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/speedex-digital/services': typeof SpeedexDigitalServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -293,10 +367,17 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speedex-design': typeof SpeedexDesignRoute
+  '/speedex-digital': typeof SpeedexDigitalRouteWithChildren
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/companies/$slug': typeof CompaniesSlugRoute
+  '/speedex-digital/about': typeof SpeedexDigitalAboutRoute
+  '/speedex-digital/contact': typeof SpeedexDigitalContactRoute
+  '/speedex-digital/industries': typeof SpeedexDigitalIndustriesRoute
+  '/speedex-digital/portfolio': typeof SpeedexDigitalPortfolioRoute
+  '/speedex-digital/web-design': typeof SpeedexDigitalWebDesignRoute
+  '/speedex-digital/': typeof SpeedexDigitalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/admin/companies': typeof AuthenticatedAdminCompaniesRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
@@ -312,7 +393,9 @@ export interface FileRoutesById {
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/api/public/chat': typeof ApiPublicChatRoute
   '/api/public/digital-chat': typeof ApiPublicDigitalChatRoute
+  '/speedex-digital/services/$slug': typeof SpeedexDigitalServicesSlugRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/speedex-digital/services/': typeof SpeedexDigitalServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -328,10 +411,17 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/speedex-design'
+    | '/speedex-digital'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin/login'
     | '/companies/$slug'
+    | '/speedex-digital/about'
+    | '/speedex-digital/contact'
+    | '/speedex-digital/industries'
+    | '/speedex-digital/portfolio'
+    | '/speedex-digital/web-design'
+    | '/speedex-digital/'
     | '/.lovable/oauth/consent'
     | '/admin/companies'
     | '/admin/content'
@@ -347,7 +437,9 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/api/public/chat'
     | '/api/public/digital-chat'
+    | '/speedex-digital/services/$slug'
     | '/admin/'
+    | '/speedex-digital/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -364,6 +456,12 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/login'
     | '/companies/$slug'
+    | '/speedex-digital/about'
+    | '/speedex-digital/contact'
+    | '/speedex-digital/industries'
+    | '/speedex-digital/portfolio'
+    | '/speedex-digital/web-design'
+    | '/speedex-digital'
     | '/.lovable/oauth/consent'
     | '/admin/companies'
     | '/admin/content'
@@ -379,7 +477,9 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/api/public/chat'
     | '/api/public/digital-chat'
+    | '/speedex-digital/services/$slug'
     | '/admin'
+    | '/speedex-digital/services'
   id:
     | '__root__'
     | '/'
@@ -394,10 +494,17 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/speedex-design'
+    | '/speedex-digital'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/admin/login'
     | '/companies/$slug'
+    | '/speedex-digital/about'
+    | '/speedex-digital/contact'
+    | '/speedex-digital/industries'
+    | '/speedex-digital/portfolio'
+    | '/speedex-digital/web-design'
+    | '/speedex-digital/'
     | '/.lovable/oauth/consent'
     | '/_authenticated/admin/companies'
     | '/_authenticated/admin/content'
@@ -413,7 +520,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/settings'
     | '/api/public/chat'
     | '/api/public/digital-chat'
+    | '/speedex-digital/services/$slug'
     | '/_authenticated/admin/'
+    | '/speedex-digital/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -429,6 +538,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeedexDesignRoute: typeof SpeedexDesignRoute
+  SpeedexDigitalRoute: typeof SpeedexDigitalRouteWithChildren
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminLoginRoute: typeof AdminLoginRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -522,6 +632,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpeedexDesignRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/speedex-digital': {
+      id: '/speedex-digital'
+      path: '/speedex-digital'
+      fullPath: '/speedex-digital'
+      preLoaderRoute: typeof SpeedexDigitalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -549,6 +666,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/companies/$slug'
       preLoaderRoute: typeof CompaniesSlugRouteImport
       parentRoute: typeof CompaniesRoute
+    }
+    '/speedex-digital/': {
+      id: '/speedex-digital/'
+      path: '/'
+      fullPath: '/speedex-digital/'
+      preLoaderRoute: typeof SpeedexDigitalIndexRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/about': {
+      id: '/speedex-digital/about'
+      path: '/about'
+      fullPath: '/speedex-digital/about'
+      preLoaderRoute: typeof SpeedexDigitalAboutRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/contact': {
+      id: '/speedex-digital/contact'
+      path: '/contact'
+      fullPath: '/speedex-digital/contact'
+      preLoaderRoute: typeof SpeedexDigitalContactRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/industries': {
+      id: '/speedex-digital/industries'
+      path: '/industries'
+      fullPath: '/speedex-digital/industries'
+      preLoaderRoute: typeof SpeedexDigitalIndustriesRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/portfolio': {
+      id: '/speedex-digital/portfolio'
+      path: '/portfolio'
+      fullPath: '/speedex-digital/portfolio'
+      preLoaderRoute: typeof SpeedexDigitalPortfolioRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/web-design': {
+      id: '/speedex-digital/web-design'
+      path: '/web-design'
+      fullPath: '/speedex-digital/web-design'
+      preLoaderRoute: typeof SpeedexDigitalWebDesignRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
     }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
@@ -662,6 +821,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicDigitalChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/speedex-digital/services/': {
+      id: '/speedex-digital/services/'
+      path: '/services'
+      fullPath: '/speedex-digital/services/'
+      preLoaderRoute: typeof SpeedexDigitalServicesIndexRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
+    '/speedex-digital/services/$slug': {
+      id: '/speedex-digital/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/speedex-digital/services/$slug'
+      preLoaderRoute: typeof SpeedexDigitalServicesSlugRouteImport
+      parentRoute: typeof SpeedexDigitalRoute
+    }
   }
 }
 
@@ -723,6 +896,32 @@ const CompaniesRouteWithChildren = CompaniesRoute._addFileChildren(
   CompaniesRouteChildren,
 )
 
+interface SpeedexDigitalRouteChildren {
+  SpeedexDigitalAboutRoute: typeof SpeedexDigitalAboutRoute
+  SpeedexDigitalContactRoute: typeof SpeedexDigitalContactRoute
+  SpeedexDigitalIndustriesRoute: typeof SpeedexDigitalIndustriesRoute
+  SpeedexDigitalPortfolioRoute: typeof SpeedexDigitalPortfolioRoute
+  SpeedexDigitalWebDesignRoute: typeof SpeedexDigitalWebDesignRoute
+  SpeedexDigitalIndexRoute: typeof SpeedexDigitalIndexRoute
+  SpeedexDigitalServicesSlugRoute: typeof SpeedexDigitalServicesSlugRoute
+  SpeedexDigitalServicesIndexRoute: typeof SpeedexDigitalServicesIndexRoute
+}
+
+const SpeedexDigitalRouteChildren: SpeedexDigitalRouteChildren = {
+  SpeedexDigitalAboutRoute: SpeedexDigitalAboutRoute,
+  SpeedexDigitalContactRoute: SpeedexDigitalContactRoute,
+  SpeedexDigitalIndustriesRoute: SpeedexDigitalIndustriesRoute,
+  SpeedexDigitalPortfolioRoute: SpeedexDigitalPortfolioRoute,
+  SpeedexDigitalWebDesignRoute: SpeedexDigitalWebDesignRoute,
+  SpeedexDigitalIndexRoute: SpeedexDigitalIndexRoute,
+  SpeedexDigitalServicesSlugRoute: SpeedexDigitalServicesSlugRoute,
+  SpeedexDigitalServicesIndexRoute: SpeedexDigitalServicesIndexRoute,
+}
+
+const SpeedexDigitalRouteWithChildren = SpeedexDigitalRoute._addFileChildren(
+  SpeedexDigitalRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -736,6 +935,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeedexDesignRoute: SpeedexDesignRoute,
+  SpeedexDigitalRoute: SpeedexDigitalRouteWithChildren,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminLoginRoute: AdminLoginRoute,

@@ -14,7 +14,6 @@ const NAV = [
   { to: '/', key: 'home' },
   { to: '/about', key: 'about' },
   { to: '/services', key: 'services' },
-  { to: '/speedex-digital', key: 'speedexDigital' },
   { to: '/portfolio', key: 'portfolio' },
   { to: '/explore', key: 'explore' },
   { to: '/products', key: 'products' },
