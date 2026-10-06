@@ -205,6 +205,228 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_faqs: {
+        Row: {
+          active: boolean
+          answer: string
+          answer_ar: string
+          created_at: string
+          id: string
+          question: string
+          question_ar: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          answer: string
+          answer_ar?: string
+          created_at?: string
+          id?: string
+          question: string
+          question_ar?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          answer?: string
+          answer_ar?: string
+          created_at?: string
+          id?: string
+          question?: string
+          question_ar?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      digital_industries: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          name_ar: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          name_ar?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          name_ar?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      digital_portfolio: {
+        Row: {
+          active: boolean
+          category: string
+          created_at: string
+          description: string
+          description_ar: string
+          id: string
+          image_url: string | null
+          link_url: string | null
+          sort_order: number
+          title: string
+          title_ar: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string
+          description_ar?: string
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          sort_order?: number
+          title: string
+          title_ar?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          created_at?: string
+          description?: string
+          description_ar?: string
+          id?: string
+          image_url?: string | null
+          link_url?: string | null
+          sort_order?: number
+          title?: string
+          title_ar?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      digital_services: {
+        Row: {
+          active: boolean
+          benefits: string[]
+          body: string
+          body_ar: string
+          category: string
+          created_at: string
+          id: string
+          image_url: string | null
+          slug: string
+          sort_order: number
+          summary: string
+          summary_ar: string
+          title: string
+          title_ar: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          benefits?: string[]
+          body?: string
+          body_ar?: string
+          category: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          slug: string
+          sort_order?: number
+          summary?: string
+          summary_ar?: string
+          title: string
+          title_ar?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          benefits?: string[]
+          body?: string
+          body_ar?: string
+          category?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          slug?: string
+          sort_order?: number
+          summary?: string
+          summary_ar?: string
+          title?: string
+          title_ar?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      digital_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      digital_testimonials: {
+        Row: {
+          active: boolean
+          company: string
+          created_at: string
+          id: string
+          name: string
+          quote: string
+          quote_ar: string
+          rating: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          company?: string
+          created_at?: string
+          id?: string
+          name: string
+          quote: string
+          quote_ar?: string
+          rating?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          company?: string
+          created_at?: string
+          id?: string
+          name?: string
+          quote?: string
+          quote_ar?: string
+          rating?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_slides: {
         Row: {
           active: boolean
