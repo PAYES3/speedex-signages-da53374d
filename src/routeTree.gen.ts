@@ -21,7 +21,6 @@ import { Route as ProductsRouteImport } from './routes/products'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SpeedexDesignRouteImport } from './routes/speedex-design'
-import { Route as SpeedexDigitalRouteImport } from './routes/speedex-digital'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
@@ -100,11 +99,6 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SpeedexDesignRoute = SpeedexDesignRouteImport.update({
   id: '/speedex-design',
   path: '/speedex-design',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SpeedexDigitalRoute = SpeedexDigitalRouteImport.update({
-  id: '/speedex-digital',
-  path: '/speedex-digital',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
@@ -232,7 +226,6 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speedex-design': typeof SpeedexDesignRoute
-  '/speedex-digital': typeof SpeedexDigitalRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
@@ -266,7 +259,6 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speedex-design': typeof SpeedexDesignRoute
-  '/speedex-digital': typeof SpeedexDigitalRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/login': typeof AdminLoginRoute
   '/companies/$slug': typeof CompaniesSlugRoute
@@ -301,7 +293,6 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speedex-design': typeof SpeedexDesignRoute
-  '/speedex-digital': typeof SpeedexDigitalRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
@@ -337,7 +328,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/speedex-design'
-    | '/speedex-digital'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin/login'
@@ -371,7 +361,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/speedex-design'
-    | '/speedex-digital'
     | '/.well-known/oauth-protected-resource'
     | '/admin/login'
     | '/companies/$slug'
@@ -405,7 +394,6 @@ export interface FileRouteTypes {
     | '/services'
     | '/sitemap.xml'
     | '/speedex-design'
-    | '/speedex-digital'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
     | '/admin/login'
@@ -441,7 +429,6 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeedexDesignRoute: typeof SpeedexDesignRoute
-  SpeedexDigitalRoute: typeof SpeedexDigitalRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminLoginRoute: typeof AdminLoginRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -533,13 +520,6 @@ declare module '@tanstack/react-router' {
       path: '/speedex-design'
       fullPath: '/speedex-design'
       preLoaderRoute: typeof SpeedexDesignRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/speedex-digital': {
-      id: '/speedex-digital'
-      path: '/speedex-digital'
-      fullPath: '/speedex-digital'
-      preLoaderRoute: typeof SpeedexDigitalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/oauth-protected-resource': {
@@ -756,7 +736,6 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeedexDesignRoute: SpeedexDesignRoute,
-  SpeedexDigitalRoute: SpeedexDigitalRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminLoginRoute: AdminLoginRoute,
