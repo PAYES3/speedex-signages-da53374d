@@ -1,2 +1,3 @@
 - Keep new public division pages as TanStack leaf routes using the shared Layout for navigation, footer, and language controls; this preserves site-wide behavior.
 - Route division consultation requests through the existing contact message storage and admin inbox, with server-side validation; this keeps owner-facing enquiries in one place.
+- Speedex Digital is a separate site under /speedex-digital: Layout swaps in Digital header/footer/chatbot by pathname, and content lives only in digital_* tables with code defaults as fallback; this keeps it fully isolated from Speedex Signages content.

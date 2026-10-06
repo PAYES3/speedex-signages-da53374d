@@ -5,3 +5,4 @@
 - [ ] Phase 4: Arabic RTL, SEO, accessibility, performance
 
 - [x] Speedex Digital page at /speedex-design with bilingual content, navigation, supplied logo and consultation form
+- [x] Speedex Digital separate site (header, mega menu, pages, AI, footer, admin, no prices)
