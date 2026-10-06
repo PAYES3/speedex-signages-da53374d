@@ -66,6 +66,10 @@ export const DIGITAL_FAQ: [string, string, string, string][] = [
 export const DIGITAL_SETTINGS_DEFAULTS: Record<string, string> = {
   tagline: 'Driving Business Growth Through Digital Solutions',
   tagline_ar: 'نقود نمو الأعمال من خلال الحلول الرقمية',
+  hero_background_url: '',
+  hero_background_x: '50',
+  hero_background_y: '50',
+  hero_overlay: '72',
   hero_text: 'Speedex Digital helps UAE businesses build a strong online presence, from premium websites and online stores to SEO, Google Ads and social media that bring real enquiries.',
   hero_text_ar: 'تساعد سبيدكس ديجيتال الشركات في الإمارات على بناء حضور رقمي قوي، من المواقع والمتاجر الراقية إلى تحسين البحث وإعلانات جوجل ووسائل التواصل التي تجلب استفسارات حقيقية.',
   about_text: 'Speedex Digital is the digital business of Speedex Group, part of Excellent Group of Companies in Abu Dhabi. We design and build websites and run digital marketing for businesses across the UAE, combining creative design, solid engineering and clear reporting.',
