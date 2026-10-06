@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { FileUpload, MediaPreview } from '@/components/admin/FileUpload';
 import { DIGITAL_SERVICES, DIGITAL_FAQ, DIGITAL_INDUSTRIES, DIGITAL_SETTINGS_DEFAULTS } from '@/lib/digital/defaults';
 
 export const Route = createFileRoute('/_authenticated/admin/speedex-digital')({ component: AdminDigital });
@@ -16,7 +17,7 @@ type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'list' |
 type TableName = 'digital_services' | 'digital_portfolio' | 'digital_testimonials' | 'digital_faqs' | 'digital_industries';
 
 const SETTINGS_GROUPS: { tab: string; label: string; keys: [string, string, boolean?][] }[] = [
-  { tab: 'home', label: 'Homepage & About', keys: [['tagline', 'Tagline'], ['tagline_ar', 'Tagline (Arabic)'], ['hero_text', 'Hero text', true], ['hero_text_ar', 'Hero text (Arabic)', true], ['about_text', 'About text', true], ['about_text_ar', 'About text (Arabic)', true]] },
+  { tab: 'home', label: 'Homepage & About', keys: [['tagline', 'Tagline'], ['tagline_ar', 'Tagline (Arabic)'], ['hero_text', 'Hero text', true], ['hero_text_ar', 'Hero text (Arabic)', true], ['hero_background_url', 'Hero background image'], ['hero_background_x', 'Background horizontal position'], ['hero_background_y', 'Background vertical position'], ['hero_overlay', 'Light overlay strength'], ['about_text', 'About text', true], ['about_text_ar', 'About text (Arabic)', true]] },
   { tab: 'contact', label: 'Contact & Footer', keys: [['phone', 'Phone'], ['whatsapp', 'WhatsApp number (digits, e.g. 971507761493)'], ['email', 'Email'], ['address', 'Address'], ['footer_text', 'Footer text', true], ['instagram', 'Instagram URL'], ['facebook', 'Facebook URL'], ['linkedin', 'LinkedIn URL'], ['tiktok', 'TikTok URL'], ['x', 'X URL']] },
   { tab: 'seo', label: 'SEO, Media & Draftly', keys: [['seo_title', 'SEO title'], ['seo_description', 'SEO description', true], ['logo_url', 'Logo URL (leave empty for the uploaded official logo)'], ['draftly_url', 'Draftly experience URL for the "Get Experience" button']] },
   { tab: 'ai', label: 'AI knowledge', keys: [['ai_knowledge', 'Extra approved facts for Speedex Digital AI (no prices)', true]] },
@@ -71,8 +72,26 @@ function SettingsForm({ keys }: { keys: [string, string, boolean?][] }) {
   }
   return (
     <div className="mt-4 space-y-4 rounded-xl border border-border bg-card p-6">
-      {keys.map(([k, label, long]) => <div key={k}><label className="mb-1 block text-sm font-semibold">{label}</label>
-        {long ? <Textarea rows={4} value={vals[k] ?? ''} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} /> : <Input value={vals[k] ?? ''} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} />}</div>)}
+      {keys.map(([k, label, long]) => {
+        if (k === 'hero_background_url') return <div key={k} className="space-y-3"><label className="block text-sm font-semibold">{label}</label>
+          {vals[k] && <div className="max-w-sm"><MediaPreview url={vals[k]} type="image" onRemove={() => setVals({ ...vals, [k]: '' })} /></div>}
+          <FileUpload folder="backgrounds" accept="image/*" label="Upload hero background" onUploaded={(files) => setVals({ ...vals, [k]: files[0].url })} />
+        </div>;
+        if (['hero_background_x', 'hero_background_y', 'hero_overlay'].includes(k)) {
+          const min = k === 'hero_overlay' ? 35 : 0;
+          const max = k === 'hero_overlay' ? 90 : 100;
+          return <div key={k}><div className="mb-2 flex items-center justify-between gap-3"><label className="text-sm font-semibold">{label}</label><span className="text-sm text-muted-foreground">{vals[k] ?? DIGITAL_SETTINGS_DEFAULTS[k]}%</span></div>
+            <input type="range" min={min} max={max} value={vals[k] ?? DIGITAL_SETTINGS_DEFAULTS[k]} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} className="w-full accent-primary" />
+          </div>;
+        }
+        return <div key={k}><label className="mb-1 block text-sm font-semibold">{label}</label>
+          {long ? <Textarea rows={4} value={vals[k] ?? ''} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} /> : <Input value={vals[k] ?? ''} onChange={(e) => setVals({ ...vals, [k]: e.target.value })} />}</div>;
+      })}
+      {vals.hero_background_url && <div className="relative aspect-[16/7] overflow-hidden rounded-xl border border-border">
+        <img src={vals.hero_background_url} alt="Background position preview" className="h-full w-full object-cover" style={{ objectPosition: `${vals.hero_background_x ?? 50}% ${vals.hero_background_y ?? 50}%` }} />
+        <div className="absolute inset-0 bg-background" style={{ opacity: Number(vals.hero_overlay ?? 72) / 100 }} />
+        <div className="absolute inset-0 grid place-items-center p-5 text-center"><span className="text-xl font-extrabold text-foreground">Speedex Digital background preview</span></div>
+      </div>}
       <Button onClick={save} disabled={saving}><Save /> {saving ? 'Saving…' : 'Save'}</Button>
     </div>
   );

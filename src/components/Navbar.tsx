@@ -14,6 +14,7 @@ const NAV = [
   { to: '/', key: 'home' },
   { to: '/about', key: 'about' },
   { to: '/services', key: 'services' },
+  { to: '/speedex-digital', key: 'speedexDigital' },
   { to: '/portfolio', key: 'portfolio' },
   { to: '/explore', key: 'explore' },
   { to: '/products', key: 'products' },
@@ -196,7 +197,7 @@ export function Navbar() {
                 {c.name}
               </Link>
             ))}
-            {NAV.filter((n) => !['/', '/about', '/speedex-digital'].includes(n.to)).map((n) => (
+            {NAV.filter((n) => !['/', '/about'].includes(n.to)).map((n) => (
               <Link key={n.to} to={n.to} className="px-3 py-3 rounded-xl hover:bg-muted font-semibold">
                 {t(`nav.${n.key}`)}
               </Link>

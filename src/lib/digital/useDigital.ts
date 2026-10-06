@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useLang } from '@/hooks/useLang';
 import { DIGITAL_SERVICES, DIGITAL_FAQ, DIGITAL_INDUSTRIES, DIGITAL_SETTINGS_DEFAULTS, type DigitalService } from './defaults';
 import digitalLogo from '@/assets/speedex-digital-logo.png.asset.json';
+import digitalWorkspace from '@/assets/speedex-digital-workspace.jpg';
 
 export type DigitalPortfolio = { id: string; title: string; title_ar: string; category: string; description: string; description_ar: string; image_url: string | null; link_url: string | null };
 export type DigitalTestimonial = { id: string; name: string; company: string; quote: string; quote_ar: string; rating: number };
@@ -16,7 +17,7 @@ export type DigitalData = {
 };
 
 export const DIGITAL_DEFAULT_DATA: DigitalData = {
-  settings: { ...DIGITAL_SETTINGS_DEFAULTS, logo_url: digitalLogo.url },
+  settings: { ...DIGITAL_SETTINGS_DEFAULTS, logo_url: digitalLogo.url, hero_background_url: digitalWorkspace },
   services: DIGITAL_SERVICES,
   faqs: DIGITAL_FAQ.map(([question, answer, question_ar, answer_ar]) => ({ question, answer, question_ar, answer_ar })),
   industries: DIGITAL_INDUSTRIES.map(([name, name_ar]) => ({ name, name_ar })),
