@@ -1,6 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { Menu, X, Languages, ChevronDown, ArrowUpRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
@@ -50,6 +50,31 @@ export function Navbar() {
     setMega(false);
   }, [path]);
 
+  const megaRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const openMega = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setMega(true);
+  };
+  const closeMegaSoon = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setMega(false), 150);
+  };
+
+  useEffect(() => {
+    if (!mega) return;
+    const onDown = (e: PointerEvent) => {
+      if (megaRef.current && !megaRef.current.contains(e.target as Node)) setMega(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMega(false); };
+    document.addEventListener('pointerdown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [mega]);
+
   const toggleLang = toggle;
 
   const linkClass =
@@ -62,7 +87,6 @@ export function Navbar() {
           ? 'bg-white/95 backdrop-blur-xl shadow-[0_8px_30px_-18px_rgba(0,0,0,0.25)] border-b border-border py-2'
           : 'bg-white/70 backdrop-blur-lg border-b border-transparent py-3'
       }`}
-      onMouseLeave={() => setMega(false)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2" aria-label={COMPANY.name}>
@@ -83,16 +107,54 @@ export function Navbar() {
             {t('nav.about')}
           </Link>
 
-          {/* Our Groups mega menu */}
-          <div className="relative" onMouseEnter={() => setMega(true)}>
-            <Link
-              to="/companies"
-              className={`${linkClass} inline-flex items-center gap-1`}
-              activeProps={{ className: 'text-primary after:scale-x-100' }}
+          {/* Our Groups compact dropdown */}
+          <div ref={megaRef} className="relative" onMouseEnter={openMega} onMouseLeave={closeMegaSoon}>
+            <button
+              type="button"
+              aria-haspopup="true"
+              aria-expanded={mega}
+              onClick={() => setMega((v) => !v)}
+              className={`${linkClass} inline-flex items-center gap-1 ${path.startsWith('/companies') ? 'text-primary after:scale-x-100' : ''}`}
             >
               {T('nav.groups', 'Our Groups')}
               <ChevronDown className={`w-4 h-4 transition-transform ${mega ? 'rotate-180' : ''}`} />
-            </Link>
+            </button>
+
+            <div
+              className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 w-[min(520px,90vw)] transition-all duration-200 ${
+                mega ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none'
+              }`}
+            >
+              <div className="rounded-2xl border border-border bg-white shadow-[0_24px_48px_-24px_rgba(0,0,0,0.35)] p-3">
+                <div className="grid grid-cols-2 gap-1">
+                  {(companies ?? []).map((c: any) => (
+                    <Link
+                      key={c.id}
+                      to={c.slug === 'speedex-digital' ? '/speedex-digital' : '/companies/$slug'}
+                      params={c.slug === 'speedex-digital' ? undefined : { slug: c.slug }}
+                      className="group flex items-center gap-2.5 rounded-xl p-2 hover:bg-muted/70 transition-colors"
+                    >
+                      <div className="w-9 h-9 shrink-0 rounded-lg bg-muted grid place-items-center overflow-hidden border border-border">
+                        {c.logo_url ? (
+                          <img src={c.logo_url} alt="" className="w-full h-full object-contain p-1" loading="lazy" />
+                        ) : (
+                          <span className="text-xs font-extrabold text-primary">{String(c.name).slice(0, 2).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <span className="text-sm font-semibold leading-tight line-clamp-2 group-hover:text-primary transition-colors">{c.name}</span>
+                    </Link>
+                  ))}
+                  {!companies?.length && (
+                    <p className="text-sm text-muted-foreground col-span-full p-2">
+                      {companiesLoading ? 'Loading companies…' : 'Companies will appear here once added in the admin panel.'}
+                    </p>
+                  )}
+                </div>
+                <Link to="/companies" className="mt-2 flex items-center justify-center gap-1 rounded-xl border-t border-border pt-2.5 pb-1 text-sm font-semibold text-primary hover:gap-2 transition-all">
+                  All companies <ArrowUpRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
           </div>
 
           {NAV.filter((n) => !['/', '/about'].includes(n.to)).map((n) => (
@@ -126,60 +188,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mega menu panel */}
-      <div
-        className={`hidden lg:block absolute inset-x-0 top-full origin-top transition-all duration-300 ${
-          mega ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
-        }`}
-        onMouseEnter={() => setMega(true)}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-3 pb-6">
-          <div className="rounded-3xl border border-border bg-white shadow-[0_40px_80px_-40px_rgba(0,0,0,0.35)] p-6">
-            <div className="flex items-end justify-between mb-5">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-primary">Our Groups</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {companies?.length ? `${companies.length} specialised companies, one trusted UAE group.` : 'One trusted UAE group.'}
-                </p>
-              </div>
-              <Link to="/companies" className="text-sm font-semibold text-primary inline-flex items-center gap-1 hover:gap-2 transition-all">
-                All companies <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 xl:grid-cols-3 gap-3">
-              {(companies ?? []).map((c: any) => (
-                <Link
-                  key={c.id}
-                  to={c.slug === 'speedex-digital' ? '/speedex-digital' : '/companies/$slug'}
-                  params={c.slug === 'speedex-digital' ? undefined : { slug: c.slug }}
-                  className="group flex gap-4 rounded-2xl border border-transparent hover:border-primary/25 hover:bg-muted/60 p-4 transition-all duration-300"
-                >
-                  <div className="w-14 h-14 shrink-0 rounded-xl bg-muted grid place-items-center overflow-hidden border border-border">
-                    {c.logo_url ? (
-                      <img src={c.logo_url} alt="" className="w-full h-full object-contain p-1.5" loading="lazy" />
-                    ) : (
-                      <span className="text-base font-extrabold text-primary">{String(c.name).slice(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-[15px] leading-snug truncate group-hover:text-primary transition-colors">{c.name}</p>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mt-0.5 leading-snug">{c.tagline || c.description}</p>
-                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                      View details <ArrowUpRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </Link>
-              ))}
-              {!companies?.length && (
-                <p className="text-sm text-muted-foreground col-span-full">
-                  {companiesLoading ? 'Loading companies…' : 'Companies will appear here once added in the admin panel.'}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
 
       {open && (
         <div className="lg:hidden bg-white border-t border-border mt-2">
