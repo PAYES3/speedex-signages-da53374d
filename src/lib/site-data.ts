@@ -29,7 +29,7 @@ export const COMPANY = {
   name: 'Speedex Signages LLC',
   tagline: 'We Light Up Your Brand',
   phone: '+971 50 776 1493',
-  whatsapp: '971501234567',
+  whatsapp: '971507761493',
   email: 'admin@excellentgroup.ae',
   address: 'Speedex Signages,\nMussaffah -38,\nAbu Dhabi,\nUnited Arab Emirates',
   mapEmbed: 'https://www.google.com/maps?q=Speedex+Auto+Workshop+L.L.C&ll=24.3564342,54.4935042&z=17&output=embed',
