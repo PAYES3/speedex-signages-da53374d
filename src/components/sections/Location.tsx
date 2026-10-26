@@ -68,7 +68,7 @@ export function Location({
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-wider text-muted-foreground">Hours</p>
-                  <p className="font-semibold mt-1">Sun – Thu · 8:30 AM – 7:00 PM</p>
+                  <p className="font-semibold mt-1">Mon – Sat · 08:00 AM – 06:00 PM</p>
                 </div>
               </div>
               <a href={mapsDirectionsUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
