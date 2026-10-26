@@ -6,7 +6,7 @@ import hero1 from '@/assets/hero/hero-1.mp4.asset.json';
 
 const STEPS = [
   { icon: Palette, title: 'Design', desc: 'Concept, 3D visualization and material selection tailored to your brand.' },
-  { icon: Hammer, title: 'Fabrication', desc: 'CNC routing, laser cutting, acrylic forming and metal work in our Al Quoz facility.' },
+  { icon: Hammer, title: 'Fabrication', desc: 'CNC routing, laser cutting, acrylic forming and metal work in our Speedex Signages.' },
   { icon: Sparkles, title: 'Finishing', desc: 'Paint, polish, LED integration and quality inspection before dispatch.' },
   { icon: Wrench, title: 'Installation', desc: 'Certified crews mount signage at any elevation, with permits handled end-to-end.' },
 ];
