@@ -37,6 +37,9 @@ export async function fetchDigitalData(): Promise<DigitalData> {
   ]);
   const settings = { ...DIGITAL_DEFAULT_DATA.settings };
   for (const row of st.data ?? []) if (row.value) settings[row.key] = row.value;
+  // WhatsApp click-to-chat needs digits only; fall back to the official number if the saved value is unusable.
+  const waDigits = String(settings.whatsapp ?? '').replace(/\D/g, '');
+  settings.whatsapp = waDigits.length >= 9 ? waDigits : DIGITAL_DEFAULT_DATA.settings.whatsapp;
   return {
     settings,
     services: sv.data?.length ? (sv.data as unknown as DigitalService[]) : DIGITAL_DEFAULT_DATA.services,
